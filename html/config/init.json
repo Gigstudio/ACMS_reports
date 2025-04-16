@@ -51,10 +51,11 @@
   },
   "database":{
     "dbversion": "m00000",
-    "dbhost": "localhost:3306",
-    "dbuser": "p-335563_simajor",
-    "dbpass": "Super@551249",
-    "dbname": "p_335563_craftmygift"
+    "dbhost": "localhost",
+    "dbport": "3306",
+    "dbuser": "admin",
+    "dbpass": "p0skudA",
+    "dbname": "ACMS"
   },
   "ldap": {
     "ldap_host": "ldap://ldap.pnhz.kz",

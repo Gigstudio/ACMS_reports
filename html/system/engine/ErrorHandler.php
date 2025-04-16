@@ -55,7 +55,7 @@ class ErrorHandler
     }
 
     private static function registerEvent($message){
-        $event = new Event(self::$eventClass, basename(str_replace('\\', '/', self::class)), $message);
+        $event = new Event(self::$eventClass, self::class, $message);
     }
 
     public static function dispatch($code, $message){

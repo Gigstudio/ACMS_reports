@@ -66,3 +66,7 @@ function array_pop_by_key(array &$array, string $path, string $delimiter = '.'):
     unset($target[$lastKey]);
     return $value;
 }
+
+function system_warn(string $msg): void {
+    trigger_error($msg, E_USER_WARNING);
+}

@@ -22,10 +22,14 @@ class Event
         self::$eventTypes = self::getFromConfig();
 
         $this->type = $type;
-        $this->source = $source;
+        $this->source = self::normalizeSource($source);
         $this->message = $message;
 
         $this->log();
+    }
+
+    private static function normalizeSource(string $fqcn): string{
+        return basename(str_replace('\\', '/', $fqcn));
     }
 
     private static function getFromConfig(){
