@@ -13,6 +13,7 @@ defined('PATH_SYSTEM') or 		define('PATH_SYSTEM', PATH_ROOT.'system'.DS);
 defined('PATH_EXCEPTIONS') or    define('PATH_EXCEPTIONS', PATH_SYSTEM.'exceptions'.DS);
 defined('PATH_ENGINE') or 		define('PATH_ENGINE', PATH_SYSTEM.'engine'.DS);
 defined('PATH_HTTP') or 		    define('PATH_HTTP', PATH_SYSTEM.'http'.DS);
+defined('PATH_CLIENTS') or       define('PATH_CLIENTS', PATH_SYSTEM.'clients'.DS);
 // defined('PATH_NETWORK') or       define('PATH_NETWORK', PATH_SYSTEM.'network'.DS);
 // defined('PATH_MODULES') or 		define('PATH_MODULES', PATH_ENGINE.'modules'.DS);
 // defined('PATH_LIBRARIES') or 	define('PATH_LIBRARIES', PATH_SYSTEM.'libraries'.DS);

@@ -36,6 +36,7 @@ $loader->addNamespace(APPLICATION . '\System', 						PATH_SYSTEM);
 $loader->addNamespace(APPLICATION . '\System\Exceptions',	        PATH_EXCEPTIONS);
 $loader->addNamespace(APPLICATION . '\System\Engine', 				PATH_ENGINE);
 $loader->addNamespace(APPLICATION . '\System\Http', 				PATH_HTTP);
+$loader->addNamespace(APPLICATION . '\System\Clients', 				PATH_CLIENTS);
 $loader->addNamespace(APPLICATION . '\Pages\Controllers', 			PATH_CONTROLLERS);
 $loader->addNamespace(APPLICATION . '\Pages\Views',					PATH_VIEWS);
 $loader->addNamespace(APPLICATION . '\Pages\Models',				PATH_MODELS);

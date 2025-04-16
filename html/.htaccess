@@ -40,7 +40,7 @@ RewriteRule .* siteroot/index.php?url=$1 [L,QSA]
 
 RewriteRule ^$ siteroot/ [L]
 
-#RewriteRule ^(config|pages|storage|system)/ - [F]
+RewriteRule ^(config|pages|storage|system)/ - [F]
 
 RewriteCond %{REQUEST_FILENAME} -d  
 RewriteCond %{REQUEST_FILENAME}/index.php !-f

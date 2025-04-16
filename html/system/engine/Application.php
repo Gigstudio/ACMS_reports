@@ -5,6 +5,7 @@ defined('_RUNKEY') or die;
 
 use GigReportServer\System\Http\Request;
 use GigReportServer\System\Http\Response;
+use GigReportServer\System\Clients\LDAPClient;
 
 class Application
 {

@@ -1,7 +1,7 @@
 data: 
     0:
         0: "objectclass"
-        1: "cn"
+        1: "cn
         2: "sn"
         3: "title"
         4: "description"

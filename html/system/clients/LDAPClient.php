@@ -1,5 +1,5 @@
 <?php
-namespace GigReportServer\System\Engine;
+namespace GigReportServer\System\Clients;
 
 defined('_RUNKEY') or die;
 
