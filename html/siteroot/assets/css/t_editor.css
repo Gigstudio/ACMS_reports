@@ -1,0 +1,296 @@
+@import url('https://fonts.googleapis.com/css?family=Fira+Sans|Playfair+Display&display=swap');
+/*Страница редактирования шаблона*/
+body{
+    overflow: hidden;
+}
+.topnav{
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 0;
+    background: rgb(35,40,80);
+    /*background: linear-gradient(0deg, rgba(35,40,80,1) 0%, rgba(35,40,80,1) 40%, rgba(35,40,80,1) 60%, rgba(35,40,80,1) 100%);*/
+    z-index: 10;
+}
+.menu-container{
+    overflow: hidden;
+    background-color: rgba(255,255,255,0);
+    border-top: solid 1px #c3c3c6;
+    border-bottom: solid 1px #c3c3c6;
+    position: relative;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 0 16px;
+    transition: 0.3s;
+}
+.menu-item{
+    padding: 10px 16px;
+    margin-left: 1px;
+    cursor: pointer;
+    float: left;
+    display: block;
+    color: #eee;
+    text-decoration: none;
+    text-transform: uppercase;
+    text-align: center;
+    font-family: 'Fira Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    transition: 0.3s;
+    z-index: 15;
+}
+.menu-item:focus, 
+/*.menu-item:active{background-color: #e3e3e6;}*/
+.menu-item.hided{display: none;}
+.menu-item:hover{color: #3984D8;}
+.right{float: right;}
+.icon{display: none;}
+.mainmenu-vr{
+    display: inline-block;
+    border: solid 1px #bbb;
+    border-style: inset;
+    float: left;
+    width: 2px;
+    height: 18px;
+    vertical-align: middle;
+    margin: 4px;
+}
+.hidable-hr{display: none;}
+.fas.fa-heading{
+    color: #757b77;
+    -webkit-text-fill-color: white;
+    -webkit-text-stroke-width: 1px; 
+    -webkit-text-stroke-color: #555b57;
+}
+.tool.disabled .fas.fa-heading{
+    -webkit-text-stroke-color: #b5bbb7;
+}
+.workspace{
+    position: relative;
+    resize: both;
+    height: 100%;
+    padding-top: 36px;
+    /*overflow: hidden;*/
+}
+.service-group{
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    padding: 4px 16px 2px 16px;
+    margin: 36px 0 0 0;
+    background-image: linear-gradient(0deg, rgba(217,220,230,1) 0%, rgba(227,230,235,1) 10%, rgba(255,255,255,1) 100%);
+    border-top: solid 1px #888;
+    border-bottom: solid 1px #888;
+    z-index: 5;
+}
+.instruments{
+    position: relative;
+    display: inline-block;
+    float: left;
+    height: auto;
+    vertical-align: middle;
+}
+.instruments input, .instruments select {
+    text-align: left;
+    width: auto;
+    height: 24px;
+    display: inline-block;
+    padding: 2px;
+    margin: 4px 2px 1px 2px;
+    float: left;
+    font-size: 14px;
+}
+.instruments input[type=number]{
+    /*width: 58px;*/
+}
+.instruments input[type=number]:disabled{
+    color: #aaa;
+}
+.instruments input[type=radio]:checked + label{
+    border-style: solid;
+    background-color: rgba(40,55,45,0.1);
+}
+.instruments.right{
+    float: right;
+    margin: 0;
+}
+.menu-vr{
+    display: inline-block;
+    border: solid 1px #fff;
+    border-style: inset;
+    float: left;
+    width: 2px;
+    height: 26px;
+    vertical-align: middle;
+    margin: 4px 8px;
+}
+.sheet{
+    margin-top: 16px;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    transform-origin: center center;
+    background-color: #fff;
+    -webkit-box-shadow: 5px 5px 10px 4px rgba(0,0,0,0.7); 
+    box-shadow: 5px 5px 10px 4px rgba(0,0,0,0.7);
+}
+.A4{
+    width: 297mm;
+    height: 210mm;
+}
+.A4.portrait{
+    width: 210mm;
+    height: 297mm;
+}
+.workzone{
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #e0e5e8;
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.field{
+    width: initial;
+    position: absolute;
+    padding: 2px 8px;
+    /*margin: 4px;*/
+    font-size: 48px;
+    border: dashed 1px #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0);
+    text-align: left;
+    user-select: none; /* standard syntax */
+    -webkit-user-select: none; /* webkit (safari, chrome) browsers */
+    -moz-user-select: none; /* mozilla browsers */
+    -khtml-user-select: none; /* webkit (konqueror) browsers */
+    -ms-user-select: none; /* IE10+ */
+}
+.field.selected{
+    border: solid 2px rgba(250, 225, 155, .9);
+    background-color: rgba(190, 190, 230, .5);
+}
+.field.outlined{
+    -webkit-text-stroke-width: 1px; 
+}
+.field.left{
+}
+.field.center{
+    left: 0px;
+    width: 100%;
+    text-align: center;
+}
+.field.right{
+    left: initial;
+    right: 0px;
+    text-align: right;
+}
+.field input{
+    border: none;
+    background-color: transparent;
+}
+.tool, .tool-span {
+    color: #757b77;
+    cursor: pointer;
+    text-align: center;
+    width: 28px;
+    height: 30px;
+    font-size: 16px;
+    display: inline-block;
+    padding: 5px 4px;
+    margin: 1px;
+    float: left;
+    border: none 1px #777;
+    border-radius: 4px;
+}
+.tool-span{
+    padding: 8px 0;
+    cursor: default;
+}
+.tool.button{
+    width: 32px;
+    border: solid 1px #777;
+    color: #454b47;
+    font-size: 14px;
+}
+.tool.disabled{
+    color: #c5cbc7;
+}
+.tool:hover {
+    border-style: solid;
+}
+.tool:active:not(.image){
+    border-color: #57bb85;
+}
+.tool i{
+    vertical-align: middle;
+    z-index: -1;
+}
+.tool.pressed{
+    border-style: solid;
+    background-color: rgba(20,35,25,0.15);
+}
+.tool.image{
+    cursor: default;
+    height: 24px;
+    padding: 2px 4px;
+    margin: 4px 0 1px 1px;
+    border-style: solid;
+    border-radius: 4px 0 0 4px;
+}
+#tool_paddings, #tool_fontsize, #tool_x, #tool_y{
+    margin: 4px -1px 1px -1px;
+}
+
+@media screen and (max-width: 480px){
+
+}
+@media screen and (max-width: 767px){
+    .topnav{
+        border-top: solid 1px #c3c6c4;
+        border-bottom: solid 1px #c3c6c4;
+    }
+    .menu-container{
+        border: none;
+        background-color: transparent;
+    }
+    .menu-item:not(.icon):not(.search) {display: none;}
+    .refs-container{position: relative;}
+    .icon{
+        display: block;
+        float: left;
+    }
+    .menu-container .mainmenu-vr{display: none;}
+    .menu-container.responsive {
+        position: relative;
+        padding: 6px 24px;
+        z-index: 15;
+    }
+    .menu-container.responsive .menu-item {
+        float: none;
+        display: block;
+        text-align: left;
+        padding: 6px 8px;
+    }
+    .menu-container.responsive .hidable-hr{
+        display: block;
+    }
+}
+@media screen and (max-width: 1024px){
+    .fadable1000{display: none;}
+}
+@media screen and (max-width: 1280px){
+    .menu-container {padding: 0 24px;}
+    .menu-item {padding: 10px 8px;}
+}

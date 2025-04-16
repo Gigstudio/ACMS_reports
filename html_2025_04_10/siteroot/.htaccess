@@ -1,0 +1,17 @@
+Options -Indexes
+RewriteEngine On
+
+# Исключение для статичных файлов (исправлено)
+RewriteCond %{REQUEST_URI} ^/assets/ [NC]
+RewriteCond %{REQUEST_URI} !^/siteroot/assets/
+RewriteRule ^(assets/.*)$ siteroot/$1 [L]
+
+RewriteCond %{REQUEST_URI} !^/index\.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+RewriteRule ^(.*)$ index.php [QSA,L]
+
+RewriteRule ^(config|pages|storage|system)/ - [F]
+
+#ErrorDocument 403 /pages/static/403.html

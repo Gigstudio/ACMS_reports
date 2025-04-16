@@ -1,0 +1,166 @@
+{
+  "app": {
+    "app_name": "Access Control and Management System Reports",
+    "app_short_name": "ACMS Reports",
+    "app_version": "1.0.0",
+    "app_author": "Gregory Chirikov",
+    "app_email": "pvl.gigstudio@gmail.com",
+    "default_charset": "UTF-8",
+    "default_locale": "ru",
+    "default_timezone": "Asia/Almaty",
+    "favicon": "assets/images/gigicon.png",
+    "apple_icon": "",
+    "secret_key": "",
+    "googleAnalytics": "UA-XXXXX-Y"
+  },
+  "debug_error":{
+    "mode": "debug"
+  },
+  "events": {
+    "0": {
+      "title": "Информация",
+      "class": "info"
+    },
+    "1": {
+      "title": "Сообщение",
+      "class": "message"
+    },
+    "2": {
+      "title": "Предупреждение",
+      "class": "warning"
+    },
+    "3": {
+      "title": "Ошибка",
+      "class": "error"
+    },
+    "4": {
+      "title": "Критическая ошибка",
+      "class": "fatal"
+    }
+  },
+  "common": {
+    "css": [
+      "themes",
+      "default",
+      "login",
+      "all"
+    ],
+    "js": [
+      "main"
+    ]
+  },
+  "database":{
+    "dbversion": "m00000",
+    "dbhost": "localhost:3306",
+    "dbuser": "p-335563_simajor",
+    "dbpass": "Super@551249",
+    "dbname": "p_335563_craftmygift"
+  },
+  "ldap": {
+    "ldap_host": "ldap://ldap.pnhz.kz",
+    "ldap_ip": "10.24.160.151",
+    "ldap_port": 389,
+    "ldap_dn": "DC=pnhz,DC=kz",
+    "ldap_username": "mailcheck",
+    "ldap_password": "uhfybwfyfpfvrt"
+  },
+  "perco": {
+    "perco_uri": "http://10.86.68.126/api/",
+    "perco_host": "10.86.68.126",
+    "perco_port": 80,
+    "perco_admin": "admin",
+    "perco_password": "123456Zz"
+  },
+  "session": {
+    "session_name": "GRSess",
+    "idle_time": 600,
+    "lifetime": 3600,
+    "path": "/",
+    "domain": "localhost",
+    "secure": false,
+    "httponly": true,
+    "gc_maxlifetime": "1800",
+    "gc_probability": "1000",
+    "gc_divisor": "1",
+    "use_cookies": "1",
+    "globalized": false,
+    "default_driver": "native_storage",
+    "drivers": {
+      "native_storage": {
+        "class": "\\GIG\\GigReportServer\\System\\Engine\\Session\\NativeSessionStorage",
+        "default": true
+      },
+      "array_storage": {
+        "class": "\\GIG\\GigReportServer\\System\\Engine\\Session\\ArraySessionStorage",
+        "default": false
+      },
+      "pdo_storage": {
+        "class": "\\GIG\\GigReportServer\\System\\Engine\\Session\\PdoSessionStorage",
+        "default": false
+      },
+      "file_storage": {
+        "class": "\\GIG\\GigReportServer\\System\\Engine\\Session\\FileSessionStorage",
+        "default": false
+      }
+    }
+  },
+  "cache": {
+    "cache_name": "system_cache",
+    "use_cache": false,
+    "storage": "file",
+    "key": "auto",
+    "cache_path": "/Storage/cache/",
+    "cache_expires": 3600,
+    "default_driver": "native_storage",
+    "drivers":{
+      "native_storage":{
+        "class": "\\GIG\\GigReportServer\\System\\Engine\\Cache\\NativeCacheStorage",
+        "default": true
+      },
+      "array_storage": {
+        "class": "\\GIG\\GigReportServer\\System\\Engine\\Cache\\ArrayCacheStorage",
+        "default": true
+      },
+      "pdo_storage": {
+        "class": "\\GIG\\GigReportServer\\System\\Engine\\Cache\\PdoSessionStorage",
+        "default": false
+      },
+      "file_storage": {
+        "class": "\\GIG\\GigReportServer\\System\\Engine\\Cache\\FileSessionStorage",
+        "default": false
+      }
+    }
+  },
+  "system":{
+    "use_session": true,
+    "use_cookie": true,
+    "logger": {
+      "use_logger": true,
+      "log": [
+        "info",
+        "warnings",
+        "errors",
+        "critical",
+        "exceptions"
+      ],
+      "log_path": "/Storage/Logs/"
+    },
+    "use_translations": true,
+    "use_auto_password": false,
+    "use_auth": true,
+    "activation_token_expiration": 3600,
+    "default_status": "pending"
+  },
+  "security": {
+    "password_pattern": "(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}",
+    "url_pattern": "https?://.+",
+    "search_pattern": "[^'\\x22]+",
+    "email_pattern": "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$",
+    "tel_pattern": "[0-9]{3}-[0-9]{3}-[0-9]{4}",
+    "random_pass_char": 9,
+    "login_timeout": 30,
+    "login_attempts": 3, 
+    "encript_password": true,
+    "password_algo": "PASSWORD_BCRYPT"
+  }
+}

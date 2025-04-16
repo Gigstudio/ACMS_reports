@@ -1,0 +1,222 @@
+[2025-03-19 11:02:18] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 30: View file not found: /var/www/html/pages/views/report.php
+[2025-03-19 11:04:24] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 30: View file not found: /var/www/html/pages/views/report.php
+[2025-03-19 11:27:44] [UNKNOWN] Ошибка 404 в модуле TemplateEngine, строка 30: View file not found: /var/www/html/pages/views/report.php
+[2025-03-19 11:35:10] [UNKNOWN] Ошибка 404 в модуле TemplateEngine, строка 30: View file not found: /var/www/html/pages/views/report.php
+[2025-03-19 11:35:19] [UNKNOWN] Ошибка 404 в модуле TemplateEngine, строка 30: View file not found: /var/www/html/pages/views/report.php
+[2025-03-19 11:36:30] [UNKNOWN] Ошибка 404 в модуле TemplateEngine, строка 30: View file not found: /var/www/html/pages/views/report.php
+[2025-03-19 11:39:00] [UNKNOWN] Ошибка 404 в модуле TemplateEngine, строка 30: View file not found: /var/www/html/pages/views/report.php
+[2025-03-19 11:39:00] [UNKNOWN] Ошибка 8192 в модуле ErrorController, строка 10: Optional parameter $code declared before required parameter $params is implicitly treated as a required parameter
+[2025-03-19 11:39:56] [UNKNOWN] Ошибка 404 в модуле TemplateEngine, строка 30: View file not found: /var/www/html/pages/views/report.php
+[2025-03-19 11:39:56] [UNKNOWN] Ошибка 8192 в модуле ErrorController, строка 10: Optional parameter $code declared before required parameter $params is implicitly treated as a required parameter
+[2025-03-19 11:40:33] [UNKNOWN] Ошибка 404 в модуле TemplateEngine, строка 30: View file not found: /var/www/html/pages/views/report.php
+[2025-03-19 11:40:33] [UNKNOWN] Ошибка 8192 в модуле ErrorController, строка 10: Optional parameter $code declared before required parameter $params is implicitly treated as a required parameter
+[2025-03-19 11:40:42] [UNKNOWN] Ошибка 404 в модуле Router, строка 72: Route not found
+[2025-03-19 11:40:42] [UNKNOWN] Ошибка 8192 в модуле ErrorController, строка 10: Optional parameter $code declared before required parameter $params is implicitly treated as a required parameter
+[2025-03-19 11:40:46] [UNKNOWN] Ошибка 404 в модуле TemplateEngine, строка 30: View file not found: /var/www/html/pages/views/report.php
+[2025-03-19 11:40:46] [UNKNOWN] Ошибка 8192 в модуле ErrorController, строка 10: Optional parameter $code declared before required parameter $params is implicitly treated as a required parameter
+[2025-03-19 11:42:37] [UNKNOWN] Ошибка 404 в модуле TemplateEngine, строка 30: View file not found: /var/www/html/pages/views/report.php
+[2025-03-19 11:42:43] [UNKNOWN] Ошибка 404 в модуле TemplateEngine, строка 30: View file not found: /var/www/html/pages/views/report.php
+[2025-03-19 11:44:28] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 30: View file not found: /var/www/html/pages/views/report.php
+[2025-03-19 11:45:37] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 30: View file not found: /var/www/html/pages/views/report.php
+[2025-03-19 11:46:03] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 30: View file not found: /var/www/html/pages/views/report.php
+[2025-03-19 11:47:33] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 30: View file not found: /var/www/html/pages/views/report.php
+[2025-03-19 11:47:43] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 30: View file not found: /var/www/html/pages/views/report.php
+[2025-03-19 11:48:17] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 30: View file not found: /var/www/html/pages/views/report.php
+[2025-03-19 11:48:58] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 30: View file not found: /var/www/html/pages/views/report.php
+[2025-03-19 11:49:14] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 30: View file not found: /var/www/html/pages/views/report.php
+[2025-03-19 11:49:52] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 30: View file not found: /var/www/html/pages/views/report.php
+[2025-03-19 11:51:06] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 30: View file not found: /var/www/html/pages/views/report.php
+[2025-03-19 11:51:53] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 30: View file not found: /var/www/html/pages/views/report.php
+[2025-03-19 11:53:14] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 30: View file not found: /var/www/html/pages/views/report.php
+[2025-03-19 11:54:04] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 30: View file not found: /var/www/html/pages/views/report.php
+[2025-03-19 11:54:38] [EXCEPTION] Ошибка 404 в модуле Router, строка 72: Route not found
+[2025-03-19 11:55:26] [EXCEPTION] Ошибка 404 в модуле Router, строка 72: Route not found
+[2025-03-19 11:55:30] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 30: View file not found: /var/www/html/pages/views/report.php
+[2025-03-19 11:55:33] [EXCEPTION] Ошибка 2 в модуле exec_apitest, строка 2: Undefined variable $request
+[2025-03-19 11:55:36] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 30: View file not found: /var/www/html/pages/views/report.php
+[2025-03-19 12:08:10] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 30: View file not found: /var/www/html/pages/views/report.php
+[2025-03-19 12:14:27] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 30: View file not found: /var/www/html/pages/views/report.php
+[2025-03-19 13:58:51] [EXCEPTION] Ошибка 2 в модуле exec_apitest, строка 2: Undefined variable $request
+[2025-03-19 16:43:04] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 30: View file not found: /var/www/html/pages/views/report.php
+[2025-03-19 16:57:08] [EXCEPTION] Ошибка 401 в модуле PercoClient, строка 43: PERCo API error: {"error":"Токен недействителен"}
+[2025-03-19 17:23:20] [EXCEPTION] Ошибка 0 в модуле PercoClient, строка 55: Xdebug has detected a possible infinite loop, and aborted your script with a stack depth of '512' frames
+[2025-03-19 17:25:12] [EXCEPTION] Ошибка 0 в модуле PercoClient, строка 24: Typed property GigReportServer\API\PercoClient::$token must not be accessed before initialization
+[2025-03-19 17:25:16] [EXCEPTION] Ошибка 0 в модуле PercoClient, строка 24: Typed property GigReportServer\API\PercoClient::$token must not be accessed before initialization
+[2025-03-20 08:14:50] [EXCEPTION] Ошибка 0 в модуле PercoClient, строка 24: Typed property GigReportServer\API\PercoClient::$token must not be accessed before initialization
+[2025-03-20 08:41:13] [EXCEPTION] Ошибка 0 в модуле PercoClient, строка 24: Typed property GigReportServer\API\PercoClient::$token must not be accessed before initialization
+[2025-03-20 08:41:26] [EXCEPTION] Ошибка 0 в модуле PercoClient, строка 24: Typed property GigReportServer\API\PercoClient::$token must not be accessed before initialization
+[2025-03-20 08:41:29] [EXCEPTION] Ошибка 0 в модуле PercoClient, строка 24: Typed property GigReportServer\API\PercoClient::$token must not be accessed before initialization
+[2025-03-20 08:41:31] [EXCEPTION] Ошибка 0 в модуле PercoClient, строка 24: Typed property GigReportServer\API\PercoClient::$token must not be accessed before initialization
+[2025-03-20 08:49:45] [EXCEPTION] Ошибка 0 в модуле PercoClient, строка 24: Typed property GigReportServer\API\PercoClient::$token must not be accessed before initialization
+[2025-03-20 08:51:39] [EXCEPTION] Ошибка 0 в модуле PercoClient, строка 17: Cannot assign array to property GigReportServer\API\PercoClient::$token of type string
+[2025-03-20 08:52:55] [EXCEPTION] Ошибка 0 в модуле PercoClient, строка 17: Cannot assign array to property GigReportServer\API\PercoClient::$token of type string
+[2025-03-20 08:58:31] [EXCEPTION] Ошибка 0 в модуле PercoClient, строка 60: json_decode(): Argument #1 ($json) must be of type string, array given
+[2025-03-20 09:00:57] [EXCEPTION] Ошибка 401 в модуле PercoClient, строка 50: PERCo API error: {"error":"Неправильный или не существующий логин или пароль"}
+[2025-03-20 09:00:58] [EXCEPTION] Ошибка 401 в модуле PercoClient, строка 50: PERCo API error: {"error":"Неправильный или не существующий логин или пароль"}
+[2025-03-20 10:06:29] [EXCEPTION] Ошибка 0 в модуле LDAPClient, строка 34: Ошибка аутентификации: Invalid credentials
+[2025-03-20 10:10:29] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 30: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 10:47:31] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 30: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 15:16:59] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 15:17:46] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 15:18:46] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 15:18:55] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 15:19:24] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 15:21:01] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 15:21:55] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 15:25:55] [EXCEPTION] Ошибка 2 в модуле Controller, строка 37: Undefined array key "debugerror"
+[2025-03-20 15:25:55] [EXCEPTION] Ошибка 2 в модуле Controller, строка 37: Trying to access array offset on null
+[2025-03-20 15:55:56] [EXCEPTION] Ошибка 2 в модуле Controller, строка 44: Undefined variable $console_html
+[2025-03-20 16:20:59] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 16:22:36] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 16:38:26] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 16:38:28] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 16:39:04] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 16:41:11] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 16:43:34] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 16:44:53] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 16:46:55] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 16:47:28] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 16:53:32] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 16:54:22] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 16:54:42] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 16:56:08] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 16:56:15] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 16:56:26] [EXCEPTION] Ошибка 404 в модуле Router, строка 72: Route not found
+[2025-03-20 16:56:35] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 16:57:02] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 16:57:21] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 16:57:52] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 16:58:03] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 17:05:43] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 17:07:24] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 17:08:54] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 17:10:00] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 17:10:10] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 17:10:17] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 17:10:40] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 17:10:57] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 17:11:06] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 17:11:18] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 17:11:26] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 17:12:40] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 17:13:30] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 17:13:38] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 17:13:48] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 17:13:59] [EXCEPTION] Ошибка 404 в модуле Router, строка 72: Route not found
+[2025-03-20 17:14:06] [EXCEPTION] Ошибка 404 в модуле Router, строка 72: Route not found
+[2025-03-20 17:15:12] [EXCEPTION] Ошибка 404 в модуле Router, строка 72: Route not found
+[2025-03-20 17:15:36] [EXCEPTION] Ошибка 404 в модуле Router, строка 72: Route not found
+[2025-03-20 17:15:48] [EXCEPTION] Ошибка 404 в модуле Router, строка 72: Route not found
+[2025-03-20 17:16:12] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 17:18:12] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-20 17:18:20] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 10:16:37] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:03:37] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:11:23] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:11:59] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:12:16] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:12:22] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:12:29] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:13:30] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:13:35] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:13:38] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:13:41] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:13:57] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:14:37] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:14:44] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:15:04] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:15:09] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:15:16] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:15:19] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:15:19] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:15:23] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:17:24] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:17:29] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:17:32] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:21:32] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:22:51] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:23:03] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:23:19] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:23:56] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:24:06] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:24:22] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:24:32] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:25:16] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:25:25] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:25:38] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:25:48] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:28:34] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:31:51] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:33:52] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:35:00] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:36:48] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:37:40] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:39:02] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:40:02] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:40:18] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:40:23] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:40:36] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:40:47] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:45:24] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:46:14] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:48:57] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:49:41] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:50:07] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:51:38] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:52:12] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:56:31] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:58:36] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:59:11] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 11:59:25] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 12:00:53] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 12:02:25] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 12:03:03] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 12:04:21] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 12:04:35] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 12:05:15] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 12:08:09] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 12:08:31] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 12:08:58] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 12:09:09] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 12:09:30] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 12:10:12] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 12:10:56] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 12:11:44] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 12:11:59] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 12:12:37] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 12:13:26] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 12:13:43] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 12:16:15] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 12:16:29] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 12:16:39] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 12:17:22] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 12:17:53] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 12:18:02] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 12:53:42] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 12:53:45] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 13:01:03] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 14:44:32] [EXCEPTION] Ошибка 404 в модуле Router, строка 72: Route not found
+[2025-03-26 14:47:50] [EXCEPTION] Ошибка 404 в модуле Router, строка 72: Route not found
+[2025-03-26 14:52:36] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 14:52:40] [EXCEPTION] Ошибка 404 в модуле Router, строка 72: Route not found
+[2025-03-26 15:00:05] [EXCEPTION] Ошибка 404 в модуле Router, строка 72: Route not found
+[2025-03-26 15:01:10] [EXCEPTION] Ошибка 404 в модуле Router, строка 72: Route not found
+[2025-03-26 15:02:32] [EXCEPTION] Ошибка 404 в модуле Router, строка 72: Route not found
+[2025-03-26 15:03:11] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 15:03:13] [EXCEPTION] Ошибка 404 в модуле Router, строка 72: Route not found
+[2025-03-26 15:03:25] [EXCEPTION] Ошибка 404 в модуле Router, строка 72: Route not found
+[2025-03-26 15:39:55] [EXCEPTION] Ошибка 404 в модуле Router, строка 72: Route not found
+[2025-03-26 15:40:17] [EXCEPTION] Ошибка 404 в модуле Router, строка 72: Route not found
+[2025-03-26 15:52:13] [EXCEPTION] Ошибка 404 в модуле Router, строка 72: Route not found
+[2025-03-26 15:52:14] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
+[2025-03-26 15:52:15] [EXCEPTION] Ошибка 404 в модуле Router, строка 72: Route not found
+[2025-03-26 15:52:24] [EXCEPTION] Ошибка 404 в модуле Router, строка 72: Route not found
+[2025-03-26 15:53:14] [EXCEPTION] Ошибка 404 в модуле Router, строка 72: Route not found
+[2025-03-26 15:55:10] [EXCEPTION] Ошибка 404 в модуле Router, строка 72: Route not found
+[2025-03-26 15:55:36] [EXCEPTION] Ошибка 404 в модуле Router, строка 72: Route not found
+[2025-03-26 15:55:58] [EXCEPTION] Ошибка 404 в модуле Router, строка 72: Route not found
+[2025-03-26 15:56:00] [EXCEPTION] Ошибка 404 в модуле Router, строка 72: Route not found
+[2025-03-26 15:56:03] [EXCEPTION] Ошибка 404 в модуле Router, строка 72: Route not found
+[2025-03-26 15:56:04] [EXCEPTION] Ошибка 404 в модуле Router, строка 72: Route not found
+[2025-03-26 16:01:58] [EXCEPTION] Ошибка 404 в модуле Router, строка 72: Route not found
+[2025-03-26 16:01:59] [EXCEPTION] Ошибка 404 в модуле TemplateEngine, строка 29: View file not found: /var/www/html/pages/views/report.php
