@@ -17,7 +17,13 @@ class Router
     }
 
     public function loadRoutes(){
-        $this->routes = !empty($this->getRoutesFromDB()) ? $this->getRoutesFromDB() : $this->getRoutesFromFile();
+        static $cachedRoutes = null;
+
+        if ($cachedRoutes === null) {
+            $cachedRoutes = !empty($this->getRoutesFromDB()) ? $this->getRoutesFromDB() : $this->getRoutesFromFile();
+        }
+
+        $this->routes = $cachedRoutes;
     }
 
     private function getRoutesFromFile(): array {

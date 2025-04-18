@@ -43,8 +43,6 @@ class Response
         http_response_code($this->statusCode);
         if ($contentType === 'application/json; charset=UTF-8') {
             echo json_encode($this->body ?? [], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
-        } elseif ($contentType === 'text/html; charset=UTF-8' && is_array($this->body)) {
-            echo "<!DOCTYPE html>\n<html>\n<head>\n" . ($this->body['head'] ?? '') . "\n</head>\n<body>\n" . ($this->body['body'] ?? '') . "\n</body>\n</html>";
         } else {
             echo $this->body;
         }

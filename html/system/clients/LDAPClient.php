@@ -15,10 +15,8 @@ class LDAPClient
     {
         $this->config = $config;
 
-        $conn_string = $config['ldap_host'].':'.$config['ldap_port'];
-        // var_dump('Connection string: '.$conn_string);
+        $conn_string = $config['ldap_host'] . ':' . $config['ldap_port'];
         $this->connection = ldap_connect($conn_string);
-        // $this->connection = ldap_connect($config['ldap_host'], $config['ldap_port']);
 
         if (!$this->connection) {
             throw new GeneralException("Не удалось подключиться к LDAP-серверу", 500, [
@@ -47,18 +45,33 @@ class LDAPClient
         }
 
         $entries = ldap_get_entries($this->connection, $search);
+        $result = [];
 
-        return $entries;
+        foreach ($entries as $entry) {
+            if (is_array($entry)) {
+                $result[] = $this->normalizeLdapEntry($entry);
+            }
+        }
+
+        return $result;
     }
 
-    public function getUserData($samaccountname)
-    {
+    public function getUserData($samaccountname): array{
+        if (empty($samaccountname)) return [];
+
         $filter = "(samaccountname=$samaccountname)";
         $data = $this->search($filter);
-        // var_dump($filter);
-        // var_dump($data);
-        // $data = 
         return $data;
+    }
+
+    protected function normalizeLdapEntry(array $entry): array{
+        $normalized = [];
+        foreach ($entry as $key => $value) {
+            if (is_string($key) && isset($value[0])) {
+                $normalized[$key] = $value[0];
+            }
+        }
+        return $normalized;
     }
 
     public function close()

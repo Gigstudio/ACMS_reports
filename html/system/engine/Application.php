@@ -6,22 +6,24 @@ defined('_RUNKEY') or die;
 use GigReportServer\System\Http\Request;
 use GigReportServer\System\Http\Response;
 use GigReportServer\System\Clients\LDAPClient;
+use GigReportServer\System\Services\LDAPService;
 
 class Application
 {
     private Config $config;
     public static Application $app;
+    private Database $db;
     public LDAPClient $ldapClient;
     // public PercoClient $percoClient;
-    // public MySQLClient $mysqlClient;
     public Request $request;
     public Response $response;
     private Router $router;
 
-    public function __construct($config){
+    public function __construct(Config $config, ?Database $db = null){
         self::$app = $this;
         $this->config = $config;
-        $this->ldapClient = new LDAPClient($config->get('ldap'));
+        $this->db = $db ?? new Database();
+        $this->ldapClient = LDAPService::safeConnect($config->get('ldap'));
         $this->request = new Request();
         $this->response = new Response();
         $this->router = new Router($this->request);
@@ -46,6 +48,10 @@ class Application
 
     public function getConfig($key, $default = null){
         return $this->config::get($key, $default);
+    }
+
+    public function getDatabase(): Database{
+        return $this->db;
     }
 
     public function run(): void

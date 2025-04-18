@@ -187,6 +187,14 @@
     width: 100%;
     height: 100%;
 }
+.menu-level{
+    display: flex;
+    list-style-type: none;
+}
+.menu-level .li{
+    display: inline-block;
+
+}
 .flex-right{
     display: flex;
     -webkit-box-align: center;

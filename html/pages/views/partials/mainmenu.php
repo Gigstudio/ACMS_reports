@@ -22,4 +22,3 @@ use GigReportServer\System\Engine\ViewHelper;
         <span id="dark"><i class="fas fa-moon"></i></span>
     </div>
 </div>
-

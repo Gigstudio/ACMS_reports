@@ -10,7 +10,7 @@ abstract class Controller
     protected Application $app;
     protected Response $response;
     protected Renderer $renderer;
-    public int $statusCode;
+    public int $statusCode = 200;
     
     public function __construct(){
         $this->app = Application::getInstance();

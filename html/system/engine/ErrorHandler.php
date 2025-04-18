@@ -45,6 +45,18 @@ class ErrorHandler
     public static function handleShutdown(): void
     {
         $error = error_get_last();
+
+        if ($error && in_array($error['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR])) {
+            self::$eventClass = Event::EVENT_ERROR;
+            $message = self::composeMessage(
+                $error['type'],
+                $error['message'],
+                pathinfo($error['file'], PATHINFO_FILENAME),
+                $error['line']
+            );
+            self::registerEvent($message);
+            self::dispatch($error['type'], $error['message']);
+        }
     }
 
     private static function composeMessage(int $errno, string $errstr, string $errfile, int $errline){

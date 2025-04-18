@@ -31,14 +31,4 @@ class Console
         self::$messages = [];
         unset($_SESSION['console_messages']);
     }
-
-    public static function createConsole(){
-        $data = [];
-        $console_html_file = PATH_LAYOUTS . 'console.php';
-        if(file_exists($console_html_file)){
-            $console_html = (file_get_contents(PATH_LAYOUTS . 'console.php'));
-            $data = "<script>let inject = " . json_encode($console_html, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) . ";</script>";
-        }
-        return $data;
-    }
 }

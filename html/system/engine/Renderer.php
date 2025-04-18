@@ -30,13 +30,24 @@ class Renderer {
         ob_start();
 
         // Утилита рендера вложенных блоков
-        $insert = function(string $name) use ($children): void {
+        $insert = function(string $name, array $params = []) use ($children): void {
             if (isset($children[$name])) {
-                echo (new Renderer())->render($children[$name]);
+                $block = $children[$name];
+                $merged = array_merge($block->getData(), $params);
+                $blockWithParams = Block::make($block->getTemplate(), $merged)
+                    ->with($block->getChildren());
+                echo $this->render($blockWithParams);
             }
         };
 
-        include $templateFile;
+        try {
+            include $templateFile;
+        } catch (\Throwable $e) {
+            ob_end_clean();
+            throw new GeneralException("Ошибка при рендере шаблона", 500, [
+                'detail' => $e->getMessage()
+            ]);
+        }
 
         return ob_get_clean();
     }

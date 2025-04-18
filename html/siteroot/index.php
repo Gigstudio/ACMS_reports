@@ -46,9 +46,16 @@ require_once $initFile;
 // Starting app
 use GigReportServer\System\Engine\ErrorHandler;
 use GigReportServer\System\Engine\Config;
+use GigReportServer\System\Engine\Database;
+use GigReportServer\System\Engine\SchemaManager;
 use GigReportServer\System\Engine\Application;
 
 ErrorHandler::register();
+
 $config = new Config();
-$app = new Application($config);
+$db = new Database();
+
+(new SchemaManager($db))->checkAndMigrate();
+
+$app = new Application($config, $db);
 $app -> run();

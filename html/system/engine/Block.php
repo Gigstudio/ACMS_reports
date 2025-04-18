@@ -21,6 +21,10 @@ class Block {
 
     public function with(array $blocks): self {
         foreach ($blocks as $name => $block) {
+            if (!$block instanceof self) {
+                system_warn("Block::with(): '$name' не является экземпляром Block. Пропущено.");
+                continue;
+            }
             $this->addBlock($name, $block);
         }
         return $this;
@@ -31,12 +35,16 @@ class Block {
     }
 
     public function addStyle(string $href){
-        $this->styles[] = $href;
+        if (!in_array($href, $this->styles, true)) {
+            $this->styles[] = $href;
+        }
         return $this;
     }
 
     public function addScript(string $src){
-        $this->scripts[] = $src;
+        if (!in_array($src, $this->scripts, true)) {
+            $this->scripts[] = $src;
+        }
         return $this;
     }
 

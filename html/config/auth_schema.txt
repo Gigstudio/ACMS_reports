@@ -1,0 +1,9 @@
+[AuthManager::authenticate(login, password)]
+    ├─> [UserRepository::findByLogin()]             ← локальная БД
+    ├─> если не найден:
+    │     ├─> [LDAPService::safeConnect()] → поиск по samaccountname
+    │     ├─> создать через UserRepository::createFromLdap()
+    │     └─> попробовать сопоставить с PERCo по ФИО или id_from_1c
+    ├─> если найден:
+    │     └─> проверить пароль (если не imported) через PasswordValidator
+    └─> вернуть [User] или null
