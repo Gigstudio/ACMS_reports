@@ -16,6 +16,7 @@ defined('_RUNKEY') or die;
 		</div>
 		<?= $insert('console') ?>
 	</div>
+	<div id="snackbar"></div>
 	<?= ViewHelper::scripts() ?>
 </body>
 </html>

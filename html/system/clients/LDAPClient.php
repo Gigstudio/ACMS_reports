@@ -22,7 +22,7 @@ class LDAPClient
             throw new GeneralException("Не удалось подключиться к LDAP-серверу", 500, [
                 'detail' => "Проверьте конфигурацию: файл init.json, раздел ldap.",
             ]);
-    }
+        }
 
         ldap_set_option($this->connection, LDAP_OPT_PROTOCOL_VERSION, 3);
         ldap_set_option($this->connection, LDAP_OPT_REFERRALS, 0);
@@ -36,7 +36,11 @@ class LDAPClient
         }
     }
 
-    public function search($filter, array $attributes = [])
+    Public function getConnection(){
+        return $this->connection;
+    }
+
+    public function search($filter, array $attributes = ['*', '+'])
     {
         $search = ldap_search($this->connection, $this->config['ldap_dn'], $filter, $attributes);
 
@@ -56,10 +60,37 @@ class LDAPClient
         return $result;
     }
 
+    public function readUserData($samaccountname){
+        $filter = "(samaccountname=$samaccountname)";
+        $result = ldap_search($this->connection, $this->config['ldap_dn'], $filter, ['*']);
+
+        $entry = ldap_first_entry($this->connection, $result);
+        $attributes = ldap_get_attributes($this->connection, $entry);
+        $out = [];
+
+        foreach ($attributes as $entry) {
+            if (is_array($entry[0])) {
+                $out[] = $this->normalizeLdapEntry($entry);
+            }
+        }
+
+        return $attributes;
+     }
+
     public function getUserData($samaccountname): array{
         if (empty($samaccountname)) return [];
 
         $filter = "(samaccountname=$samaccountname)";
+        $attributes = [
+            'samaccountname',
+            'displayname',
+            'mail',
+            'extensionattribute10',
+            'extensionattribute1',
+            'department',
+            'title',
+            'distinguishedName'
+          ];
         $data = $this->search($filter);
         return $data;
     }

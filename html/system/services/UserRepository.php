@@ -22,12 +22,20 @@ class UserRepository
 
     public function createFromLdap(array $ldap): array
     {
+        $passwordHash = password_hash(Application::getInstance()->getRequest()->getPostParam('pass') ?? '', PASSWORD_BCRYPT);
+
         $this->db->insert('users', [
             'login' => strtolower($ldap['samaccountname'] ?? ''),
+            'password' => $passwordHash,
             'email' => $ldap['mail'] ?? null,
             'full_name' => $ldap['displayname'] ?? null,
+            'first_name' => $ldap['givenname'] ?? null,
+            'last_name' => $ldap['sn'] ?? null,
             'id_from_1c' => $ldap['extensionattribute10'] ?? null,
-            'is_imported' => 1,
+            'division_id' => $perco[''] ?? null,
+            'position_id' => $perco[''] ?? null,
+            'bage_number' => $perco['extensionattribute10'] ?? null,
+            'source' => 'ldap',
             'is_active' => 1,
         ]);
 

@@ -1,5 +1,6 @@
 <?php
 use GigReportServer\Pages\Controllers\AuthController;
+use GigReportServer\System\Engine\Application;
 
 $action = $input['action'] ?? null;
 
@@ -9,20 +10,27 @@ switch ($action) {
         break;
 
     case 'login':
-        $userdata = (new AuthController)->login($input['data']);
-        // var_dump($userdata);
-        echo json_encode($userdata, JSON_INVALID_UTF8_IGNORE);
+        $controller = new AuthController;
+        $result = $controller->login($input['data'] ?? []);
+
+        Application::getInstance()->response->json($result);
         break;
 
     case 'register':
-        echo (new AuthController)->register($input);
-        // echo json_encode(['status' => 'success', 'message' => 'Данные для регистрации получены']);
+        $controller = new AuthController;
+        $result = $controller->register($input['data'] ?? []);
+
+        Application::getInstance()->response->json($result);
         break;
 
-    case 'logout':
-        // echo json_encode(['status' => 'success', 'message' => 'Данные для регистрации получены']);
+        case 'logout':
+        $controller = new AuthController;
+        $result = $controller->logout();
+
+        Application::getInstance()->response->json($result);
         break;
 
     default:
-        echo json_encode(['status' => 'error', 'message' => 'Неизвестное действие']);
+        header('Content-Type: application/json; charset=UTF-8');
+        echo json_encode(['status' => 'error', 'message' => 'Неизвестное действие'], JSON_UNESCAPED_UNICODE);
 }

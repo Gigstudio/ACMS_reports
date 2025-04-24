@@ -72,6 +72,14 @@
     "perco_admin": "admin",
     "perco_password": "123456Zz"
   },
+  "firebird": {
+    "firebird_host": "prod-acs-srv.pnhz.kz",
+    "firebird_port": 3050,
+    "firebird_dbpath": "/PERCo_Bases/SCD17k.fdb", 
+    "firebird_charset": "UTF8",
+    "firebird_user": "SYSDBA",
+    "firebird_password": "p0skudA"
+  },
   "session": {
     "session_name": "GRSess",
     "idle_time": 600,

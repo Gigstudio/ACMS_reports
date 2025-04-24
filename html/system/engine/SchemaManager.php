@@ -4,10 +4,11 @@ namespace GigReportServer\System\Engine;
 defined('_RUNKEY') or die;
 
 use GigReportServer\System\Exceptions\GeneralException;
+use GigReportServer\System\Clients\MySQLClient;
 
 class SchemaManager
 {
-    private Database $db;
+    private MySQLClient $db;
     private string $schemaPath;
     private array $requiredTables = ['users'];
     private string $version;
@@ -37,17 +38,17 @@ class SchemaManager
     }
 
     private function updateVersion(){
-        $affected = $this->db->update('db_settings', ['value' => $this->version], ['param' => 'dbversion']);
-        if($affected === 0){
+        $value = $this->db->value("SELECT value FROM db_settings WHERE param = ?", ['dbversion']);
+        if ($value === false) {
+            trigger_error('Превый запуск!', E_USER_WARNING);
             $this->db->insert('db_settings', [
                 'param' => 'dbversion',
                 'value' => $this->version
             ]);
-        }
-        $this->db->insert('db_migrations', [
-            'version' => $this->version,
-            'description' => 'Автоматическая миграция при запуске приложения'
-        ]);
+        } elseif ($value !== $this->version) {
+            trigger_error("Версия базы данных обновлена с {$value} до {$this->version}", E_USER_WARNING);
+            $this->db->update('db_settings', ['value' => $this->version], ['param' => 'dbversion']);
+        }        $affected = $this->db->update('db_settings', ['value' => $this->version], ['param' => 'dbversion']);
     }
 
     private function ensureSettingsTable(): void

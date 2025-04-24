@@ -7,24 +7,31 @@ use GigReportServer\System\Http\Request;
 use GigReportServer\System\Http\Response;
 use GigReportServer\System\Clients\LDAPClient;
 use GigReportServer\System\Services\LDAPService;
+use GigReportServer\System\Clients\MySQLClient;
+use GigReportServer\System\Clients\PercoWebClient;
 
 class Application
 {
     private Config $config;
     public static Application $app;
-    private Database $db;
+    private MySQLClient $db;
     public LDAPClient $ldapClient;
-    // public PercoClient $percoClient;
+    public ?PercoWebClient $percoWebClient;
     public Request $request;
     public Response $response;
     private Router $router;
 
-    public function __construct(Config $config, ?Database $db = null){
+    public function __construct(Config $config, ?MySQLClient $db = null){
         self::$app = $this;
         $this->config = $config;
-        $this->db = $db ?? new Database();
+        $this->db = $db ?? new MySQLClient();
         $this->ldapClient = LDAPService::safeConnect($config->get('ldap'));
-        $this->request = new Request();
+        try {
+            $this->percoWebClient = new PercoWebClient($config->get('perco'));
+        } catch (\Throwable $e) {
+            $this->percoWebClient = null;
+            trigger_error("PERCo-Web недоступен: " . $e->getMessage(), E_USER_WARNING);
+        }        $this->request = new Request();
         $this->response = new Response();
         $this->router = new Router($this->request);
 
@@ -44,6 +51,10 @@ class Application
 
     public static function getInstance(): self{
         return self::$app ?? new self(new Config);
+    }
+
+    public function getRequest(){
+        return $this->request;
     }
 
     public function getConfig($key, $default = null){

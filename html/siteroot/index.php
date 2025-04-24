@@ -46,14 +46,14 @@ require_once $initFile;
 // Starting app
 use GigReportServer\System\Engine\ErrorHandler;
 use GigReportServer\System\Engine\Config;
-use GigReportServer\System\Engine\Database;
+use GigReportServer\System\Clients\MySQLClient;
 use GigReportServer\System\Engine\SchemaManager;
 use GigReportServer\System\Engine\Application;
 
 ErrorHandler::register();
 
 $config = new Config();
-$db = new Database();
+$db = new MySQLClient();
 
 (new SchemaManager($db))->checkAndMigrate();
 

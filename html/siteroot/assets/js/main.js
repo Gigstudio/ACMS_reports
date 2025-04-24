@@ -17,17 +17,17 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(html => {
             if (!document.getElementById('modalbg')) {
                 document.body.insertAdjacentHTML('beforeend', html);
-                const existingScript = document.querySelector('script[src="/assets/js/login.js"]');
-                if(!existingScript){
-                    const script = document.createElement('script');
-                    script.src = '/assets/js/login.js';
-                    script.onload = () => {
-                        if (typeof Auth.initLoginUI === 'function') Auth.initLoginUI();
-                    };
-                    document.body.appendChild(script);
-                } else {
-                    if (typeof Auth.initLoginUI === 'function') Auth.initLoginUI();
-                }
+                // const existingScript = document.querySelector('script[src="/assets/js/login.js"]');
+                // if(!existingScript){
+                //     const script = document.createElement('script');
+                //     script.src = '/assets/js/login.js';
+                //     script.onload = () => {
+                //         if (typeof Auth.initLoginUI === 'function') Auth.initLoginUI();
+                //     };
+                //     document.body.appendChild(script);
+                // } else {
+                if (typeof Auth.initLoginUI === 'function') Auth.initLoginUI();
+                // }
             }
         })
         .catch(err => console.error('Ошибка загрузки модального окна:', err));

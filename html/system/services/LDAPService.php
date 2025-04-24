@@ -8,6 +8,13 @@ use GigReportServer\System\Exceptions\GeneralException;
 
 class LDAPService
 {
+    protected LDAPClient $client;
+
+    public function __construct(array $config)
+    {
+        $this->client = new LDAPClient($config);
+    }
+
     public static function safeConnect(array $config, bool $require = false): ?LDAPClient
     {
         try {
@@ -16,9 +23,12 @@ class LDAPService
             if ($require) {
                 throw $e;
             }
-
-            system_warn("LDAP недоступен: " . $e->getMessage());
+            trigger_error("LDAP недоступен: " . $e->getMessage(), E_USER_WARNING);
             return null;
         }
+    }
+
+    public function getConnection(){
+        return $this->client->getConnection();
     }
 }

@@ -22,7 +22,8 @@ class Block {
     public function with(array $blocks): self {
         foreach ($blocks as $name => $block) {
             if (!$block instanceof self) {
-                system_warn("Block::with(): '$name' не является экземпляром Block. Пропущено.");
+                trigger_error("Block::with(): '$name' не является экземпляром Block. Пропущено.", E_USER_WARNING);
+                // system_warn("Block::with(): '$name' не является экземпляром Block. Пропущено.");
                 continue;
             }
             $this->addBlock($name, $block);

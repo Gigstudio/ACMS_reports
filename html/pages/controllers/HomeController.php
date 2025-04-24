@@ -11,8 +11,7 @@ class HomeController extends Controller
 {
     public function index($data): void{
         $ldap = Application::getInstance()->ldapClient;
-        $data['userinfo'] = $ldap->getUserData('g.chirikov');
-        // $check_ldap = 
+        $data['userinfo'] = $ldap->getUserData('ai.kadyrbekov');
 
         $head = Block::make('partials/head');
         $mainmenu = Block::make('partials/mainmenu', ['user' => 'Admin']);
