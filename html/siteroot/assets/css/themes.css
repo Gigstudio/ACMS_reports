@@ -3,12 +3,13 @@
     --transition-fast: 0.1s;
     --transition-mid: 0.3s;
     --transition-slow: 0.5s;
-    --transition-veryslow: 2.5s;
+    --transition-veryslow: 1.5s;
     --bg-color: #fcfdff;
     --text-color: #000000;
     --shadow-color: #00000044;
     --text-gray: #5a5a5a;
     --text-darkgray: #3a3a3a;
+    --text-blue: #234877;
     --light-green:#00c50a;
     --light-red:#c5000a;
     --dark-green:#004904;
@@ -41,6 +42,7 @@
     --shadow-color: #ffffff25;
     --text-gray: #5a5a5a;
     --text-darkgray: #3a3a3a;
+    --text-blue: #234877;
     --light-green:#00c50a;
     --light-red:#c5000a;
     --dark-green:#004904;

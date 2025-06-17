@@ -1,0 +1,6 @@
+[
+    {"Field": "id", "Type": "int", "Null": "NO", "Default": null, "Extra": "auto_increment", "Key": "PRI"},
+    {"Field": "name", "Type": "varchar(128)", "Null": "NO", "Default": null, "Extra": "", "Key": ""},
+    {"Field": "is_lead", "Type": "tinyint(1)", "Null": "NO", "Default": 0, "Extra": "", "Key": ""},
+    {"Field": "is_tabler", "Type": "tinyint(1)", "Null": "NO", "Default": 0, "Extra": "", "Key": ""}
+]

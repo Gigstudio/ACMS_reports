@@ -1,0 +1,7 @@
+<Files "init.json">
+    Require all granted
+</Files>
+
+<FilesMatch "^(?!init\.json$).*$">
+    Require all denied
+</FilesMatch>

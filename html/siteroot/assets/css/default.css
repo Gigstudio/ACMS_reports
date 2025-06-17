@@ -190,6 +190,8 @@
 .menu-level{
     display: flex;
     list-style-type: none;
+    margin: 0;
+    padding: 0;
 }
 .menu-level .li{
     display: inline-block;
@@ -238,28 +240,52 @@
 .highlited{
     color: var(--menu-highlight);
 }
-
-.switch-container{
-    position: absolute;
-    right: 0;
-    margin-right: 6px;
-    border: solid 1px #ffffff33;
-    opacity: 70%;
+.controls-holder{
+    position: relative;
+    padding: 6px var(--w64);
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+    min-height: 24px;
+    background-color: var(--winc-bg);
+    color: var(--menu-forecolor);
 }
-.flex-vertical{
+
+.indicator{
+    /* display:inline-block; */
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    margin-right: 5px;
+    vertical-align: middle;
+    border:1px solid #555;
+    transition: "background 0.2s";
+    animation: flashIndicator var(--transition-veryslow) ease-in-out;
+    animation-iteration-count: infinite;
+}
+.switch-container{
+    height: max-content;
+    width: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2px 4px;
+    margin-left: 8px;
+    border: solid 1px #ffffff33;
+    border-radius: 6px;
+    opacity: 80%;
+    font-size: 14px;
+}
+/* .flex-vertical{
     display: flex;
     flex-direction: column;
     align-items: center;
-}
+} */
 .switch {
     position: relative;
     display: inline-block;
-    width: 16px;
-    height: 32px;
+    width: 32px;
+    height: 16px;
     margin: 2px;
-}
-.hidden {
-    display: none;
 }
 .slider {
     position: absolute;
@@ -290,9 +316,9 @@
     box-shadow: 0 0 1px #2196F3;
 }
 .switch-toggle:checked + .slider:before {
-    -webkit-transform: translateY(16px);
-    -ms-transform: translateY(16px);
-    transform: translateY(16px);
+    -webkit-transform: translateX(16px);
+    -ms-transform: translateX(16px);
+    transform: translateX(16px);
 }
 .slider.round {
     border-radius: 18px;
@@ -305,6 +331,7 @@
     padding: 0 var(--w64);
     height: 100%;
     overflow: auto;
+    font-size: 14px;
 }
 .btn{
     padding: 12px 32px;
@@ -408,6 +435,10 @@
     animation: flashText var(--transition-slow) ease-in-out;
     animation-iteration-count: 3;
 }
+.hidden {
+    display: none;
+}
+
 
 #snackbar {
     visibility: hidden;
@@ -459,3 +490,15 @@
 		text-shadow: rgba(255,221,0,0.9) 0px 0px 10px;
 	}
 }
+@keyframes flashIndicator { 
+    0%{
+		background-color: rgb(0, 255, 21);
+	}
+	50%{
+		background-color: rgb(0, 168, 21);
+	}
+    100%{
+		background-color: rgb(0, 255, 21);
+	}
+}
+

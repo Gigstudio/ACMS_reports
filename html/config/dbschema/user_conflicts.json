@@ -1,0 +1,9 @@
+[
+    {"Field": "id", "Type": "int", "Null": "NO", "Default": null, "Extra": "AUTO_INCREMENT", "Key": "PRI"},
+    {"Field": "login", "Type": "varchar(64)", "Null": "NO", "Default": null, "Extra": "", "Key": "UNI"},
+    {"Field": "source", "Type": "enum('ldap','perco')", "Null": "NO", "Default": null, "Extra": "", "Key": ""},
+    {"Field": "serialized_data", "Type": "text", "Null": "NO", "Default": null, "Extra": "", "Key": ""},
+    {"Field": "detected_at", "Type": "datetime", "Null": "NO", "Default": "CURRENT_TIMESTAMP", "Extra": "", "Key": ""},
+    {"Field": "resolved", "Type": "tinyint(1)", "Null": "NO", "Default": 0, "Extra": "", "Key": ""}
+]
+  

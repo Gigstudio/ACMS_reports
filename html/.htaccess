@@ -20,11 +20,11 @@ Options -Indexes
 
 RewriteEngine On
 
+# Защита от некоторых уязвимостей через URL
 RewriteCond %{QUERY_STRING} base64_encode[^(]*\([^)]*\) [OR]
 RewriteCond %{QUERY_STRING} (<|%3C)([^s]*s)+cript.*(>|%3E) [NC,OR]
 RewriteCond %{QUERY_STRING} GLOBALS(=|\[|\%[0-9A-Z]{0,2}) [OR]
 RewriteCond %{QUERY_STRING} _REQUEST(=|\[|\%[0-9A-Z]{0,2})
-
 RewriteRule .* siteroot/index.php [R=301,F]
 
 # Перенаправление /assets/ в /siteroot/assets/
@@ -32,19 +32,23 @@ RewriteCond %{REQUEST_URI} ^/assets/(.*)$
 RewriteCond %{DOCUMENT_ROOT}/siteroot/assets/%1 -f
 RewriteRule ^assets/(.*)$ siteroot/assets/$1 [L]
 
+# Защита системных файлов
+<FilesMatch "^(\.env|\.git|config\.php)$">
+    Require all denied
+</FilesMatch>
+
+# Защита папок (исключая config/)
+RewriteRule ^(pages|storage|system)/ - [F]
+
 RewriteCond %{REQUEST_URI} !^/index\.php
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-#RewriteCond %{REQUEST_URI} !^/api/ 
 RewriteRule .* siteroot/index.php?url=$1 [L,QSA] 
 
 RewriteRule ^$ siteroot/ [L]
-
-RewriteRule ^(config|pages|storage|system)/ - [F]
 
 RewriteCond %{REQUEST_FILENAME} -d  
 RewriteCond %{REQUEST_FILENAME}/index.php !-f
 RewriteRule ^(.*/)?$ siteroot/index.php?url=$1 [L,QSA] 
 
-#ErrorDocument 403 /pages/static/403.html
-
+# ErrorDocument 403 /pages/static/403.html

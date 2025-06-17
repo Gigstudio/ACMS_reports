@@ -1,0 +1,159 @@
+ReportServer
+├── .env
+├── .env.example
+├── .gitignore
+├── bin
+│   ├── mysql8
+│   │   └── Dockerfile
+│   └── php83
+│       └── Dockerfile
+├── config
+│   ├── initdb
+│   │   └── .gitkeep
+│   ├── php
+│   │   ├── .gitkeep
+│   │   └── php.ini
+│   └── vhosts
+│       ├── .gitkeep
+│       └── default.conf
+├── data
+│   ├── .gitkeep
+│   └── mysql
+│       └── .gitkeep
+├── docker-compose.yml
+├── history.md
+├── html
+│   ├── .htaccess
+│   ├── API
+│   │   ├── ApiAnswer.php
+│   │   └── Controllers
+│   │       ├── ApiController.php
+│   │       └── ConsoleController.php
+│   ├── app
+│   │   ├── Core
+│   │   │   ├── Application.php
+│   │   │   ├── AssetManager.php
+│   │   │   ├── Autoloader.php
+│   │   │   ├── Block.php
+│   │   │   ├── Config.php
+│   │   │   ├── Console.php
+│   │   │   ├── ContextDetector.php
+│   │   │   ├── Controller.php
+│   │   │   ├── DbSchemaManager.php
+│   │   │   ├── ErrorHandler.php
+│   │   │   ├── Event.php
+│   │   │   ├── FileEventLogger.php
+│   │   │   ├── functions.php
+│   │   │   ├── Renderer.php
+│   │   │   ├── Request.php
+│   │   │   ├── Response.php
+│   │   │   └── Router.php
+│   │   ├── Domain
+│   │   │   └── Exceptions
+│   │   │       └── GeneralException.php
+│   │   ├── Infrastructure
+│   │   │   ├── Contracts
+│   │   │   │   ├── DatabaseClientInterface.php
+│   │   │   │   └── EventLoggerInterface.php
+│   │   │   └── Persistence
+│   │   │       ├── Database.php
+│   │   │       └── MySQLClient.php
+│   │   └── Presentation
+│   │       ├── Controller
+│   │       │   ├── HomeController.php
+│   │       │   └── MessageController.php
+│   │       └── View
+│   │           ├── blocks
+│   │           │   ├── content.php
+│   │           │   ├── error.php
+│   │           │   └── login.php
+│   │           ├── FontManager.php
+│   │           ├── layouts
+│   │           │   └── default.php
+│   │           ├── MenuBuilder.php
+│   │           ├── partials
+│   │           │   ├── bottommenu.php
+│   │           │   ├── console.php
+│   │           │   ├── head.php
+│   │           │   ├── mainmenu.php
+│   │           │   ├── modals.php
+│   │           │   └── modal_login.php
+│   │           └── ViewHelper.php
+│   ├── bootstrap.php
+│   ├── config
+│   │   ├── .htaccess
+│   │   ├── apimap.php
+│   │   ├── dbschema
+│   │   │   ├── companies.json
+│   │   │   ├── divisions.json
+│   │   │   ├── perco_users.json
+│   │   │   ├── positions.json
+│   │   │   ├── users.json
+│   │   │   ├── user_conflicts.json
+│   │   │   └── user_profiles.json
+│   │   ├── defines.php
+│   │   ├── events.php
+│   │   ├── init.json
+│   │   ├── menuItems.php
+│   │   └── routes.php
+│   ├── robots.txt
+│   ├── scripts
+│   ├── siteroot
+│   │   ├── .htaccess
+│   │   ├── assets
+│   │   │   ├── css
+│   │   │   │   ├── all.css
+│   │   │   │   ├── default.css
+│   │   │   │   ├── login.css
+│   │   │   │   ├── test_default.css
+│   │   │   │   ├── themes.css
+│   │   │   │   └── t_editor.css
+│   │   │   ├── images
+│   │   │   │   ├── gigicon.png
+│   │   │   │   ├── gigicon_white.png
+│   │   │   │   ├── gig_logo_text_black.png
+│   │   │   │   ├── gig_logo_text_white.png
+│   │   │   │   ├── Logotip-PMKHZ_2023_prozrachnyy-fon.png
+│   │   │   │   ├── Magnifying_glass_icon.svg
+│   │   │   │   ├── pnhz_logo_round_01.png
+│   │   │   │   └── pnhz_logo_round_02.png
+│   │   │   ├── js
+│   │   │   │   ├── core
+│   │   │   │   │   ├── APIClient.js
+│   │   │   │   │   ├── AppConsole.js
+│   │   │   │   │   ├── ModalManager.js
+│   │   │   │   │   └── Utils.js
+│   │   │   │   └── main.js
+│   │   │   └── webfonts
+│   │   │       ├── fa-brands-400.eot
+│   │   │       ├── fa-brands-400.svg
+│   │   │       ├── fa-brands-400.ttf
+│   │   │       ├── fa-brands-400.woff
+│   │   │       ├── fa-brands-400.woff2
+│   │   │       ├── fa-regular-400.eot
+│   │   │       ├── fa-regular-400.svg
+│   │   │       ├── fa-regular-400.ttf
+│   │   │       ├── fa-regular-400.woff
+│   │   │       ├── fa-regular-400.woff2
+│   │   │       ├── fa-solid-900.eot
+│   │   │       ├── fa-solid-900.svg
+│   │   │       ├── fa-solid-900.ttf
+│   │   │       ├── fa-solid-900.woff
+│   │   │       ├── fa-solid-900.woff2
+│   │   │       ├── Lobster-Regular.ttf
+│   │   │       └── OFL.txt
+│   │   └── index.php
+│   └── storage
+│       └── logs
+│           └── events.log
+├── logs
+│   ├── .gitkeep
+│   ├── apache2
+│   │   ├── .gitkeep
+│   │   ├── error.log
+│   │   └── other_vhosts_access.log
+│   └── mysql
+│       └── .gitkeep
+├── projectlog.md
+├── temp
+└── TODO.md

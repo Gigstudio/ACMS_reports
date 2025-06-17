@@ -1,0 +1,8 @@
+[
+    {"Field": "id", "Type": "int", "Null": "NO", "Default": null, "Extra": "auto_increment", "Key": "PRI"},
+    {"Field": "user_id", "Type": "int", "Null": "NO", "Default": null, "Extra": "", "Key": "MUL"},
+    {"Field": "birthday", "Type": "date", "Null": "YES", "Default": null, "Extra": "", "Key": ""},
+    {"Field": "phone", "Type": "varchar(32)", "Null": "YES", "Default": null, "Extra": "", "Key": ""},
+    {"Field": "telegram", "Type": "varchar(64)", "Null": "YES", "Default": null, "Extra": "", "Key": ""},
+    {"Field": "avatar", "Type": "varchar(255)", "Null": "YES", "Default": null, "Extra": "", "Key": ""}
+]

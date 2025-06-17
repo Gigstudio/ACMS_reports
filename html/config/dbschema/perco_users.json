@@ -1,0 +1,11 @@
+[
+    {"Field": "id", "Type": "int", "Null": "NO", "Default": null, "Extra": "auto_increment", "Key": "PRI"},
+    {"Field": "perco_id", "Type": "varchar(32)", "Null": "NO", "Default": null, "Extra": "", "Key": "UNI"},
+    {"Field": "identifier", "Type": "int", "Null": "YES", "Default": null, "Extra": "", "Key": ""},
+    {"Field": "fio", "Type": "varchar(128)", "Null": "NO", "Default": null, "Extra": "", "Key": ""},
+    {"Field": "company_id", "Type": "int", "Null": "YES", "Default": null, "Extra": "", "Key": "MUL"},
+    {"Field": "division_id", "Type": "int", "Null": "YES", "Default": null, "Extra": "", "Key": "MUL"},
+    {"Field": "position_id", "Type": "int", "Null": "YES", "Default": null, "Extra": "", "Key": "MUL"},
+    {"Field": "is_block", "Type": "tinyint(1)", "Null": "NO", "Default": 0, "Extra": "", "Key": ""},
+    {"Field": "updated_at", "Type": "datetime", "Null": "YES", "Default": null, "Extra": "", "Key": ""}
+]

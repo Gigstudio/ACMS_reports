@@ -23,3 +23,7 @@ sessions/
 /logs/mysql/
 /config/initdb/
 /logs/apache2/
+
+# Чувствительные данные
+.env
+/html/config/init.json

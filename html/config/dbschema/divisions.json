@@ -1,0 +1,7 @@
+[
+    {"Field": "id", "Type": "int", "Null": "NO", "Default": null, "Extra": "auto_increment", "Key": "PRI"},
+    {"Field": "name", "Type": "varchar(128)", "Null": "NO", "Default": null, "Extra": "", "Key": ""},
+    {"Field": "parent_id", "Type": "int", "Null": "YES", "Default": null, "Extra": "", "Key": "MUL"},
+    {"Field": "company_id", "Type": "int", "Null": "YES", "Default": null, "Extra": "", "Key": "MUL"},
+    {"Field": "external_code", "Type": "varchar(32)", "Null": "YES", "Default": null, "Extra": "", "Key": ""} 
+]
