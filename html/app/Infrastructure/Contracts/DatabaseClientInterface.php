@@ -13,7 +13,7 @@ interface DatabaseClientInterface
     public function value(string $sql, array $params = [], string $message = ''): mixed;
 
     // CRUD-запросы
-    public function get(string $table, array $where = [], array $fields = ['*']): array;
+    public function get(string $table, array $where = [], array $fields = ['*'], int $limit = null): array;
     public function first(string $table, array $where = [], array $fields = ['*']): ?array;
     public function insert(string $table, array $data): bool;
     public function massInsert(string $table, array $fields, array $rows): int;

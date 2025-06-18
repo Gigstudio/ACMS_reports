@@ -13,7 +13,7 @@
         <thead>
         <tr>
             <?php foreach (array_keys($staff[0]) as $col): ?>
-                <th><?= htmlspecialchars($col) ?></th>
+                <th><?= htmlspecialchars((string)($col ?? ''), ENT_QUOTES, 'UTF-8') ?></th>
             <?php endforeach; ?>
         </tr>
         </thead>
@@ -21,7 +21,7 @@
         <?php foreach ($staff as $row): ?>
             <tr>
                 <?php foreach ($row as $cell): ?>
-                    <td><?= htmlspecialchars($cell) ?></td>
+                    <td><?= htmlspecialchars((string)($cell ?? ''), ENT_QUOTES, 'UTF-8') ?></td>
                 <?php endforeach; ?>
             </tr>
         <?php endforeach; ?>

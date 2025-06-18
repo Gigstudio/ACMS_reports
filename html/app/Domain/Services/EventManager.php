@@ -4,7 +4,6 @@ namespace GIG\Domain\Services;
 use GIG\Domain\Entities\Event;
 use GIG\Infrastructure\Repository\EventRepository;
 use GIG\Core\Console;
-use GIG\Core\Config;
 use GIG\Core\FileEventLogger;
 
 defined('_RUNKEY') or die;

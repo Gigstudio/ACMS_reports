@@ -128,7 +128,7 @@ class MySQLClient extends Database implements DatabaseClientInterface
     public function describeTable(string $table): array
     {
         $this->validateIdentifier($table);
-        $stmt = $this->exec("DESCRIBE `$table`", [], "DESCRIBE $table");
+        $stmt = $this->exec("DESCRIBE `$table`", []);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 

@@ -32,7 +32,7 @@ class HomeController extends Controller
         }
         $data['firebird_tables'] = $tableNames;
 
-        $staff = $firebird->get('STAFF', [], ['*']);
+        $staff = $firebird->get('STAFF', [], ['*'], 200);
         $data['staff'] = $staff;
 
 

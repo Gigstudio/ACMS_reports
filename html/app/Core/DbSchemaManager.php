@@ -38,6 +38,7 @@ class DbSchemaManager
         $this->ensureSettingsTable();
         $this->ensureMigrationsTable();
         $this->ensureRolesTable();
+        $this->ensureBackgroundTasksTable();
 
         $current = $this->getCurrentVersion();
         if ($current !== $this->version) {
@@ -96,7 +97,7 @@ class DbSchemaManager
     {
         if (!$this->db->tableExists('db_migrations')) {
             $this->db->createTable('db_migrations', [
-                ['Field' => 'id', 'Type' => 'int(11)', 'Null' => 'NO', 'Default' => null, 'Extra' => 'auto_increment', 'Key' => 'PRI'],
+                ['Field' => 'id', 'Type' => 'int', 'Null' => 'NO', 'Default' => null, 'Extra' => 'auto_increment', 'Key' => 'PRI'],
                 ['Field' => 'version', 'Type' => 'varchar(32)', 'Null' => 'NO', 'Default' => null, 'Extra' => '', 'Key' => ''],
                 ['Field' => 'applied_at', 'Type' => 'timestamp', 'Null' => 'NO', 'Default' => 'CURRENT_TIMESTAMP', 'Extra' => '', 'Key' => ''],
                 ['Field' => 'description', 'Type' => 'text', 'Null' => 'YES', 'Default' => null, 'Extra' => '', 'Key' => '']
@@ -112,7 +113,7 @@ class DbSchemaManager
     {
         if (!$this->db->tableExists('roles')) {
             $this->db->createTable('roles', [
-                ['Field' => 'id', 'Type' => 'INT', 'Null' => 'NO', 'Default' => null, 'Extra' => 'AUTO_INCREMENT', 'Key' => 'PRI'],
+                ['Field' => 'id', 'Type' => 'int', 'Null' => 'NO', 'Default' => null, 'Extra' => 'AUTO_INCREMENT', 'Key' => 'PRI'],
                 ['Field' => 'name', 'Type' => 'varchar(255)', 'Null' => 'YES', 'Default' => null, 'Extra' => '', 'Key' => ''],
                 ['Field' => 'description', 'Type' => 'varchar(255)', 'Null' => 'YES', 'Default' => null, 'Extra' => '', 'Key' => '']
             ]);
@@ -139,6 +140,26 @@ class DbSchemaManager
                 $this->db->insert('roles', $role);
                 EventManager::logParams(Event::INFO, self::class, "Добавлена роль {$role['name']}");
             }
+        }
+    }
+
+    protected function ensureBackgroundTasksTable()
+    {
+        if (!$this->db->tableExists('background_tasks')) {
+            $this->db->createTable('background_tasks', [
+                ["Field" => "id", "Type" => "int", "Null" => "NO", "Default" => null, "Extra" => "AUTO_INCREMENT", "Key" => "PRI"],
+                ["Field" => "type", "Type" => "varchar(64)", "Null" => "NO", "Default" => "", "Extra" => "", "Key" => ""],
+                ["Field" => "status", "Type" => "ENUM('pending','running','done','error','aborted')", "Null" => "NO", "Default" => "pending", "Extra" => "", "Key" => ""],
+                ["Field" => "params", "Type" => "json", "Null" => "YES", "Default" => null, "Extra" => "", "Key" => ""],
+                ["Field" => "progress", "Type" => "float", "Null" => "NO", "Default" => 0, "Extra" => "", "Key" => ""],
+                ["Field" => "result", "Type" => "json", "Null" => "YES", "Default" => null, "Extra" => "", "Key" => ""],
+                ["Field" => "log", "Type" => "json", "Null" => "YES", "Default" => null, "Extra" => "", "Key" => ""],
+                ["Field" => "user_id", "Type" => "int", "Null" => "YES", "Default" => null, "Extra" => "", "Key" => ""],
+                ["Field" => "created_at", "Type" => "timestamp", "Null" => "NO", "Default" => "CURRENT_TIMESTAMP", "Extra" => "", "Key" => ""],
+                ["Field" => "updated_at", "Type" => "timestamp", "Null" => "YES", "Default" => null, "Extra" => "", "Key" => ""],
+                ["Field" => "finished_at", "Type" => "timestamp", "Null" => "YES", "Default" => null, "Extra" => "", "Key" => ""]
+            ]);
+            EventManager::logParams(Event::INFO, self::class, "Создана таблица background_tasks");
         }
     }
 

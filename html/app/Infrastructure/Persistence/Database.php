@@ -90,9 +90,9 @@ abstract class Database implements DatabaseClientInterface
 
     // --- CRUD-операции ---
 
-    public function get(string $table, array $where = [], array $fields = ['*']): array
+    public function get(string $table, array $where = [], array $fields = ['*'], int $limit = null): array
     {
-        [$sql, $params] = $this->buildSelect($table, $fields, $where);
+        [$sql, $params] = $this->buildSelect($table, $fields, $where, $limit);
         return $this->exec($sql, $params)->fetchAll(PDO::FETCH_ASSOC);
     }
 

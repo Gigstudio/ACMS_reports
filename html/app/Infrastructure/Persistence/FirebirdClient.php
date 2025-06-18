@@ -124,7 +124,7 @@ class FirebirdClient extends Database implements DatabaseClientInterface
     // --- LIMIT/ROWS override ---
 
     /**
-     * Firebird: LIMIT/ROWS в buildSelect (переопределяем)
+     * Firebird: LIMIT/ROWS в buildSelect
      */
     protected function buildSelect(string $table, array $fields, array $where = [], ?int $limit = null): array
     {
@@ -149,8 +149,7 @@ class FirebirdClient extends Database implements DatabaseClientInterface
         }
 
         if ($limit !== null) {
-            // В Firebird: ROWS 1
-            $sql .= " ROWS 1";
+            $sql .= " ROWS " . intval($limit);
         }
 
         return [$sql, $params];
