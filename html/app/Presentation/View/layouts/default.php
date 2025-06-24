@@ -14,6 +14,7 @@ defined('_RUNKEY') or die;
 		<div class="wrapper bottom menu-holder">
 			<?= $insert('bottommenu') ?>
 		</div>
+		<?= ViewHelper::statusbar() ?>
         <div id="modal-root">
             <?= $insert('modals') ?>
         </div>

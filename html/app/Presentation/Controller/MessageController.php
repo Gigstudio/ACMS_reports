@@ -29,12 +29,14 @@ class MessageController extends Controller
         $mainmenu = Block::make('partials/mainmenu', ['user' => 'Admin']);
         $content = Block::make('blocks/error', $data);
         $bottommenu = Block::make('partials/bottommenu', ['user' => 'Admin']);
+        $statusbar = Block::make('partials/statusbar', ['user' => 'Admin']);
         $page = Block::make('layouts/default', ['title' => 'CRM-панель'])
             ->with([
                 'head' => $head,
                 'mainmenu' => $mainmenu,
                 'content' => $content,
                 'bottommenu' => $bottommenu,
+                'statusbar' => $statusbar,
             ]);
 
         $this->render($page);

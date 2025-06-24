@@ -1,10 +1,10 @@
 <?php
-namespace GIG\API\Controller;
+namespace GIG\Api\Controller;
 
 defined('_RUNKEY') or die;
 
 use GIG\Core\Console;
-use GIG\API\ApiAnswer;
+use GIG\Api\ApiAnswer;
 
 /**
  * API-контроллер для работы с консолью сообщений.
@@ -34,6 +34,7 @@ class ConsoleController extends ApiController
             'class'   => $this->param('class') ?? 'info',
             'source'  => $this->param('source') ?? 'api',
             'message' => $this->param('message') ?? '',
+            'detail'  => $this->param('detail') ?? '',
         ];
         if ($this->param('level') !== null) {
             $msg['level'] = (int)$this->param('level');

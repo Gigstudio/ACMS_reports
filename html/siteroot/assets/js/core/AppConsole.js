@@ -43,7 +43,8 @@ export class AppConsole {
                 el.classList.add('console-message', msg.class);
                 el.innerHTML = `<span class="msg-head ${msg.class}">${msg.source}</span> 
                                 <span class="msg-head ${msg.class}">[${msg.time}]</span> 
-                                <span class="msg-detail">${msg.message}</span>`;
+                                <span class="msg-body">${msg.message}</span>
+                                <span class="msg-detail">${msg.detail}</span>`;
                 consoleElement.appendChild(el);
             });
             consoleElement.scrollTop = consoleElement.scrollHeight;

@@ -3,14 +3,13 @@ namespace GIG\Domain\Services;
 
 defined('_RUNKEY') or die;
 
-use GIG\Infrastructure\Contracts\BackgroundTaskManagerInterface;
 use GIG\Infrastructure\Contracts\DatabaseClientInterface;
 use GIG\Domain\Entities\BackgroundTask;
 use GIG\Domain\Exceptions\GeneralException;
 use GIG\Domain\Services\EventManager;
 use GIG\Domain\Entities\Event;
 
-class BackgroundTaskManager implements BackgroundTaskManagerInterface
+class BackgroundTaskManager
 {
     protected DatabaseClientInterface $db;
 

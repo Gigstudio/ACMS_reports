@@ -95,6 +95,6 @@ $loader->addNamespace(APPLICATION . '\\Infrastructure\\Repository', PATH_REPOSIT
 $loader->addNamespace(APPLICATION . '\\Infrastructure\\Clients', PATH_CLIENTS);
 $loader->addNamespace(APPLICATION . '\\Presentation', PATH_PRESENTATION);
 $loader->addNamespace(APPLICATION . '\\Presentation\Controller', PATH_CONTROLLERS);
-$loader->addNamespace(APPLICATION . '\\API', PATH_API);
-$loader->addNamespace(APPLICATION . '\\API\Controller', PATH_API_CONTROLLERS);
+$loader->addNamespace(APPLICATION . '\\Api', PATH_API);
+$loader->addNamespace(APPLICATION . '\\Api\Controller', PATH_API_CONTROLLERS);
 

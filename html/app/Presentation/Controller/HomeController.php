@@ -40,8 +40,10 @@ class HomeController extends Controller
 
         $head = Block::make('partials/head');
         $mainmenu = Block::make('partials/mainmenu', ['user' => 'Admin']);
-        $content = Block::make('blocks/content', $data);
+        $content = Block::make('blocks/home', $data);
         $bottommenu = Block::make('partials/bottommenu', ['user' => 'Admin']);
+        $statusbar = Block::make('partials/statusbar', ['user' => 'Admin']);
+        $modals = Block::make('partials/modals', ['modals' => $modals]);
 
         $page = Block::make('layouts/default', $data)
             ->with([
@@ -49,7 +51,8 @@ class HomeController extends Controller
                 'mainmenu' => $mainmenu,
                 'content' => $content,
                 'bottommenu' => $bottommenu,
-                'modals' => Block::make('partials/modals', ['modals' => $modals]),
+                'statusbar' => $statusbar,
+                'modals' => $modals,
             ]);
 
         $this->render($page);

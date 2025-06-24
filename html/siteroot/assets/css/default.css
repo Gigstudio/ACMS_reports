@@ -165,9 +165,14 @@
 .console-message .fatal{
     color: var(--msg-fatal);
 }
+.console-message .msg-body,
 .console-message .msg-detail{
-    opacity: .8;
+    opacity: .85;
     font-weight: 100;
+}
+.console-message .msg-detail{
+    opacity: .75;
+    font-style: italic;
 }
 .topnav{
     width: 100%;
@@ -435,6 +440,44 @@
     animation: flashText var(--transition-slow) ease-in-out;
     animation-iteration-count: 3;
 }
+
+.statusbar {
+    background-color: var(--text-darkgray);
+    color: var(--menu-forecolor);
+    display: flex;
+    align-items: center;
+    font-size: 11px;
+    padding: 2px 16px;
+    gap: 18px;
+}
+.statusbar-label {
+    opacity: 0.7;
+}
+.statusbar-divider {
+    width: 1px;
+    height: 18px;
+    background: #6668;
+    margin: 0 10px;
+}
+.statusbar-service {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.statusbar-light {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 3px;
+    box-shadow: 0 0 5px rgba(255, 254, 254, 0.267);
+}
+.status-ok   { background: #37d65c; box-shadow: 0 0 6px #37d65c99; }
+.status-fail { background: #d62a37; box-shadow: 0 0 6px #d62a3799; }
+.status-warn { background: #f4d53a; box-shadow: 0 0 6px #f4d53a99; }
+.statusbar-name { opacity: 0.85; }
+
+
 .hidden {
     display: none;
 }

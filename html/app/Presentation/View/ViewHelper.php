@@ -48,4 +48,11 @@ class ViewHelper
         $builder = new MenuBuilder($menus);
         return $builder->render($name);
     }
+
+    public static function statusbar()
+    {
+        $services = Application::getInstance()->getConfig('services') ?? [];
+        $builder = new StatusbarBuilder($services);
+        return $builder->render();
+    }
 }

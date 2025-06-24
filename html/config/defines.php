@@ -25,7 +25,7 @@ defined('PATH_PRESENTATION') or     define('PATH_PRESENTATION', PATH_APP . 'Pres
 defined('PATH_VIEWS') or            define('PATH_VIEWS', PATH_PRESENTATION . 'View' . DS);
 defined('PATH_CONTROLLERS') or      define('PATH_CONTROLLERS', PATH_PRESENTATION . 'Controller' . DS);
 
-defined('PATH_API') or              define('PATH_API', PATH_ROOT . 'API' . DS);
+defined('PATH_API') or              define('PATH_API', PATH_ROOT . 'Api' . DS);
 defined('PATH_API_CONTROLLERS') or  define('PATH_API_CONTROLLERS', PATH_API . 'Controller' . DS);
 
 defined('PATH_SITEROOT') or         define('PATH_SITEROOT', PATH_ROOT . 'siteroot' . DS);

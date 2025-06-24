@@ -3,7 +3,7 @@ namespace GIG\Core;
 
 defined('_RUNKEY') or die;
 
-use GIG\API\ApiAnswer;
+use GIG\Api\ApiAnswer;
 
 class Response
 {
@@ -67,6 +67,12 @@ class Response
 
         $contentType = $this->headers['Content-Type'][0] ?? '';
 
+        if (is_callable($this->body) && str_starts_with($contentType, 'text/event-stream')) {
+            // Не вызываем echo, просто передаем управление функции-генератору
+            ($this->body)();
+            exit;
+        }
+
         if (str_starts_with($contentType, 'application/json')) {
             echo json_encode($this->body ?? [], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
         } else {
@@ -99,6 +105,16 @@ class Response
         $this->setStatus($statusCode)
             ->setHeader('Content-Type', 'text/html; charset=UTF-8')
             ->setBody($body)
+            ->send();
+    }
+
+    public function stream(callable $callback, int $statusCode = 200)
+    {
+        $this->setStatus($statusCode)
+            ->setHeader('Content-Type', 'text/event-stream')
+            ->setHeader('Cache-Control', 'no-cache')
+            ->setHeader('Connection', 'keep-alive')
+            ->setBody($callback)
             ->send();
     }
 

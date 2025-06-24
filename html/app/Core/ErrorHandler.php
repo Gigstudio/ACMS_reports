@@ -24,9 +24,9 @@ class ErrorHandler
         $eventType = match ($errno) {
             E_USER_NOTICE, E_NOTICE        => Event::INFO,
             E_WARNING, E_USER_WARNING      => Event::WARNING,
-            E_ERROR, E_USER_ERROR,
-            E_CORE_ERROR, E_COMPILE_ERROR,
-            E_RECOVERABLE_ERROR            => Event::ERROR,
+            // E_ERROR, E_USER_ERROR,
+            // E_CORE_ERROR, E_COMPILE_ERROR,
+            // E_RECOVERABLE_ERROR            => Event::ERROR,
             default                        => Event::ERROR,
         };
 
@@ -43,10 +43,40 @@ class ErrorHandler
 
     public static function handleException(\Throwable $e): void
     {
+        // --- Фильтрация всех мусорных (браузерных/ботовых) URI для GeneralException 404 ---
+        if (
+            $e instanceof \GIG\Domain\Exceptions\GeneralException &&
+            $e->getCode() === 404
+        ) {
+            $uri = $_SERVER['REQUEST_URI'] ?? '';
+            $ignoreUriPatterns = [
+                '#^/\.well-known(/|$)#i',           // .well-known и всё внутри
+                '#^/robots\.txt$#i',                // robots.txt
+                '#^/favicon\.ico$#i',               // favicon.ico
+                '#^/apple-touch-icon.*\.png$#i',    // apple-touch-icon*.png
+                '#^/sitemap\.xml$#i',               // sitemap.xml
+                '#^/browserconfig\.xml$#i',         // browserconfig.xml (IE/Edge)
+                '#^/manifest\.json$#i',             // PWA manifest
+                '#^/service-worker\.js$#i',         // PWA service worker
+                '#^/site\.webmanifest$#i',          // site.webmanifest
+                '#^/humans\.txt$#i',                // humans.txt
+                '#^/crossdomain\.xml$#i',           // legacy multimedia
+                '#^/security\.txt$#i',              // security.txt
+                '#^/ads\.txt$#i',                   // ads.txt
+                '#^/yandex_[a-z0-9]+\.txt$#i',      // yandex site verify
+                '#^/google[a-z0-9]+\.html$#i',      // google site verify
+                '#^/BingSiteAuth\.xml$#i',          // bing site verify
+            ];
+            foreach ($ignoreUriPatterns as $pattern) {
+                if (preg_match($pattern, $uri)) {
+                    return;
+                }
+            }
+        }
+
         $eventType = Event::ERROR;
         $detail = self::composeMessage($eventType, $e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
 
-        // Дополним extra деталями, если они есть
         $extra = method_exists($e, 'getExtra') ? $e->getExtra() : [];
         if (!isset($extra['trace'])) {
             $extra['trace'] = $e->getTraceAsString();

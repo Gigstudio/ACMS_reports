@@ -2,7 +2,7 @@
     {"Field": "id", "Type": "int", "Null": "NO", "Default": null, "Extra": "auto_increment", "Key": "PRI"},
     {"Field": "type", "Type": "tinyint(1)", "Null": "NO", "Default": null, "Extra": "", "Key": ""},
     {"Field": "source", "Type": "varchar(128)", "Null": "NO", "Default": null, "Extra": "", "Key": ""},
-    {"Field": "message", "Type": "varchar(255)", "Null": "NO", "Default": "", "Extra": "", "Key": ""},
+    {"Field": "message", "Type": "varchar(512)", "Null": "NO", "Default": "", "Extra": "", "Key": ""},
     {"Field": "timestamp", "Type": "datetime", "Null": "NO", "Default": "CURRENT_TIMESTAMP", "Extra": "", "Key": ""},
     {"Field": "data", "Type": "json", "Null": "YES", "Default": null, "Extra": "", "Key": ""},
     {"Field": "user_id", "Type": "int", "Null": "YES", "Default": null, "Extra": "", "Key": "MUL"},

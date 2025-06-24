@@ -1,6 +1,7 @@
 // import { ModalManager } from './core/ModalManager.js';
 // import { Auth } from './core/Auth.js';
 import { AppConsole } from './core/AppConsole.js';
+import { StatusMonitor } from './core/StatusMonitor.js';
 // import { APIClient } from './core/APIClient.js';
 
 // --- Тема ---
@@ -30,6 +31,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const savedTheme = localStorage.getItem("theme") || "light";
     applyTheme(savedTheme);
 
+    const monitor = new StatusMonitor();
+    monitor.start();
     // document.addEventListener('click', async (e) => {
     //     const trigger = e.target.closest('[data-modal]');
     //     if (!trigger) return;

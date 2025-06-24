@@ -4,7 +4,6 @@ namespace GIG\Api\Controller;
 defined('_RUNKEY') or die;
 
 use GIG\Domain\Services\BackgroundTaskManager;
-use GIG\Core\Application;
 use GIG\Core\Request;
 
 class TaskController extends ApiController
@@ -14,48 +13,48 @@ class TaskController extends ApiController
     public function __construct()
     {
         parent::__construct();
-        $this->manager = new BackgroundTaskManager(Application::getInstance()->getMysql());
+        $this->manager = new BackgroundTaskManager($this->app->getMysql());
     }
 
     // Список задач
-    public function list(Request $request)
+    public function list()
     {
         $filter = []; // добавить фильтрацию, если надо
-        $limit  = (int)($request->getQueryParam('limit', 100));
+        $limit  = (int)($this->request->getQueryParam('limit', 100));
         $tasks = $this->manager->getTasks($filter, $limit);
         $this->success(['tasks' => array_map(fn($t) => $t->toArray(), $tasks)]);
     }
 
     // Получить одну задачу
-    public function view(Request $request)
+    public function view()
     {
-        $id = (int)($request->getRouteParams()['id'] ?? 0);
+        $id = (int)($this->request->getRouteParams()['id'] ?? 0);
         $task = $this->manager->getTask($id);
         $this->success(['task' => $task->toArray()]);
     }
 
     // Создать задачу
-    public function create(Request $request)
+    public function create()
     {
-        $type   = $request->getBody()['type'] ?? null;
-        $params = $request->getBody()['params'] ?? [];
-        $userId = $request->getBody()['user_id'] ?? null;
+        $type   = $this->request->getBody()['type'] ?? null;
+        $params = $this->request->getBody()['params'] ?? [];
+        $userId = $this->request->getBody()['user_id'] ?? null;
         $task = $this->manager->createTask($type, $params, $userId);
         $this->success(['task' => $task->toArray()], "Создана фоновая задача");
     }
 
     // Удалить задачу
-    public function delete(Request $request)
+    public function delete()
     {
-        $id = (int)($request->getRouteParams()['id'] ?? 0);
+        $id = (int)($this->request->getRouteParams()['id'] ?? 0);
         $this->manager->deleteTask($id);
         $this->success([], "Задача удалена");
     }
 
     // Отменить задачу (пометить как aborted)
-    public function cancel(Request $request)
+    public function cancel()
     {
-        $id = (int)($request->getRouteParams()['id'] ?? 0);
+        $id = (int)($this->request->getRouteParams()['id'] ?? 0);
         $this->manager->updateTask($id, ['status' => 'aborted']);
         $this->success([], "Задача отменена");
     }

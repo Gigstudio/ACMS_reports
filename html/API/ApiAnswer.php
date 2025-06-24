@@ -1,5 +1,5 @@
 <?php
-namespace GIG\API;
+namespace GIG\Api;
 
 defined('_RUNKEY') or die;
 

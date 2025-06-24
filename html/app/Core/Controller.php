@@ -46,7 +46,6 @@ abstract class Controller
     }
 
     protected function render(Block $block): void {
-        // if($this->app->getConfig('settings.debug_mode', 'deploy') === 'debug'){
         if(DEV_MODE){
             $console = Block::make('partials/console');
             $block = $block->with(['console' => $console]);

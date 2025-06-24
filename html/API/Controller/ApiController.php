@@ -1,12 +1,12 @@
 <?php
-namespace GIG\API\Controller;
+namespace GIG\Api\Controller;
 
 defined('_RUNKEY') or die;
 
 use GIG\Core\Application;
 use GIG\Core\Request;
 use GIG\Core\Response;
-use GIG\API\ApiAnswer;
+use GIG\Api\ApiAnswer;
 
 /**
  * Базовый API-контроллер.

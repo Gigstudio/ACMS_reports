@@ -92,7 +92,7 @@ class Application
     public function getFirebird(): ?DatabaseClientInterface
     {
         if (!$this->firebird) {
-            $this->firebird = new FirebirdClient($this->config->get('firebird'));
+            $this->firebird = new FirebirdClient($this->config->get('services.PERCo-S20'));
         }
         return $this->firebird;
     }

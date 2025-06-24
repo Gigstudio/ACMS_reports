@@ -63,6 +63,7 @@ class EventManager
                 'class'     => self::getClass($event->type),
                 'source'    => self::extractSource($event->source),
                 'message'   => $event->message,
+                'detail'    => isset($event->data['extra']['detail']) ? (" | " . $event->data['extra']['detail']) : ''
             ]);
         }
     }
@@ -89,9 +90,10 @@ class EventManager
     {
         $class = self::getClass($event->type);
         $time  = date('Y-m-d H:i:s', $event->timestamp);
-        $src   = $event->source;
+        $src   = self::extractSource($event->source);
         $msg   = $event->message;
-        return sprintf("[%s][%s][%s] %s", $time, strtoupper($class), $src, $msg);
+        $detail = isset($event->data['extra']['detail']) ? (" | " . $event->data['extra']['detail']) : '';
+        return sprintf("[%s][%s][%s] %s%s", $time, strtoupper($class), $src, $msg, $detail);
     }
 
     /**
