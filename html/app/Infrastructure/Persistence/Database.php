@@ -9,6 +9,7 @@ use GIG\Infrastructure\Contracts\DatabaseClientInterface;
 use GIG\Domain\Exceptions\GeneralException;
 use GIG\Domain\Entities\Event;
 use GIG\Domain\Services\EventManager;
+use GIG\Core\Config;
 
 /**
  * Абстрактный универсальный клиент для PDO-совместимых БД.
@@ -31,6 +32,11 @@ abstract class Database implements DatabaseClientInterface
                 'detail' => "Идентификатор '$identifier' содержит недопустимые символы."
             ]);
         }
+    }
+
+        protected function getDefaultConfig(): array
+    {
+        return Config::get('services.MySQL') ?? [];
     }
 
     // --- Универсальный конструктор выборки SELECT ---

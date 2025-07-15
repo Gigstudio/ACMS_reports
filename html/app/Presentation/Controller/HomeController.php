@@ -23,17 +23,17 @@ class HomeController extends Controller
         Данные для тестирования
         FireBird:
         */
-        $firebird = Application::getInstance()->getFirebird();
+        // $firebird = Application::getInstance()->getFirebirdClient();
         
-        $tables = $firebird->exec("SELECT TRIM(RDB\$RELATION_NAME) AS NAME FROM RDB\$RELATIONS WHERE RDB\$SYSTEM_FLAG = 0");
-        $tableNames = [];
-        foreach ($tables as $tbl) {
-            $tableNames[] = $tbl['NAME'];
-        }
-        $data['firebird_tables'] = $tableNames;
+        // $tables = $firebird->exec("SELECT TRIM(RDB\$RELATION_NAME) AS NAME FROM RDB\$RELATIONS WHERE RDB\$SYSTEM_FLAG = 0");
+        // $tableNames = [];
+        // foreach ($tables as $tbl) {
+        //     $tableNames[] = $tbl['NAME'];
+        // }
+        // $data['firebird_tables'] = $tableNames;
 
-        $staff = $firebird->get('STAFF', [], ['*'], 200);
-        $data['staff'] = $staff;
+        // $staff = $firebird->get('STAFF', [], ['*'], 200);
+        // $data['staff'] = $staff;
 
 
         // НАЧАЛО РЕНДЕРА. Все переменные должны быть определены ДО этого блока.

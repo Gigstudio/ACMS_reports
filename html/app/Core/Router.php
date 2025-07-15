@@ -15,6 +15,10 @@ class Router
         $this->request = $request;
     }
 
+    public function getAllRoutes(){
+        return $this->routes;
+    }
+
     /**
      * Загружает маршруты из файла или БД.
      */

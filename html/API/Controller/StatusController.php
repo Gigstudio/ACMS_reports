@@ -12,7 +12,7 @@ class StatusController extends ApiController
     public function __construct()
     {
         parent::__construct();
-        $this->manager = new ServiceStatusManager($this->app->getMysql());
+        $this->manager = new ServiceStatusManager($this->app->getMysqlClient());
     }
 
     public function getAll(): void

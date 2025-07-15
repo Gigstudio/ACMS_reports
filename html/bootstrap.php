@@ -12,8 +12,11 @@ defined('DS') or define('DS', DIRECTORY_SEPARATOR);
 defined('ABSPATH') or define('ABSPATH', __DIR__ . DS);
 
 // Сессии
-if (session_status() !== PHP_SESSION_ACTIVE) {
-    session_start();
+$requestUri = $_SERVER['REQUEST_URI'] ?? '';
+if (!preg_match('#^/api/status/stream#', $requestUri)) {
+    if (session_status() !== PHP_SESSION_ACTIVE) {
+        session_start();
+    }
 }
 
 // Отображение всех ошибок в режиме разработки

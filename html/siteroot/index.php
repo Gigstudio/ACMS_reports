@@ -8,6 +8,7 @@ use GIG\Core\DbSchemaManager;
 use GIG\Infrastructure\Persistence\MySQLClient;
 use GIG\Core\Application;
 use GIG\Infrastructure\Repository\EventRepository;
+use GIG\Core\Config;
 
 // 1. Подключаем логгер событий
 EventManager::setLogger(new FileEventLogger(PATH_LOGS . 'events.log'));

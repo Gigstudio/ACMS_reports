@@ -3,7 +3,7 @@
     {"Field": "service", "Type": "varchar(32)", "Null": "NO", "Default": null, "Extra": "", "Key": ""},
     {"Field": "status", "Type": "enum('ok','fail','busy','warn','unknown')", "Null": "NO", "Default": null, "Extra": "", "Key": ""},
     {"Field": "message", "Type": "varchar(512)", "Null": "YES", "Default": null, "Extra": "", "Key": ""},
-    {"Field": "details", "Type": "json", "Null": "YES", "Default": null, "Extra": "", "Key": "MUL"},
+    {"Field": "details", "Type": "json", "Null": "YES", "Default": null, "Extra": "", "Key": ""},
     {"Field": "created_at", "Type": "datetime", "Null": "NO", "Default": "CURRENT_TIMESTAMP", "Extra": "", "Key": ""},
     {"Field": "updated_at", "Type": "datetime", "Null": "NO", "Default": "CURRENT_TIMESTAMP", "Extra": "", "Key": ""}
 ]

@@ -41,7 +41,17 @@ class FirebirdClient extends Database implements DatabaseClientInterface
 
     protected function getDefaultConfig(): array
     {
-        return Config::get('database') ?? [];
+        return Config::get('services.MySQL') ?? [];
+    }
+
+    public function checkStatus(): array
+    {
+        try {
+            $this->tableExists("STAFF");
+            return ['status' => 'ok', 'message' => 'Firebird доступен'];
+        } catch (\Throwable $e) {
+            return ['status' => 'fail', 'message' => 'Firebird: ' . $e->getMessage(), 'detail' => $e->getTraceAsString()];
+        }
     }
 
     /**

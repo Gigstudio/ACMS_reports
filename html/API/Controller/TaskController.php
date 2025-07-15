@@ -13,7 +13,7 @@ class TaskController extends ApiController
     public function __construct()
     {
         parent::__construct();
-        $this->manager = new BackgroundTaskManager($this->app->getMysql());
+        $this->manager = new BackgroundTaskManager($this->app->getMysqlClient());
     }
 
     // Список задач

@@ -23,6 +23,28 @@ services:
       HOST_MACHINE_MYSQL_PORT: ${HOST_MACHINE_MYSQL_PORT}
     extra_hosts:
       - "host.docker.internal:host-gateway"
+  worker:
+    build:
+      context: .
+      dockerfile: bin/worker/Dockerfile
+    container_name: "${COMPOSE_PROJECT_NAME}-worker"
+    restart: always
+    volumes:
+      - ./html:/var/www/html:rw
+      - ./config/php/php.ini:/usr/local/etc/php/php.ini
+      - ./config/supervisor:/etc/supervisor/conf.d
+      - ./logs/worker:/var/log/worker
+    environment:
+      ENVIRONMENT: production
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    depends_on:
+      - db
+    command: ["/usr/bin/supervisord", "-n"]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
   db:
     build:
       context: "./bin/${DATABASE}"

@@ -20,11 +20,11 @@ class MySQLClient extends Database implements DatabaseClientInterface
 
     protected function connect(array $config): void
     {
-        $host = $config['dbhost'] ?? 'localhost';
-        $port = $config['dbport'] ?? 3306;
-        $dbname = $config['dbname'] ?? '';
-        $user = $config['dbuser'] ?? 'root';
-        $pass = $config['dbpass'] ?? '';
+        $host = $config['db_host'] ?? 'localhost';
+        $port = $config['db_port'] ?? 3306;
+        $dbname = $config['db_name'] ?? '';
+        $user = $config['db_user'] ?? 'root';
+        $pass = $config['db_pass'] ?? '';
 
         // Автоматическое создание БД (dev only — для prod можно убрать/закомментировать)
         $dsn = "mysql:host=$host;port=$port;charset=utf8mb4";
@@ -34,7 +34,7 @@ class MySQLClient extends Database implements DatabaseClientInterface
             ]);
             $pdo->exec("CREATE DATABASE IF NOT EXISTS `$dbname` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
         } catch (\PDOException $e) {
-            throw new GeneralException('Ошибка создания базы данных', 500, [
+            throw new GeneralException("Ошибка создания базы данных. dsn=$dsn; user=$user; pass=$pass", 500, [
                 'detail' => $e->getMessage()
             ]);
         }
@@ -54,9 +54,28 @@ class MySQLClient extends Database implements DatabaseClientInterface
         }
     }
 
-    protected function getDefaultConfig(): array
+    public function checkStatus(): array
     {
-        return Config::get('database') ?? [];
+        try {
+            $result = $this->value('SELECT 1');
+            if ($result == 1) {
+                return [
+                    'status' => 'ok',
+                    'message' => 'MySQL соединение активно'
+                ];
+            } else {
+                return [
+                    'status' => 'fail',
+                    'message' => 'Не удалось получить ответ от MySQL'
+                ];
+            }
+        } catch (\Throwable $e) {
+            return [
+                'status' => 'fail',
+                'message' => 'MySQL: ' . $e->getMessage(),
+                'details' => $e->getTraceAsString()
+            ];
+        }
     }
 
     public function tableExists(string $table): bool

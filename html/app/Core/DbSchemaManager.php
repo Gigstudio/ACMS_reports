@@ -27,7 +27,7 @@ class DbSchemaManager
     {
         $this->db = $db;
         $this->schemaPath = $schemaPath ?? PATH_CONFIG . 'dbschema' . DS;
-        $this->version = Config::get('database.dbversion', 'm00000');
+        $this->version = Config::get('services.MySQL.dbversion', 'm00000');
     }
 
     /**

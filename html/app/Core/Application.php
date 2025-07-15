@@ -71,7 +71,7 @@ class Application
         return $this;
     }
 
-    public function getConfig(string $key, $default = null): mixed
+    public function getConfig(string $key = null, $default = null): mixed
     {
         return $this->config::get($key, $default);
     }
@@ -81,20 +81,40 @@ class Application
         $this->config::set($key, $value);
     }
 
-    public function getMysql(): ?DatabaseClientInterface
+    public function getMysqlClient(): ?DatabaseClientInterface
     {
         if (!$this->db) {
-            $this->db = new MySQLClient($this->config->get('database'));
+            $this->db = new MySQLClient($this->config->get('services.MySQL'));
         }
         return $this->db;
     }
 
-    public function getFirebird(): ?DatabaseClientInterface
+    public function getFirebirdClient(): ?DatabaseClientInterface
     {
         if (!$this->firebird) {
             $this->firebird = new FirebirdClient($this->config->get('services.PERCo-S20'));
         }
         return $this->firebird;
+    }
+
+    public function getServiceByName(string $name)
+    {
+        $services = $this->getConfig('services') ?? [];
+        if(!array_key_exists($name, $services)){
+            return null;
+            // throw new GeneralException("Неизвестный сервис $name.", 400, [
+            //     'detail' => "Сервис $name отсутствует в списке отслеживаемых. Проверьте init.json"
+            // ]);
+        }
+        $suffix = $services[$name]['client'];
+        $method = "get$suffix";
+        if (!method_exists($this, $method)){
+            return null;
+            // throw new GeneralException("Метод $method() для сервиса '$name' не реализован.", 400, [
+            //     'detail' => "Метод $method не реализован в Application."
+            // ]);
+        }
+        return $this->{$method}();
     }
 
     // public function getLdap(): ?LDAPClient
@@ -110,7 +130,7 @@ class Application
     //     return $this->ldapClient;
     // }
 
-    // public function getPercoWebClient(): ?PercoWebClient
+    // public function getPercoWeb(): ?PercoWebClient
     // {
     //     if (!$this->percoWebClient) {
     //         try {

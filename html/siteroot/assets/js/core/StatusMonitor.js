@@ -8,7 +8,6 @@ export class StatusMonitor {
         if (this.eventSource) return;
         this.eventSource = new EventSource(this.url);
         console.log(this.eventSource);
-        return;
         this.eventSource.onmessage = (event) => {
             try {
                 const data = JSON.parse(event.data);
@@ -36,12 +35,19 @@ export class StatusMonitor {
             const light = node.querySelector('.statusbar-light');
             const name = node.querySelector('.statusbar-name');
 
+            if (!light) return;
+
+            let lastState = null;
+            light.classList.forEach(cn => {
+                if (cn.startsWith('status-')) lastState = cn.slice(7);
+            });
+
             let status = 'warn';
             let message = '';
             if (errorMsg) {
                 status = 'fail';
                 message = 'Нет связи с сервером: ' + errorMsg;
-            } else if (services[code]) {
+            } else if (services && typeof services === 'object' && services[code]) {
                 status = services[code].status || 'warn';
                 message = services[code].message || '';
             } else {
@@ -49,10 +55,14 @@ export class StatusMonitor {
                 message = 'Нет данных';
             }
 
-            light.classList.remove('status-ok', 'status-warn', 'status-fail');
-            light.classList.add(`status-${status}`);
-            light.title = message;
-            if (name) name.title = message;
+            if (lastState !== status || light.title !== message) {
+                light.classList.remove('status-ok', 'status-warn', 'status-fail');
+                light.classList.add(`status-${status}`);
+                light.title = message;
+            }
+            if (name) {
+                name.title = message;
+            }
         });
 
         const statusbar = document.querySelector('.statusbar');

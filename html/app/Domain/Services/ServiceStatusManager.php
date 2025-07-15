@@ -42,7 +42,9 @@ class ServiceStatusManager
             'updated_at' => date('Y-m-d H:i:s')
         ];
         if ($details !== null) {
-            $data['details'] = is_array($details) ? json_encode($details, JSON_UNESCAPED_UNICODE) : $details;
+            $data['details'] = json_encode($details, JSON_UNESCAPED_UNICODE);
+        } else {
+            $data['details'] = null;
         }
         $found = $this->db->first('service_status', ['service' => $service]);
         if ($found) {
