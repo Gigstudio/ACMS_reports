@@ -24,20 +24,21 @@ class Router
      */
     public function loadRoutes(): void
     {
-        static $cachedRoutes = ['api' => null, 'ui' => null];
-        $isApi = $this->request->isApi();
+        static $cachedRoutes = null;
 
-        if ($isApi) {
-            if ($cachedRoutes['api'] === null) {
-                $cachedRoutes['api'] = $this->getApiRoutesFromFile();
+        if ($cachedRoutes === null) {
+            $cachedRoutes = [];
+            $api = $this->getApiRoutesFromFile();
+            $ui  = $this->getRoutesFromFile();
+
+            // Слияние по методам
+            foreach (['GET', 'POST', 'PUT', 'PATCH', 'DELETE'] as $method) {
+                $cachedRoutes[$method] = [];
+                if (isset($api[$method])) $cachedRoutes[$method] += $api[$method];
+                if (isset($ui[$method]))  $cachedRoutes[$method] += $ui[$method];
             }
-            $this->routes = $cachedRoutes['api'] ?? [];
-        } else {
-            if ($cachedRoutes['ui'] === null) {
-                $cachedRoutes['ui'] = $this->getRoutesFromFile();
-            }
-            $this->routes = $cachedRoutes['ui'] ?? [];
         }
+        $this->routes = $cachedRoutes;
     }
 
     private function getApiRoutesFromFile(): array
@@ -46,22 +47,10 @@ class Router
         return file_exists($routesFile) ? include $routesFile : [];
     }
     
-    /**
-     * Загружает маршруты из файла.
-     */
     private function getRoutesFromFile(): array
     {
         $routesFile = PATH_CONFIG . 'routes.php';
         return file_exists($routesFile) ? include $routesFile : [];
-    }
-
-    /**
-     * Загружает маршруты из БД.
-     */
-    private function getRoutesFromDB(): array
-    {
-        // Для будущей реализации — сейчас возвращает []
-        return [];
     }
 
     /**

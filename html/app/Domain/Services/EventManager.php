@@ -3,7 +3,6 @@ namespace GIG\Domain\Services;
 
 use GIG\Domain\Entities\Event;
 use GIG\Infrastructure\Repository\EventRepository;
-use GIG\Core\Console;
 use GIG\Core\FileEventLogger;
 
 defined('_RUNKEY') or die;
@@ -46,25 +45,11 @@ class EventManager
      */
     public static function log(Event $event): void
     {
-        // 1. В БД (если возможно)
         if (self::$repository) {
             self::$repository->save($event);
         }
-        // 2. В лог-файл (всегда, если задан)
         if (self::$logger) {
-            $str = self::formatForLog($event);
-            self::$logger->logLine($str);
-        }
-        // 3. В консоль (если есть сессия)
-        if (class_exists(Console::class)) {
-            Console::setMessage([
-                'type'      => $event->type,
-                'time'      => date('Y-m-d H:i:s', $event->timestamp),
-                'class'     => self::getClass($event->type),
-                'source'    => self::extractSource($event->source),
-                'message'   => $event->message,
-                'detail'    => isset($event->data['extra']['detail']) ? (" | " . $event->data['extra']['detail']) : ''
-            ]);
+            self::$logger->log($event);
         }
     }
 
@@ -83,17 +68,29 @@ class EventManager
         self::log($event);
     }
 
+    public static function toArray(Event $event)
+    {
+        $arr =  $event->toArray();
+        extract($arr, EXTR_OVERWRITE);
+
+        return [
+            'id'        => $id,
+            'class'     => self::getClass($type),
+            'time'      => date('Y-m-d H:i:s', $timestamp),
+            'source'    => self::extractSource($source),
+            'message'   => $message,
+            'detail'    => isset($data['extra']['detail']) ? (" | " . $data['extra']['detail']) : '',
+        ];
+    }
+
     /**
      * Форматирует строку для человекочитаемого лог-файла.
      */
     public static function formatForLog(Event $event): string
     {
-        $class = self::getClass($event->type);
-        $time  = date('Y-m-d H:i:s', $event->timestamp);
-        $src   = self::extractSource($event->source);
-        $msg   = $event->message;
-        $detail = isset($event->data['extra']['detail']) ? (" | " . $event->data['extra']['detail']) : '';
-        return sprintf("[%s][%s][%s] %s%s", $time, strtoupper($class), $src, $msg, $detail);
+        $arr = self::toArray($event);
+        extract($arr, EXTR_OVERWRITE);
+        return sprintf("[%s][%s][%s] %s%s", $time, strtoupper($class), $source, $message, $detail);
     }
 
     /**

@@ -26,8 +26,7 @@ use GIG\Presentation\View\ViewHelper;
                 title="Log in"
                 id="login"
                 data-modal="login-modal"
-                data-modal-api="auth"
-                data-modal-action="getmodal">
+                data-modal-url="/api/auth/modal">
                 <span><i class="fas fa-right-to-bracket"></i></span>
             </a>
         </div>

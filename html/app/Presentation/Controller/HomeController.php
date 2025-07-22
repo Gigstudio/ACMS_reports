@@ -35,6 +35,22 @@ class HomeController extends Controller
         // $staff = $firebird->get('STAFF', [], ['*'], 200);
         // $data['staff'] = $staff;
 
+        /*
+        Данные для тестирования
+        PERCo-Web:
+        */
+        $percoWeb = $this->app->getPercoWebClient();
+        $ldap = $this->app->getLdapClient();
+
+        $bageNumber = '2820176';
+        $percoUserId = $percoWeb->getUserByIdentifier($bageNumber);
+        $data['percoUser'] = $percoUserId;
+
+        $percoUserInfo = $percoWeb->getUserInfoById($percoUserId['user_id']);
+        $data['percoUserInfo'] = $percoUserInfo;
+
+        $ldapUserInfo = $ldap->getUserData('a.abdilmanov');
+        $data['ldapUserInfo'] = $ldapUserInfo;
 
         // НАЧАЛО РЕНДЕРА. Все переменные должны быть определены ДО этого блока.
 

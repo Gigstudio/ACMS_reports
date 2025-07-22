@@ -34,7 +34,7 @@ abstract class Database implements DatabaseClientInterface
         }
     }
 
-        protected function getDefaultConfig(): array
+    protected function getDefaultConfig(): array
     {
         return Config::get('services.MySQL') ?? [];
     }
@@ -56,8 +56,14 @@ abstract class Database implements DatabaseClientInterface
             $conditions = [];
             foreach ($where as $key => $val) {
                 $this->validateIdentifier($key);
-                $conditions[] = "`$key` = ?";
-                $params[] = $val;
+                if (is_array($val)) {
+                    $placeholders = implode(',', array_fill(0, count($val), '?'));
+                    $conditions[] = "`$key` IN ($placeholders)";
+                    foreach ($val as $v) $params[] = $v;
+                } else {
+                    $conditions[] = "`$key` = ?";
+                    $params[] = $val;
+                }
             }
             $sql .= " WHERE " . implode(" AND ", $conditions);
         }
@@ -94,6 +100,12 @@ abstract class Database implements DatabaseClientInterface
         return $this->exec($sql, $params, $message)->fetchColumn();
     }
 
+    public function count(string $table, array $where = [])
+    {
+        $this->validateIdentifier($table);
+        [$sql, $params] = $this->buildSelect($table, ['COUNT(*) as cnt'], $where);
+        return (int)($this->exec($sql, $params)->fetchColumn());
+    }
     // --- CRUD-операции ---
 
     public function get(string $table, array $where = [], array $fields = ['*'], int $limit = null): array
@@ -177,7 +189,7 @@ abstract class Database implements DatabaseClientInterface
             $sql .= " WHERE " . implode(" AND ", $conditions);
         }
 
-        return $this->exec($sql, $params, "Обновление записи в $table")->rowCount() > 0;
+        return $this->exec($sql, $params)->rowCount() > 0;
     }
 
     public function updateOrInsert(string $table, array $data, array $where): bool
@@ -197,6 +209,40 @@ abstract class Database implements DatabaseClientInterface
             $insert = array_merge($where, $data);
             return $this->insert($table, $insert);
         }
+    }
+
+    public function upsertMany(string $table, array $fields, array $rows): int
+    {
+        $this->validateIdentifier($table);
+        foreach ($fields as $field) {
+            $this->validateIdentifier($field);
+        }
+        if (empty($rows)) return 0;
+
+        $placeholders = '(' . implode(',', array_fill(0, count($fields), '?')) . ')';
+        $allPlaceholders = implode(',', array_fill(0, count($rows), $placeholders));
+        $sql = "INSERT INTO `$table` (`" . implode('`,`', $fields) . "`) VALUES $allPlaceholders";
+
+        // Формируем часть ON DUPLICATE KEY UPDATE
+        $update = [];
+        foreach ($fields as $field) {
+            $update[] = "`$field`=VALUES(`$field`)";
+        }
+        $sql .= " ON DUPLICATE KEY UPDATE " . implode(', ', $update);
+
+        $params = [];
+        foreach ($rows as $row) {
+            // Приводим к нужному порядку, если строки ассоциативные:
+            if (array_keys($row) !== range(0, count($row)-1)) {
+                $ordered = [];
+                foreach ($fields as $f) $ordered[] = $row[$f] ?? null;
+                $params = array_merge($params, $ordered);
+            } else {
+                $params = array_merge($params, $row);
+            }
+        }
+        $stmt = $this->exec($sql, $params, "Upsert в $table");
+        return $stmt->rowCount();
     }
 
     public function delete(string $table, array $where): bool

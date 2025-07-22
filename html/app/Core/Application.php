@@ -4,16 +4,15 @@ namespace GIG\Core;
 defined('_RUNKEY') or die;
 
 use GIG\Core\Config;
-use GIG\Domain\Exceptions\GeneralException;
 use GIG\Infrastructure\Contracts\DatabaseClientInterface;
 use GIG\Infrastructure\Persistence\MySQLClient;
 use GIG\Infrastructure\Persistence\FirebirdClient;
-// use GIG\Infrastructure\Clients\LDAPClient;
-// use GIG\Infrastructure\Clients\PercoWebClient;
+use GIG\Infrastructure\Persistence\LdapClient;
+use GIG\Infrastructure\Persistence\PercoWebClient;
 use GIG\Core\Request;
 use GIG\Core\Response;
 use GIG\Core\Router;
-// use GIG\Domain\Entities\User;
+use GIG\Domain\Entities\User;
 
 class Application
 {
@@ -22,17 +21,14 @@ class Application
 
     protected ?DatabaseClientInterface $db = null;
     protected ?DatabaseClientInterface $firebird = null;
-    // protected ?LDAPClient $ldapClient = null;
-    // protected ?PercoWebClient $percoWebClient = null;
-    // protected ?User $currentUser = null;
+    protected ?LdapClient $ldapClient = null;
+    protected ?PercoWebClient $percoWebClient = null;
+    protected ?User $currentUser = null;
 
     public Request $request;
     public Response $response;
     public Router $router;
 
-    /**
-     * Основной конструктор приложения
-     */
     public function __construct(?Config $config = null)
     {
         self::$app = $this;
@@ -50,7 +46,7 @@ class Application
      */
     public static function getInstance(): self
     {
-        if (self::$app === null) {
+        if (!self::hasInstance()) {
             self::$app = new self(new Config());
         }
         return self::$app;
@@ -59,16 +55,6 @@ class Application
     public static function hasInstance(): bool
     {
         return isset(self::$app);
-    }
-
-    /**
-     * Инициализация ядра приложения: подключение БД, инициализация клиентов.
-     */
-    public function init(): self
-    {
-        // Можно инициализировать дополнительные сервисы по мере надобности
-
-        return $this;
     }
 
     public function getConfig(string $key = null, $default = null): mixed
@@ -97,63 +83,46 @@ class Application
         return $this->firebird;
     }
 
+    public function getLdapClient(): ?LdapClient
+    {
+        if (!$this->ldapClient) {
+            $this->ldapClient = new LdapClient($this->config->get('services.LDAP'));
+        }
+        return $this->ldapClient;
+    }
+
+    public function getPercoWebClient(): ?PercoWebClient
+    {
+        if (!$this->percoWebClient) {
+            $this->percoWebClient = new PercoWebClient($this->config->get('services.PERCo-Web'));
+        }
+        return $this->percoWebClient;
+    }
+
     public function getServiceByName(string $name)
     {
         $services = $this->getConfig('services') ?? [];
         if(!array_key_exists($name, $services)){
             return null;
-            // throw new GeneralException("Неизвестный сервис $name.", 400, [
-            //     'detail' => "Сервис $name отсутствует в списке отслеживаемых. Проверьте init.json"
-            // ]);
         }
         $suffix = $services[$name]['client'];
         $method = "get$suffix";
         if (!method_exists($this, $method)){
             return null;
-            // throw new GeneralException("Метод $method() для сервиса '$name' не реализован.", 400, [
-            //     'detail' => "Метод $method не реализован в Application."
-            // ]);
         }
         return $this->{$method}();
     }
 
-    // public function getLdap(): ?LDAPClient
-    // {
-    //     if (!$this->ldapClient) {
-    //         try {
-    //             $this->ldapClient = new LDAPClient($this->config->get('ldap'));
-    //         } catch (\Throwable $e) {
-    //             $this->ldapClient = null;
-    //             Event::log(Event::EVENT_WARNING, self::class, "LDAP недоступен: " . $e->getMessage());
-    //         }
-    //     }
-    //     return $this->ldapClient;
-    // }
-
-    // public function getPercoWeb(): ?PercoWebClient
-    // {
-    //     if (!$this->percoWebClient) {
-    //         try {
-    //             $this->percoWebClient = new PercoWebClient($this->config->get('perco'));
-    //         } catch (\Throwable $e) {
-    //             $this->percoWebClient = null;
-    //             Event::log(Event::EVENT_WARNING, self::class, "PERCo-Web недоступен: " . $e->getMessage());
-    //         }
-    //     }
-    //     return $this->percoWebClient;
-    // }
-
-    // public function getCurrentUser(): ?User
-    // {
-    //     return $this->currentUser;
-    // }
+    public function getCurrentUser(): ?User
+    {
+        return $this->currentUser;
+    }
     
-    // public function setCurrentUser(?User $user): void
-    // {
-    //     $this->currentUser = $user;
-    // }
+    public function setCurrentUser(?User $user): void
+    {
+        $this->currentUser = $user;
+    }
 
-    // Можно раскомментировать когда потребуется подключение стилей/скриптов
     protected function setupAssets(): void
     {
         $styles = $this->config->get('styles', []);

@@ -3,29 +3,29 @@ namespace GIG\Infrastructure\Contracts;
 
 defined('_RUNKEY') or die;
 
-use GIG\Domain\Entities\BackgroundTask;
+use GIG\Domain\Entities\Task;
 
 /**
  * Контракт менеджера фоновых задач.
  * Абстрагирует создание, обновление, получение и мониторинг задач.
  */
-interface BackgroundTaskManagerInterface
+interface TaskManagerInterface
 {
     /**
      * Создать новую фоновую задачу.
      * @param string $type  Тип задачи (например, 'sync_firebird', 'export_csv', ...).
      * @param array $params Параметры задачи (будут сериализованы в json).
      * @param int|null $userId Инициатор (если есть).
-     * @return BackgroundTask ID созданной задачи.
+     * @return Task ID созданной задачи.
      */
-    public function createTask(string $type, array $params = [], ?int $userId = null): BackgroundTask;
+    public function createTask(string $type, array $params = [], ?int $userId = null): Task;
 
     /**
      * Получить задачу по ID.
      * @param int $id
-     * @return BackgroundTask|null
+     * @return Task|null
      */
-    public function getTask(int $id): ?BackgroundTask;
+    public function getTask(int $id): ?Task;
 
     /**
      * Вернуть список задач с фильтрами (например, по статусу или типу).

@@ -23,9 +23,8 @@ export async function sendMessage(type = 0, msg = null){
         'message': msg ?? 'Действие пользователя'
     };
     try{
-        const result = await APIClient.send('console', 'add', message);
+        const result = await APIClient.request('/api/console', 'POST', message);
         if (AppConsole.ready) AppConsole.update();
-        // console.log(result.message);
     } catch (error) {
         console.error('Ошибка отправки сообщений: ', error);
     }

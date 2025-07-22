@@ -3,12 +3,13 @@
     {"Field": "login", "Type": "varchar(64)", "Null": "NO", "Default": null, "Extra": "", "Key": "UNI"},
     {"Field": "password", "Type": "varchar(255)", "Null": "NO", "Default": null, "Extra": "", "Key": ""},
     {"Field": "email", "Type": "varchar(128)", "Null": "YES", "Default": null, "Extra": "", "Key": ""},
-    {"Field": "id_1C", "Type": "varchar(128)", "Null": "YES", "Default": null, "Extra": "", "Key": ""},
-    {"Field": "perco_id", "Type": "varchar(128)", "Null": "NO", "Default": null, "Extra": "", "Key": "MUL"},
-    {"Field": "identifier", "Type": "int", "Null": "YES", "Default": null, "Extra": "", "Key": ""},
-    {"Field": "role_id", "Type": "int", "Null": "NO", "Default": 1, "Extra": "", "Key": "MUL"},
+    {"Field": "table_number", "Type": "varchar(128)", "Null": "YES", "Default": null, "Extra": "", "Key": "UNI"},
+    {"Field": "perco_id", "Type": "int", "Null": "NO", "Default": null, "Extra": "", "Key": "UNI"},
+    {"Field": "card_number", "Type": "varchar(32)", "Null": "YES", "Default": null, "Extra": "", "Key": ""},
+    {"Field": "role_id", "Type": "int", "Null": "NO", "Default": 1, "Extra": "", "Key": ""},
     {"Field": "is_active", "Type": "tinyint(1)", "Null": "NO", "Default": 1, "Extra": "", "Key": ""},
     {"Field": "is_blocked", "Type": "tinyint(1)", "Null": "NO", "Default": 0, "Extra": "", "Key": ""},
     {"Field": "created_at", "Type": "datetime", "Null": "NO", "Default": "CURRENT_TIMESTAMP", "Extra": "", "Key": ""},
-    {"Field": "source", "Type": "varchar(16)", "Null": "NO", "Default": "local", "Extra": "", "Key": ""}
+    {"Field": "source", "Type": "varchar(16)", "Null": "NO", "Default": "perco", "Extra": "", "Key": ""},
+    {"Field": "last_login_at", "Type": "datetime", "Null": "YES", "Default": null, "Extra": "", "Key": ""}
 ]

@@ -1,0 +1,7 @@
+[
+    {"Field": "id", "Type": "int", "Null": "NO", "Default": null, "Extra": "auto_increment", "Key": "PRI"},
+    {"Field": "user_id", "Type": "int", "Null": "NO", "Default": null, "Extra": "", "Key": ""},
+    {"Field": "console_first_id", "Type": "int", "Null": "YES", "Default": null, "Extra": "", "Key": ""},
+    {"Field": "settings", "Type": "text", "Null": "YES", "Default": null, "Extra": "", "Key": ""},
+    {"Field": "updated_at", "Type": "timestamp", "Null": "NO", "Default": "CURRENT_TIMESTAMP", "Extra": "on update CURRENT_TIMESTAMP", "Key": ""}
+]

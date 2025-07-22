@@ -9,8 +9,8 @@
                 <i class="fas fa-broom"></i>
             </div>
         <div class="winc-holder" id="terminal_controls">
-            <div class="winc-btn" title="Свернуть">
-                <i class="fas fa-window-minimize"></i>
+            <div class="winc-btn" title="Развернуть">
+                <i class="fas fa-window-maximize"></i>
             </div>
             <div class="winc-btn" title="Закрыть">
                 <i class="fas fa-times"></i>
@@ -18,5 +18,5 @@
         </div>
     </div>
     <div class="resizer"></div>
-    <div class="terminal" id="console"></div>
+    <div class="terminal hidden" id="console"></div>
 </div>

@@ -4,7 +4,6 @@ namespace GIG\Infrastructure\Persistence;
 defined('_RUNKEY') or die;
 
 use PDO;
-use GIG\Core\Config;
 use GIG\Infrastructure\Contracts\DatabaseClientInterface;
 use GIG\Domain\Exceptions\GeneralException;
 

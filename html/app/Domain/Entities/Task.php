@@ -3,9 +3,9 @@ namespace GIG\Domain\Entities;
 
 defined('_RUNKEY') or die;
 
-class BackgroundTask extends Entity
+class Task extends Entity
 {
-    // public const PENDING = 0;
+    // public const PENDING = 'PENDING';
     // public const RUNNING = 1;
     // public const DONE    = 2;
     // public const ERROR   = 3;
@@ -13,7 +13,7 @@ class BackgroundTask extends Entity
 
     public ?int $id = null;
     public string $type = '';
-    public string $status = 'pending';
+    public string $status = 'PENDING';
     public array $params = [];
     public float $progress = 0.0;
     public array $result = [];

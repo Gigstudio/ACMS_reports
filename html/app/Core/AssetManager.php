@@ -32,25 +32,25 @@ class AssetManager
         return self::$scripts;
     }
 
-    public static function renderStyles(): string
-    {
-        return implode("\n", array_map(
-            fn($href) => "<link rel=\"stylesheet\" href=\"" . htmlspecialchars($href) . "\">",
-            self::$styles
-        ));
-    }
+    // public static function renderStyles(): string
+    // {
+    //     return implode("\n", array_map(
+    //         fn($href) => "<link rel=\"stylesheet\" href=\"" . htmlspecialchars($href) . "\">",
+    //         self::$styles
+    //     ));
+    // }
 
-    public static function renderScripts(): string
-    {
-        return implode("\n", array_map(
-            fn($src) => "<script src=\"" . htmlspecialchars($src) . "\"></script>",
-            self::$scripts
-        ));
-    }
+    // public static function renderScripts(): string
+    // {
+    //     return implode("\n", array_map(
+    //         fn($src) => "<script src=\"" . htmlspecialchars($src) . "\"></script>",
+    //         self::$scripts
+    //     ));
+    // }
 
-    public static function reset(): void
-    {
-        self::$styles = [];
-        self::$scripts = [];
-    }
+    // public static function reset(): void
+    // {
+    //     self::$styles = [];
+    //     self::$scripts = [];
+    // }
 }

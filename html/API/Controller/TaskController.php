@@ -3,17 +3,16 @@ namespace GIG\Api\Controller;
 
 defined('_RUNKEY') or die;
 
-use GIG\Domain\Services\BackgroundTaskManager;
-use GIG\Core\Request;
+use GIG\Domain\Services\TaskManager;
 
 class TaskController extends ApiController
 {
-    protected BackgroundTaskManager $manager;
+    protected TaskManager $manager;
 
     public function __construct()
     {
         parent::__construct();
-        $this->manager = new BackgroundTaskManager($this->app->getMysqlClient());
+        $this->manager = new TaskManager($this->app->getMysqlClient());
     }
 
     // Список задач

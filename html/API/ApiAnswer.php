@@ -5,18 +5,18 @@ defined('_RUNKEY') or die;
 
 class ApiAnswer
 {
-    public const STATUS_SUCCESS = 'success';
-    public const STATUS_ERROR = 'error';
-    public const STATUS_FAIL = 'FAIL';
+    public const SUCCESS = 'success';
+    public const ERROR = 'error';
+    public const FAIL = 'FAIL';
 
-    public string $status = self::STATUS_SUCCESS; // success|fail|error
+    public string $status = self::SUCCESS; // success|fail|error
     public int $code = 200; // HTTP-статус (дублирует, но всегда в теле)
     public string $message = ''; // Человеко-ориентированное сообщение
     public array $data = []; // Payload
     public array $extra = []; // Необязательные поля (trace, debug, details...)
 
     public function __construct(
-        $status = self::STATUS_SUCCESS,
+        $status = self::SUCCESS,
         $code = 200,
         $message = '',
         $data = [],
@@ -51,7 +51,7 @@ class ApiAnswer
      */
     public static function build(
         $data = [],
-        $status = self::STATUS_SUCCESS,
+        $status = self::SUCCESS,
         $code = 200,
         $message = '',
         $extra = []

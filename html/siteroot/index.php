@@ -19,7 +19,7 @@ ErrorHandler::register();
 // 3. Проверяем и, если нужно, инициализируем/мигрируем БД
 $db = new MySQLClient();
 DbSchemaManager::checkAndMigrateStatic($db);
-EventManager::setRepository(new EventRepository($db));
+EventManager::setRepository(new EventRepository());
 
 // 4. Запускаем ядро приложения
 $app = Application::getInstance();

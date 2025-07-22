@@ -28,23 +28,6 @@ abstract class Controller
         return $this->request->isApi();
     }
 
-    protected function json(array $payload, int $status = 200): void {
-        if (!$this->isApiRequest()) {
-            throw new GeneralException(
-                "Метод json() может вызываться только в контексте API-запроса",
-                500,
-                [
-                    'detail' => "Попытка возврата JSON вне API. Проверьте логику вызова контроллера."
-                ]
-            );
-        }
-
-        $payload['status'] ??= $status >= 400 ? 'error' : 'success';
-        $payload['code'] ??= $status;
-        $this->response->setStatus($status);
-        $this->response->json($payload);
-    }
-
     protected function render(Block $block): void {
         if(DEV_MODE){
             $console = Block::make('partials/console');

@@ -24,14 +24,4 @@ class GeneralException extends \Exception
     {
         return $this->extra;
     }
-
-    public function getShortMessage(): string
-    {
-        return $this->extra['message']['short'] ?? $this->getMessage();
-    }
-
-    public function getFullMessage(): string
-    {
-        return $this->extra['message']['full'] ?? $this->getMessage();
-    }
 }

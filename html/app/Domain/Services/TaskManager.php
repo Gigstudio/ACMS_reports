@@ -4,12 +4,12 @@ namespace GIG\Domain\Services;
 defined('_RUNKEY') or die;
 
 use GIG\Infrastructure\Contracts\DatabaseClientInterface;
-use GIG\Domain\Entities\BackgroundTask;
+use GIG\Domain\Entities\Task;
 use GIG\Domain\Exceptions\GeneralException;
 use GIG\Domain\Services\EventManager;
 use GIG\Domain\Entities\Event;
 
-class BackgroundTaskManager
+class TaskManager
 {
     protected DatabaseClientInterface $db;
 
@@ -21,21 +21,21 @@ class BackgroundTaskManager
     /**
      * Создать новую фоновую задачу.
      */
-    public function createTask(string $type, array $params = [], ?int $userId = null): BackgroundTask
+    public function createTask(string $type, array $params = [], ?int $userId = null): Task
     {
         $data = [
             'type'       => $type,
-            'status'     => 'pending',
+            'status'     => 'PENDING',
             'params'     => json_encode($params, JSON_UNESCAPED_UNICODE),
             'progress'   => 0,
             'user_id'    => $userId,
             'created_at' => date('Y-m-d H:i:s')
         ];
 
-        $success = $this->db->insert('background_tasks', $data);
+        $success = $this->db->insert('background_task', $data);
         if (!$success) {
             throw new GeneralException("Ошибка создания фоновой задачи", 500, [
-                'detail' => "Не удалось вставить запись в таблицу background_tasks",
+                'detail' => "Не удалось вставить запись в таблицу background_task",
                 'data' => $data
             ]);
         }
@@ -46,17 +46,17 @@ class BackgroundTaskManager
         return $this->getTask($id);
     }
 
-    public function getTask(int $id): ?BackgroundTask
+    public function getTask(int $id): ?Task
     {
         $row = $this->getTaskRowOrFail($id);
-        return new BackgroundTask($row);
+        return new Task($row);
     }
 
     public function getTasks(array $filter = [], int $limit = 100): array
     {
-        $rows = $this->db->get('background_tasks', $filter, ['*'], $limit);
+        $rows = $this->db->get('background_task', $filter, ['*'], $limit);
         return array_map(function($row) {
-            return new BackgroundTask($this->decodeRow($row));
+            return new Task($this->decodeRow($row));
         }, $rows);
     }
 
@@ -72,11 +72,11 @@ class BackgroundTaskManager
         }
         $fields['updated_at'] = date('Y-m-d H:i:s');
 
-        if (isset($fields['status']) && in_array($fields['status'], ['done', 'error', 'aborted'])) {
+        if (isset($fields['status']) && in_array($fields['status'], ['DONE', 'ERROR', 'ABORTED'])) {
             $fields['finished_at'] = date('Y-m-d H:i:s');
         }
 
-        $success = $this->db->update('background_tasks', $fields, ['id' => $id]);
+        $success = $this->db->update('background_task', $fields, ['id' => $id]);
         if (!$success) {
             throw new GeneralException("Не удалось обновить задачу", 500, [
                 'detail' => "Ошибка при обновлении задачи #$id",
@@ -97,15 +97,19 @@ class BackgroundTaskManager
 
         $logs = [];
         if (!empty($row['log'])) {
-            $decoded = json_decode($row['log'], true);
-            $logs = is_array($decoded) ? $decoded : [];
+            if (is_string($row['log'])) {
+                $decoded = json_decode($row['log'], true);
+                $logs = is_array($decoded) ? $decoded : [];
+            } elseif (is_array($row['log'])) {
+                $logs = $row['log'];
+            }
         }
         $logs[] = [
             'ts'   => date('Y-m-d H:i:s'),
             'msg'  => $logEntry
         ];
 
-        $success = $this->db->update('background_tasks', [
+        $success = $this->db->update('background_task', [
             'log'        => json_encode($logs, JSON_UNESCAPED_UNICODE),
             'updated_at' => date('Y-m-d H:i:s')
         ], ['id' => $id]);
@@ -123,7 +127,7 @@ class BackgroundTaskManager
     public function deleteTask(int $id): bool
     {
         $this->getTaskRowOrFail($id);
-        $success = $this->db->delete('background_tasks', ['id' => $id]);
+        $success = $this->db->delete('background_task', ['id' => $id]);
         if (!$success) {
             throw new GeneralException("Ошибка при удалении задачи", 500, [
                 'detail' => "Не удалось удалить задачу #$id"
@@ -146,7 +150,7 @@ class BackgroundTaskManager
     }
     protected function getTaskRowOrFail(int $id): array
     {
-        $row = $this->db->first('background_tasks', ['id' => $id]);
+        $row = $this->db->first('background_task', ['id' => $id]);
         if (!$row) {
             throw new GeneralException("Задача не найдена", 404, [
                 'detail' => "Нет задачи с ID $id"

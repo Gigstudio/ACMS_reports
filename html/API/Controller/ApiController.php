@@ -7,6 +7,7 @@ use GIG\Core\Application;
 use GIG\Core\Request;
 use GIG\Core\Response;
 use GIG\Api\ApiAnswer;
+use GIG\Domain\Entities\User;
 
 /**
  * Базовый API-контроллер.
@@ -18,26 +19,26 @@ abstract class ApiController
     protected Request $request;
     protected Response $response;
     /** @var int HTTP статус ответа */
-    // protected ?User $user;
+    protected ?User $user;
 
     public function __construct()
     {
         $this->app = Application::getInstance();
         $this->request = $this->app->request;
         $this->response = $this->app->response;
-        // $this->user = $this->app->getCurrentUser();
+        $this->user = $this->app->getCurrentUser();
     }
 
     /**
      * Бросает ошибку, если пользователь не авторизован.
      */
-    // protected function requireAuth(): void
-    // {
-    //     $user = $this->app->getCurrentUser();
-    //     if (!$user) {
-    //         $this->abort('Требуется авторизация', 401);
-    //     }
-    // }
+    protected function requireAuth(): void
+    {
+        $user = $this->app->getCurrentUser();
+        if (!$user) {
+            $this->abort('Требуется авторизация', 401);
+        }
+    }
 
     /**
      * Проверка роли пользователя (строка или массив ролей).
@@ -74,7 +75,7 @@ abstract class ApiController
         array $extra = []
     ): void {
         $answer = new ApiAnswer(
-            status: ApiAnswer::STATUS_SUCCESS,
+            status: ApiAnswer::SUCCESS,
             code: $code,
             message: $message,
             data: $data,
@@ -93,7 +94,7 @@ abstract class ApiController
         array $extra = []
     ): void {
         $answer = new ApiAnswer(
-            status: ApiAnswer::STATUS_ERROR,
+            status: ApiAnswer::ERROR,
             code: $code,
             message: $message,
             data: $data,

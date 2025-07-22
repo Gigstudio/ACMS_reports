@@ -7,7 +7,6 @@ export class StatusMonitor {
     start() {
         if (this.eventSource) return;
         this.eventSource = new EventSource(this.url);
-        console.log(this.eventSource);
         this.eventSource.onmessage = (event) => {
             try {
                 const data = JSON.parse(event.data);

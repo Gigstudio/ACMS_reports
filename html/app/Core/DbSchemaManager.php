@@ -37,7 +37,7 @@ class DbSchemaManager
     {
         $this->ensureSettingsTable();
         $this->ensureMigrationsTable();
-        $this->ensureRolesTable();
+        $this->ensureRoleTable();
         $this->ensureBackgroundTasksTable();
 
         $current = $this->getCurrentVersion();
@@ -48,45 +48,45 @@ class DbSchemaManager
     }
 
     /**
-     * Получить актуальную версию схемы из таблицы db_settings.
+     * Получить актуальную версию схемы из таблицы app_settings.
      */
     protected function getCurrentVersion(): string
     {
-        if (!$this->db->tableExists('db_settings')) {
+        if (!$this->db->tableExists('app_settings')) {
             return '';
         }
-        return $this->db->value("SELECT value FROM db_settings WHERE param = ?", ['dbversion']) ?? '';
+        return $this->db->value("SELECT value FROM app_settings WHERE param = ?", ['dbversion']) ?? '';
     }
 
     /**
-     * Обновить версию схемы в таблице db_settings.
+     * Обновить версию схемы в таблице app_settings.
      */
     protected function updateVersion(): void
     {
-        $value = $this->db->value("SELECT value FROM db_settings WHERE param = ?", ['dbversion']);
+        $value = $this->db->value("SELECT value FROM app_settings WHERE param = ?", ['dbversion']);
         if ($value === false) {
             EventManager::logParams(Event::WARNING, self::class, 'Первый запуск: инициализация версии базы');
-            $this->db->insert('db_settings', [
+            $this->db->insert('app_settings', [
                 'param' => 'dbversion',
                 'value' => $this->version
             ]);
         } elseif ($value !== $this->version) {
             EventManager::logParams(Event::INFO, self::class, "Версия базы данных обновлена с {$value} до {$this->version}");
-            $this->db->updateOrInsert('db_settings', ['value' => $this->version], ['param' => 'dbversion']);
+            $this->db->updateOrInsert('app_settings', ['value' => $this->version], ['param' => 'dbversion']);
         }
     }
 
     /**
-     * Убедиться, что существует таблица db_settings.
+     * Убедиться, что существует таблица app_settings.
      */
     protected function ensureSettingsTable(): void
     {
-        if (!$this->db->tableExists('db_settings')) {
-            $this->db->createTable('db_settings', [
+        if (!$this->db->tableExists('app_settings')) {
+            $this->db->createTable('app_settings', [
                 ['Field' => 'param', 'Type' => 'varchar(64)', 'Null' => 'NO', 'Default' => null, 'Extra' => '', 'Key' => 'PRI'],
                 ['Field' => 'value', 'Type' => 'varchar(255)', 'Null' => 'YES', 'Default' => null, 'Extra' => '', 'Key' => '']
             ]);
-            EventManager::logParams(Event::INFO, self::class, "Создана таблица db_settings");
+            EventManager::logParams(Event::INFO, self::class, "Создана таблица app_settings");
         }
     }
 
@@ -95,29 +95,29 @@ class DbSchemaManager
      */
     protected function ensureMigrationsTable(): void
     {
-        if (!$this->db->tableExists('db_migrations')) {
-            $this->db->createTable('db_migrations', [
+        if (!$this->db->tableExists('db_migration')) {
+            $this->db->createTable('db_migration', [
                 ['Field' => 'id', 'Type' => 'int', 'Null' => 'NO', 'Default' => null, 'Extra' => 'auto_increment', 'Key' => 'PRI'],
                 ['Field' => 'version', 'Type' => 'varchar(32)', 'Null' => 'NO', 'Default' => null, 'Extra' => '', 'Key' => ''],
                 ['Field' => 'applied_at', 'Type' => 'timestamp', 'Null' => 'NO', 'Default' => 'CURRENT_TIMESTAMP', 'Extra' => '', 'Key' => ''],
                 ['Field' => 'description', 'Type' => 'text', 'Null' => 'YES', 'Default' => null, 'Extra' => '', 'Key' => '']
             ]);
-            EventManager::logParams(Event::INFO, self::class, "Создана таблица db_migrations");
+            EventManager::logParams(Event::INFO, self::class, "Создана таблица db_migration");
         }
     }
 
     /**
      * Убедиться, что существует таблица ролей, и наполнить её начальными данными.
      */
-    protected function ensureRolesTable(): void
+    protected function ensureRoleTable(): void
     {
-        if (!$this->db->tableExists('roles')) {
-            $this->db->createTable('roles', [
+        if (!$this->db->tableExists('role')) {
+            $this->db->createTable('role', [
                 ['Field' => 'id', 'Type' => 'int', 'Null' => 'NO', 'Default' => null, 'Extra' => 'AUTO_INCREMENT', 'Key' => 'PRI'],
                 ['Field' => 'name', 'Type' => 'varchar(255)', 'Null' => 'YES', 'Default' => null, 'Extra' => '', 'Key' => ''],
                 ['Field' => 'description', 'Type' => 'varchar(255)', 'Null' => 'YES', 'Default' => null, 'Extra' => '', 'Key' => '']
             ]);
-            EventManager::logParams(Event::INFO, self::class, "Создана таблица roles");
+            EventManager::logParams(Event::INFO, self::class, "Создана таблица role");
         }
         $this->ensureDefaultRoles();
     }
@@ -135,21 +135,22 @@ class DbSchemaManager
             ['name' => 'Admin',   'description' => 'Администратор системы']
         ];
         foreach ($roleList as $role) {
-            $exists = $this->db->value("SELECT id FROM roles WHERE name = ?", [$role['name']]);
-            if (!$exists) {
-                $this->db->insert('roles', $role);
-                EventManager::logParams(Event::INFO, self::class, "Добавлена роль {$role['name']}");
-            }
+
+            // $exists = $this->db->value("SELECT id FROM role WHERE name = ?", [$role['name']]);
+            // if (!$exists) {
+            $this->db->updateOrInsert('role', $role, ['name' => $role['name']]);
+            EventManager::logParams(Event::INFO, self::class, "Добавлена роль {$role['name']}");
+            // }
         }
     }
 
     protected function ensureBackgroundTasksTable()
     {
-        if (!$this->db->tableExists('background_tasks')) {
-            $this->db->createTable('background_tasks', [
+        if (!$this->db->tableExists('background_task')) {
+            $this->db->createTable('background_task', [
                 ["Field" => "id", "Type" => "int", "Null" => "NO", "Default" => null, "Extra" => "AUTO_INCREMENT", "Key" => "PRI"],
                 ["Field" => "type", "Type" => "varchar(64)", "Null" => "NO", "Default" => "", "Extra" => "", "Key" => ""],
-                ["Field" => "status", "Type" => "ENUM('pending','running','done','error','aborted')", "Null" => "NO", "Default" => "pending", "Extra" => "", "Key" => ""],
+                ["Field" => "status", "Type" => "ENUM('PENDING','RUNNING','DONE','ERROR','ABORTED')", "Null" => "NO", "Default" => "PENDING", "Extra" => "", "Key" => ""],
                 ["Field" => "params", "Type" => "json", "Null" => "YES", "Default" => null, "Extra" => "", "Key" => ""],
                 ["Field" => "progress", "Type" => "float", "Null" => "NO", "Default" => 0, "Extra" => "", "Key" => ""],
                 ["Field" => "result", "Type" => "json", "Null" => "YES", "Default" => null, "Extra" => "", "Key" => ""],
@@ -159,7 +160,20 @@ class DbSchemaManager
                 ["Field" => "updated_at", "Type" => "timestamp", "Null" => "YES", "Default" => null, "Extra" => "", "Key" => ""],
                 ["Field" => "finished_at", "Type" => "timestamp", "Null" => "YES", "Default" => null, "Extra" => "", "Key" => ""]
             ]);
-            EventManager::logParams(Event::INFO, self::class, "Создана таблица background_tasks");
+            EventManager::logParams(Event::INFO, self::class, "Создана таблица background_task");
+        }
+        $this->ensureDefaultTasks();
+    }
+
+    protected function ensureDefaultTasks()
+    {
+        $taskList = [
+            ['type' => 'sync_divisions'],
+            ['type' => 'sync_positions']
+        ];
+        foreach ($taskList as $task) {
+            $this->db->updateOrInsert('background_task', $task, ['type' => $task['type']]);
+            EventManager::logParams(Event::INFO, self::class, "Добавлена роль {$task['type']}");
         }
     }
 

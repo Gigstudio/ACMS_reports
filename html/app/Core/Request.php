@@ -131,4 +131,13 @@ class Request
     {
         return $this->files[$key] ?? null;
     }
+
+    public function getIp(): string
+    {
+        if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            return trim(explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])[0]);
+        }
+
+        return $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+    }
 }

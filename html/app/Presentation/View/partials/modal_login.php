@@ -2,7 +2,7 @@
 defined('_RUNKEY') or die;
 ?>
 
-<div class="login-wrapper<?= $show ? '' : ' hidden' ?>">
+<div class="login-wrapper hidden">
 	<input class="hidden" type="checkbox" id="checkreg" />
 
 	<div class="closemodal" id="close_login"><i class="fas fa-times"></i></div>
@@ -23,7 +23,7 @@ defined('_RUNKEY') or die;
 							<input id="password" type="password" placeholder="Password" name="password"/>
 						</div>
 						<div class="lineholder fullwidth">
-							<label class="showpass">Показать пароль&nbsp;<i class="fas fa-eye"></i></label>
+							<span class="showpass">Показать пароль&nbsp;<i class="fas fa-eye"></i></span>
 						</div>
 					</fieldset>
 					<div class="lineholder fullwidth">

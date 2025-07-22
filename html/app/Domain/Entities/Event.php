@@ -3,60 +3,46 @@ namespace GIG\Domain\Entities;
 
 defined('_RUNKEY') or die;
 
+use GIG\Core\Application;
+
 class Event extends Entity
 {
-    // Константы типов событий (можно расширять при необходимости)
     public const INFO     = 0;
     public const MESSAGE  = 1;
     public const WARNING  = 2;
     public const ERROR    = 3;
     public const FATAL    = 4;
 
-    /** @var int|null Идентификатор */
     public ?int $id = null;
-
-    /** @var int Тип события (использовать константы) */
     public int $type;
-
-    /** @var string Источник события */
     public string $source;
-
-    /** @var string Текст сообщения */
     public string $message;
-
-    /** @var int Время (timestamp UNIX) */
     public int $timestamp;
+    public string $ip;
+    public ?int $userId = null;
 
-    /** @var array Дополнительные данные */
+    /** Дополнительные данные (сериализуемые) */
     public array $data = [];
 
-    /**
-     * Конструктор с автозаполнением timestamp
-     */
-    public function __construct(array $data = [])
+    public function __construct(array $properties = [])
     {
-        if (!isset($data['timestamp'])) {
-            $data['timestamp'] = time();
-        }
-        parent::__construct($data);
+        $properties['timestamp'] ??= time();
+        $properties['ip'] ??= Application::getInstance()->request->getIp();
+        parent::__construct($properties);
     }
 
-    /**
-     * Удобная фабрика создания
-     */
     public static function create(
         int $type,
         string $source,
         string $message,
-        ?int $timestamp = null,
-        array $data = []
+        array $data = [],
+        ?int $userId = null
     ): static {
         return new static([
             'type' => $type,
             'source' => $source,
             'message' => $message,
-            'timestamp' => $timestamp ?? time(),
             'data' => $data,
+            'userId' => $userId,
         ]);
-    }
-}
+    }}

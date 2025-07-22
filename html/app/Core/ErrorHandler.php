@@ -7,11 +7,10 @@ use GIG\Domain\Entities\Event;
 use GIG\Domain\Services\EventManager;
 use GIG\Core\ContextDetector;
 use GIG\Presentation\Controller\MessageController;
+use GIG\Domain\Exceptions\GeneralException;
 
 class ErrorHandler
 {
-    protected static int $eventClass = Event::ERROR;
-
     public static function register(): void
     {
         set_error_handler([self::class, 'handleError']);
@@ -24,28 +23,19 @@ class ErrorHandler
         $eventType = match ($errno) {
             E_USER_NOTICE, E_NOTICE        => Event::INFO,
             E_WARNING, E_USER_WARNING      => Event::WARNING,
-            // E_ERROR, E_USER_ERROR,
-            // E_CORE_ERROR, E_COMPILE_ERROR,
-            // E_RECOVERABLE_ERROR            => Event::ERROR,
             default                        => Event::ERROR,
         };
 
         $message = self::composeMessage($eventType, $errno, $errstr, $errfile, $errline);
 
         EventManager::logParams($eventType, $errfile, $message);
-
-        // self::dispatch($errno, [
-        //     'title'   => EventManager::getTitle($eventType),
-        //     'message' => $errstr,
-        //     'detail'  => $message
-        // ]);
     }
 
     public static function handleException(\Throwable $e): void
     {
         // --- Фильтрация всех мусорных (браузерных/ботовых) URI для GeneralException 404 ---
         if (
-            $e instanceof \GIG\Domain\Exceptions\GeneralException &&
+            $e instanceof GeneralException &&
             $e->getCode() === 404
         ) {
             $uri = $_SERVER['REQUEST_URI'] ?? '';
@@ -126,7 +116,6 @@ class ErrorHandler
         }
     }
 
-    // Исправлено: eventType теперь — аргумент, а не self::$eventClass
     private static function composeMessage(int $eventType, int $errno, string $errstr, string $errfile, int $errline): string
     {
         return sprintf(
@@ -152,8 +141,6 @@ class ErrorHandler
                 http_response_code($code);
 
                 $extra = $payload['extra'] ?? [];
-                // Только для development/DEBUG — отдаём trace во фронт
-                // $dev = defined('ENVIRONMENT') ? ENVIRONMENT === 'development' : true;
                 if (!DEV_MODE && isset($extra['trace'])) {
                     unset($extra['trace']);
                 }

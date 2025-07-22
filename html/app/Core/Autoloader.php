@@ -45,7 +45,7 @@ class Autoloader
         return false;
     }
 
-    protected function loadMappedFile($prefix, $relative_class)
+    protected function loadMappedFile($prefix, $relative_class): bool|string
     {
         if (isset($this->prefixes[$prefix]) === false) {
             return false;
@@ -55,46 +55,29 @@ class Autoloader
                   . str_replace('\\', DS, $relative_class)
                   . '.php';
 
-                  if (isset($this->cache[$file])) {
-                    require $this->cache[$file];
-                    return $this->cache[$file];
-                }
-    
-                if (!file_exists($file)) {
-                    continue;
-                }
-    
-                $realPath = realpath($file);
-                if (!$realPath) {
-                    error_log("Autoload failed: {$file} (realpath failed)");
-                    continue;
-                }
-    
-                $this->cache[$file] = $realPath;
-                require $realPath;
-                return $realPath;
-            }
+            return $this->requireFile($file);
+        }
         return false;
     }
 
-    protected function requireFile($file)
+    protected function requireFile($file): bool|string
     {
         if (isset($this->cache[$file])){
             require $this->cache[$file];
-            return true;
+            return $this->cache[$file];
         }
         if(!file_exists($file)){
             error_log("Autoload failed: {$file} (file does not exist)");
-            return false;
+            return false; //continue
         }
         $realPath = realpath($file);
         if (!$realPath) {
             error_log("Autoload failed: {$file} (realpath failed)");
-            return false;
+            return false; //continue
         }
     
         $this->cache[$file] = $realPath;
         require $realPath;
-        return true;
+        return $realPath;
     }
 }

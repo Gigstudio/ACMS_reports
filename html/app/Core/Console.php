@@ -3,11 +3,14 @@ namespace GIG\Core;
 
 defined('_RUNKEY') or die;
 
+use GIG\Domain\Entities\Event;
+use GIG\Core\Application;
+
 class Console
 {
-    protected static array $messages = [];
-    const MAX_CONSOLE_MESSAGES = 100;
-
+    protected const MAX_CONSOLE_MESSAGES = 100;
+    protected const SESSION_KEY = 'console_events';
+    
     /**
      * Добавить сообщение в консоль (сессию)
      */

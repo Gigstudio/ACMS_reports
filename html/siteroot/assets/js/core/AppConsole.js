@@ -3,40 +3,85 @@ import { APIClient } from './APIClient.js';
 export class AppConsole {
     static ready = false;
 
+    static safeSetItem(key, value) {
+        try {
+            localStorage.setItem(key, value);
+        } catch (e) {
+            console.warn('localStorage.setItem failed:', e);
+        }
+    }
+
+    static safeGetItem(key, fallback = null) {
+        try {
+            return localStorage.getItem(key) ?? fallback;
+        } catch (e) {
+            console.warn('localStorage.getItem failed:', e);
+            return fallback;
+        }
+    }
+
     /**
      * Получить текущий уровень фильтра из radio/LS
      */
     static getFilterLevel() {
-        let selectedInput = document.querySelector('input[name="log_filter"]:checked');
-        return selectedInput ? selectedInput.value : localStorage.getItem("consoleFilter") || 0;
+        const selectedInput = document.querySelector('input[name="log_filter"]:checked');
+        const value = selectedInput ? selectedInput.value : this.safeGetItem("consoleFilter", 0);
+        return parseInt(value, 10);
     }
 
     /**
      * Сохранить фильтр в LS
      */
     static setFilterLevel(level) {
-        localStorage.setItem("consoleFilter", level);
+        this.safeSetItem("consoleFilter", level);
+    }
+
+    static getFirstMsgId() {
+        const value = this.safeGetItem("firstMsgId", 0);
+        return parseInt(value, 10);
+    }
+
+    static setFirstMsgId(id) {
+        this.safeSetItem("firstMsgId", id);
     }
 
     /**
      * Обновить консоль (REST)
      */
-    static async update(filterLevel = null) {
-        if (filterLevel === null || filterLevel === undefined) {
-            filterLevel = this.getFilterLevel();
-        }
+    static async update(filterLevel = null, firstMsgId = null) {
+        filterLevel = (filterLevel === null || filterLevel === undefined) ? this.getFilterLevel() : parseInt(filterLevel, 10);
         this.setFilterLevel(filterLevel);
 
+        firstMsgId = (firstMsgId === null || firstMsgId === undefined) ? this.getFirstMsgId() : parseInt(firstMsgId, 10);
+        this.setFirstMsgId(firstMsgId);
+
         let url = '/api/console';
-        if (filterLevel) {
-            url += '?level=' + encodeURIComponent(filterLevel);
+        const params = [];
+
+        if (filterLevel > 0) {
+            params.push('level=' + encodeURIComponent(filterLevel));
         }
+        if (firstMsgId > 0) {
+            params.push('fromId=' + encodeURIComponent(firstMsgId));
+        }
+        if (params.length > 0) {
+            url += '?' + params.join('&');
+        }
+        console.log('filterLevel: ', filterLevel);
+        console.log('firstMsgId: ', firstMsgId);
+        console.log('url: ', url);
 
         try {
             const resp = await APIClient.request(url, 'GET');
-            const messages = resp.data.messages || [];
+            const raw = resp.data?.messages;
+
+            const messages = raw && typeof raw === 'object'
+                ? Object.values(raw)
+                : [];
             const consoleElement = document.getElementById('console');
             if (!consoleElement) return;
+                console.log(Array.isArray(resp.data.messages));
+
             consoleElement.innerHTML = '';
             messages.forEach(msg => {
                 const el = document.createElement('p');
@@ -58,7 +103,10 @@ export class AppConsole {
      */
     static async clear() {
         try {
-            await APIClient.request('/api/console', 'DELETE');
+            const resp = await APIClient.request('/api/console', 'DELETE');
+            console.log(resp.data.firstEventId);
+            const firstId = resp.data?.firstEventId || 0;
+            this.setFirstMsgId(firstId);
             this.update();
         } catch (error) {
             console.error('Ошибка очистки консоли:', error);
@@ -104,62 +152,84 @@ export class AppConsole {
     }
 
     /**
-     * Полная инициализация AppConsole
+     * Смена состояния (свернута / развернута)
      */
-    static init() {
-        // Кнопки управления
-        const clearBtn = document.querySelectorAll('.winc-btn')[0];
-        const minBtn = document.querySelectorAll('.winc-btn')[1];
-        const closeBtn = document.querySelectorAll('.winc-btn')[2];
-        const resizer = document.querySelector('#console_inject .resizer');
-        const consoleEl = document.getElementById('console');
-        const consoleWin = consoleEl?.parentElement;
+    static updateConsoleState(btn, target,  state) {
+        target.classList.toggle('hidden', state != "maximized");
+        btn.title = state != 'maximized' ? 'Развернуть' : 'Свернуть';
+        btn.firstElementChild.className = state != 'maximized' ? 'fas fa-window-maximize' : 'fas fa-window-minimize';
+    }
 
-        // Перетаскивание/resize консоли
-        if (resizer && consoleEl) {
-            let startY, startHeight;
-            resizer.addEventListener('mousedown', (e) => {
-                startY = e.clientY;
-                startHeight = parseInt(getComputedStyle(consoleEl).height, 10);
-                const onMove = (e) => {
-                    let newHeight = startHeight - e.clientY + startY;
-                    if (e.clientY >= window.innerHeight - 60) newHeight = 42;
-                    if (e.clientY <= window.innerHeight / 2) newHeight = window.innerHeight / 2 - 20;
-                    consoleEl.style.height = `${newHeight}px`;
-                    consoleEl.style.maxHeight = `${newHeight}px`;
-                };
-                const onUp = () => {
-                    document.removeEventListener('mousemove', onMove);
-                    document.removeEventListener('mouseup', onUp);
-                };
-                document.addEventListener('mousemove', onMove);
-                document.addEventListener('mouseup', onUp);
-            });
-        }
+    /**
+     * Инициализация управления размером консоли
+     */
+    static setupResizer(consoleEl, resizer) {
+        if (!resizer || !consoleEl) return;
 
-        // Кнопки
-        minBtn?.addEventListener('click', () => {
-            const state = consoleEl.classList.toggle('hidden') ? 'maximized' : 'minimized';
-            localStorage.setItem("consoleState", state);
+        let startY, startHeight;
+        resizer.addEventListener('mousedown', (e) => {
+            startY = e.clientY;
+            startHeight = parseInt(getComputedStyle(consoleEl).height, 10);
+            const onMove = (e) => {
+                let newHeight = startHeight - e.clientY + startY;
+                if (e.clientY >= window.innerHeight - 60) newHeight = 42;
+                if (e.clientY <= window.innerHeight / 2) newHeight = window.innerHeight / 2 - 20;
+                consoleEl.style.height = `${newHeight}px`;
+                consoleEl.style.maxHeight = `${newHeight}px`;
+            };
+            const onUp = () => {
+                document.removeEventListener('mousemove', onMove);
+                document.removeEventListener('mouseup', onUp);
+            };
+            document.addEventListener('mousemove', onMove);
+            document.addEventListener('mouseup', onUp);
         });
+    }
 
-        closeBtn?.addEventListener('click', () => {
-            if (consoleWin) {
-                consoleWin.remove();
-                localStorage.setItem('consoleState', 'minimized');
-            }
-        });
+    /**
+     * Инициализация кнопок управления состоянием окна консоли
+     */
+    static setupButtons(consoleEl, consoleWin) {
+        const [clearBtn, minBtn, closeBtn] = document.querySelectorAll('.winc-btn');
+
+        const savedState = this.safeGetItem("consoleState", "maximized");
+        this.updateConsoleState(minBtn, consoleEl, savedState);
 
         clearBtn?.addEventListener('click', () => this.clear());
+        minBtn?.addEventListener('click', () => {
+            const state = consoleEl.classList.toggle('hidden') ? 'minimized' : 'maximized';
+            this.safeSetItem("consoleState", state)
+            this.updateConsoleState(minBtn, consoleEl, state);
+        });
+        closeBtn?.addEventListener('click', () => {
+            consoleWin?.remove();
+            this.safeSetItem("consoleState", "minimized")
+        });
+    }
 
-        // Фильтр
+    /**
+     * Инициализация слушателя фильтра
+     */
+    static setupFilter() {
         document.querySelectorAll('input[name="log_filter"]').forEach(input => {
             input.addEventListener('change', () => {
                 this.update(input.value);
             });
         });
+    }
 
-        // Первая инициализация консоли
+    /**
+     * Полная инициализация AppConsole
+     */
+    static init(state) {
+        const consoleEl = document.getElementById('console');
+        const consoleWin = consoleEl?.parentElement;
+        const resizer = document.querySelector('#console_inject .resizer');
+
+        this.setupResizer(consoleEl, resizer);
+        this.setupButtons(consoleEl, consoleWin);
+        this.setupFilter();
+
         this.update(this.getFilterLevel());
         this.ready = true;
     }
