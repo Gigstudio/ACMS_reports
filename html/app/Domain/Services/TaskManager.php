@@ -8,27 +8,31 @@ use GIG\Domain\Entities\Task;
 use GIG\Domain\Exceptions\GeneralException;
 use GIG\Domain\Services\EventManager;
 use GIG\Domain\Entities\Event;
+use GIG\Core\Application;
 
 class TaskManager
 {
     protected DatabaseClientInterface $db;
 
-    public function __construct(DatabaseClientInterface $db)
+    public function __construct(DatabaseClientInterface $db = null)
     {
-        $this->db = $db;
+        $this->db = $db ?? Application::getInstance()->getMysqlClient();
     }
 
     /**
      * Создать новую фоновую задачу.
      */
-    public function createTask(string $type, array $params = [], ?int $userId = null): Task
+    public function createTask(string $type, string $name, array $params = [], ?int $userId = null, string $executionType = 'ONCE', ?int $interval = null): Task
     {
         $data = [
-            'type'       => $type,
-            'status'     => 'PENDING',
-            'params'     => json_encode($params, JSON_UNESCAPED_UNICODE),
-            'progress'   => 0,
-            'user_id'    => $userId,
+            'type'              => $type,
+            'name'              => $name,
+            'status'            => 'PENDING',
+            'params'            => json_encode($params, JSON_UNESCAPED_UNICODE),
+            'progress'          => 0,
+            'user_id'           => $userId,
+            'execution_type'    => $executionType,
+            'interval_minutes'  => $executionType === 'RECURRING' ? $interval : null,
             'created_at' => date('Y-m-d H:i:s')
         ];
 
@@ -55,14 +59,44 @@ class TaskManager
     public function getTasks(array $filter = [], int $limit = 100): array
     {
         $rows = $this->db->get('background_task', $filter, ['*'], $limit);
+        // file_put_contents(PATH_LOGS.'debug_perco.json', json_encode($rows));
         return array_map(function($row) {
             return new Task($this->decodeRow($row));
         }, $rows);
     }
 
+    public function getRunnableTasks(int $limit = 50)
+    {
+        $rawTasks = $this->getTasks(['status' => ['PENDING', 'ERROR']], 200);
+
+        $result = [];
+        $now = time();
+
+        foreach ($rawTasks as $task) {
+            if ($task->execution_type === 'ONCE') {
+                $result[] = $task;
+            } elseif ($task->execution_type === 'RECURRING') {
+                if ($task->last_run_at === null) {
+                    $result[] = $task;
+                } else {
+                    $last = strtotime($task->last_run_at);
+                    $interval = ($task->interval_minutes ?? 0) * 60;
+                    if (($now - $last) >= $interval) {
+                        $result[] = $task;
+                    }
+                }
+            }
+
+            if (count($result) >= $limit) break;
+        }
+
+        // file_put_contents(PATH_LOGS.'debug_perco.json', $result);
+        return $result;
+    }
+
     public function updateTask(int $id, array $fields): bool
     {
-        $row = $this->getTaskRowOrFail($id);
+        // $row = $this->getTaskRowOrFail($id);
 
         // JSON-поля — преобразуем, если нужно
         foreach (['params', 'result', 'log'] as $field) {
@@ -71,6 +105,9 @@ class TaskManager
             }
         }
         $fields['updated_at'] = date('Y-m-d H:i:s');
+        if (isset($fields['status']) && $fields['status'] === 'RUNNING') {
+            $fields['last_run_at'] = date('Y-m-d H:i:s');
+        }
 
         if (isset($fields['status']) && in_array($fields['status'], ['DONE', 'ERROR', 'ABORTED'])) {
             $fields['finished_at'] = date('Y-m-d H:i:s');
@@ -144,6 +181,12 @@ class TaskManager
             if (isset($row[$field]) && is_string($row[$field])) {
                 $decoded = json_decode($row[$field], true);
                 $row[$field] = is_array($decoded) ? $decoded : $row[$field];
+            }
+            if (isset($row['interval_minutes'])) {
+                $row['interval_minutes'] = (int) $row['interval_minutes'];
+            }
+            if (isset($row['last_run_at']) && $row['last_run_at'] === '0000-00-00 00:00:00') {
+                $row['last_run_at'] = null;
             }
         }
         return $row;

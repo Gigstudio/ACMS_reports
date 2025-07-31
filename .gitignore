@@ -16,7 +16,7 @@ Thumbs.db
 # Кэш и сессии
 cache/
 sessions/
-/temp/
+temp/
 
 # База данных и apache
 /data/mysql/

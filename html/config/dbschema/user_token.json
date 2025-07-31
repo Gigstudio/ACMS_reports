@@ -1,0 +1,11 @@
+[
+    { "Field": "id",           "Type": "int",           "Null": "NO",  "Default": null,             "Extra": "auto_increment", "Key": "PRI" },
+    { "Field": "user_id",      "Type": "int",           "Null": "NO",  "Default": null,             "Extra": "",               "Key": "" },
+    { "Field": "token",        "Type": "char(64)",      "Null": "NO",  "Default": null,             "Extra": "",               "Key": "UNI" },
+    { "Field": "created_at",   "Type": "datetime",      "Null": "NO",  "Default": "CURRENT_TIMESTAMP", "Extra": "",            "Key": "" },
+    { "Field": "expires_at",   "Type": "datetime",      "Null": "YES", "Default": null,             "Extra": "",               "Key": "" },
+    { "Field": "ip_address",   "Type": "varchar(64)",   "Null": "YES", "Default": null,             "Extra": "",               "Key": "" },
+    { "Field": "user_agent",   "Type": "varchar(255)",  "Null": "YES", "Default": null,             "Extra": "",               "Key": "" },
+    { "Field": "source",       "Type": "varchar(32)",   "Null": "NO",  "Default": "sse",            "Extra": "",               "Key": "" },
+    { "Field": "is_revoked",   "Type": "tinyint(1)",    "Null": "NO",  "Default": 0,                "Extra": "",               "Key": "" }
+]

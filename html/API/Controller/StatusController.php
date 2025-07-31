@@ -4,6 +4,7 @@ namespace GIG\Api\Controller;
 defined('_RUNKEY') or die;
 
 use GIG\Domain\Services\ServiceStatusManager;
+use GIG\Infrastructure\Repository\UserTokenRepository;
 
 class StatusController extends ApiController
 {
@@ -24,6 +25,14 @@ class StatusController extends ApiController
     public function stream()
     {
         $manager = $this->manager;
+        $token = $this->param('token');
+        $user = null;
+        if ($token) {
+            $repo = new UserTokenRepository();
+            $user = $repo->findUserByToken($token);
+        }
+        $this->app->setCurrentUser($user);
+
         $this->response->stream(function() use ($manager) {
             if (function_exists('apache_setenv')) apache_setenv('no-gzip', '1');
             @ini_set('zlib.output_compression', 0);
@@ -45,11 +54,10 @@ class StatusController extends ApiController
 
                 if ($data !== $lastData || $iterations % 12 === 0) {
                     echo "data: $data\n\n";
-                    // @ob_flush();
                     flush();
                     $lastData = $data;
                 }
-                sleep(5);
+                usleep(5000000);
             }
         });
     }

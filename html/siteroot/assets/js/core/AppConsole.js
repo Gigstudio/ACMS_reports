@@ -67,9 +67,6 @@ export class AppConsole {
         if (params.length > 0) {
             url += '?' + params.join('&');
         }
-        console.log('filterLevel: ', filterLevel);
-        console.log('firstMsgId: ', firstMsgId);
-        console.log('url: ', url);
 
         try {
             const resp = await APIClient.request(url, 'GET');
@@ -80,7 +77,6 @@ export class AppConsole {
                 : [];
             const consoleElement = document.getElementById('console');
             if (!consoleElement) return;
-                console.log(Array.isArray(resp.data.messages));
 
             consoleElement.innerHTML = '';
             messages.forEach(msg => {

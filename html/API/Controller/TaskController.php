@@ -35,10 +35,24 @@ class TaskController extends ApiController
     // Создать задачу
     public function create()
     {
-        $type   = $this->request->getBody()['type'] ?? null;
-        $params = $this->request->getBody()['params'] ?? [];
-        $userId = $this->request->getBody()['user_id'] ?? null;
-        $task = $this->manager->createTask($type, $params, $userId);
+        $body = $this->request->getBody();
+
+        $type           = $body['type'] ?? null;
+        $params         = $body['params'] ?? [];
+        $userId         = $body['user_id'] ?? null;
+        $executionType  = strtoupper(trim($body['execution_type'] ?? 'ONCE'));
+        $interval       = isset($body['interval_minutes']) ? (int)$body['interval_minutes'] : null;
+        $name           = $body['name'] ?? null;
+
+        if (!$type) {
+            $this->error("Не указан тип задачи");
+        }
+
+        if (!in_array($executionType, ['ONCE', 'RECURRING'])) {
+            $this->error("Недопустимый тип запуска: $executionType");
+        }
+
+        $task = $this->manager->createTask($type, $name, $params, $userId, $executionType, $interval);
         $this->success(['task' => $task->toArray()], "Создана фоновая задача");
     }
 
@@ -54,7 +68,7 @@ class TaskController extends ApiController
     public function cancel()
     {
         $id = (int)($this->request->getRouteParams()['id'] ?? 0);
-        $this->manager->updateTask($id, ['status' => 'aborted']);
+        $this->manager->updateTask($id, ['status' => 'ABORTED']);
         $this->success([], "Задача отменена");
     }
 }

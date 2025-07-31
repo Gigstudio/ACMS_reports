@@ -128,9 +128,9 @@ class DbSchemaManager
     protected function ensureDefaultRoles(): void
     {
         $roleList = [
-            ['name' => 'Common',  'description' => 'Все пользователи'],
-            ['name' => 'Table',   'description' => 'Оператор/табельщик'],
-            ['name' => 'Lead',    'description' => 'Руководитель подразделения'],
+            ['name' => 'Common',  'description' => 'Пользователь'],
+            ['name' => 'Table',   'description' => 'Оператор / Табельщик цеха'],
+            ['name' => 'Lead',    'description' => 'Руководитель / Начальник цеха'],
             ['name' => 'Control', 'description' => 'Служба контроля'],
             ['name' => 'Admin',   'description' => 'Администратор системы']
         ];
@@ -138,8 +138,9 @@ class DbSchemaManager
 
             // $exists = $this->db->value("SELECT id FROM role WHERE name = ?", [$role['name']]);
             // if (!$exists) {
-            $this->db->updateOrInsert('role', $role, ['name' => $role['name']]);
-            EventManager::logParams(Event::INFO, self::class, "Добавлена роль {$role['name']}");
+            if($this->db->updateOrInsert('role', $role, ['name' => $role['name']])){
+                EventManager::logParams(Event::INFO, self::class, "Добавлена роль {$role['name']}");
+            }
             // }
         }
     }
@@ -149,7 +150,11 @@ class DbSchemaManager
         if (!$this->db->tableExists('background_task')) {
             $this->db->createTable('background_task', [
                 ["Field" => "id", "Type" => "int", "Null" => "NO", "Default" => null, "Extra" => "AUTO_INCREMENT", "Key" => "PRI"],
+                ["Field" => "name", "Type" => "varchar(128)", "Null" => "YES", "Default" => null, "Extra" => "", "Key" => ""],
                 ["Field" => "type", "Type" => "varchar(64)", "Null" => "NO", "Default" => "", "Extra" => "", "Key" => ""],
+                ["Field" => "execution_type", "Type" => "ENUM('ONCE','RECURRING')", "Null" => "NO", "Default" => "ONCE", "Extra" => "", "Key" => ""],
+                ["Field" => "interval_minutes", "Type" => "int", "Null" => "YES", "Default" => null, "Extra" => "", "Key" => ""],
+                ["Field" => "last_run_at", "Type" => "timestamp", "Null" => "YES", "Default" => null, "Extra" => "", "Key" => ""],
                 ["Field" => "status", "Type" => "ENUM('PENDING','RUNNING','DONE','ERROR','ABORTED')", "Null" => "NO", "Default" => "PENDING", "Extra" => "", "Key" => ""],
                 ["Field" => "params", "Type" => "json", "Null" => "YES", "Default" => null, "Extra" => "", "Key" => ""],
                 ["Field" => "progress", "Type" => "float", "Null" => "NO", "Default" => 0, "Extra" => "", "Key" => ""],
@@ -168,12 +173,23 @@ class DbSchemaManager
     protected function ensureDefaultTasks()
     {
         $taskList = [
-            ['type' => 'sync_divisions'],
-            ['type' => 'sync_positions']
+            [
+                'type'            => 'sync_divisions',
+                'name'            => 'Синхронизация подразделений',
+                'execution_type'  => 'RECURRING',
+                'interval_minutes'=> 10
+            ],
+            [
+                'type'            => 'sync_positions',
+                'name'            => 'Синхронизация должностей',
+                'execution_type'  => 'RECURRING',
+                'interval_minutes'=> 15
+            ]
         ];
         foreach ($taskList as $task) {
-            $this->db->updateOrInsert('background_task', $task, ['type' => $task['type']]);
-            EventManager::logParams(Event::INFO, self::class, "Добавлена роль {$task['type']}");
+            if ($this->db->updateOrInsert('background_task', $task, ['type' => $task['type']])){
+                EventManager::logParams(Event::INFO, self::class, "Добавлено задание {$task['type']}");
+            }
         }
     }
 

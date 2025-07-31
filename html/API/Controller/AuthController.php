@@ -25,9 +25,9 @@ class AuthController extends ApiController
         exit;
     }
 
-    public function login(Request $request)
+    public function login()
     {
-        $data = $request->getBody();
+        $data = $this->request->getBody();
         $login = $data['login'] ?? '';
         $password = $data['password'] ?? '';
 
@@ -42,18 +42,23 @@ class AuthController extends ApiController
             );
         }
         try {
-            $result = $this->auth->authenticate($login, $password);
+            $result = $this->auth->authenticate($login, $password, true);
+            $token = $result['token'];
+            $user  = $result['user'];
+            $this->success([
+                'user' => $user->toArray(['id', 'login', 'name', 'role_id', 'source']),
+                'token' => $token
+            ]);
         } catch (Throwable $e) {
             throw new GeneralException(
                 $e->getCode() == 401 ? 'Неверный пароль' : ($e->getCode() == 404 ? 'Пользователь не найден' : 'Сбой авторизации'),
-                500,
+                $e->getCode() ?: 500,
                 [
                     'reason' => $e->getCode() == 401 ? 'missing_password' : ($e->getCode() == 404 ? 'missing_login' : ''),
                     'detail' => $e->getMessage()
                 ]
             );
         }
-        $this->success($result);
     }
 
     public function logout(): void

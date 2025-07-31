@@ -3,11 +3,11 @@ namespace GIG\Domain\Services;
 
 defined('_RUNKEY') or die;
 
-use GIG\Infrastructure\Repository\LocalUserRepository;
 use GIG\Core\Application;
-use GIG\Infrastructure\Persistence\LdapClient;
-use GIG\Domain\Entities\User;
 use GIG\Core\PasswordManager;
+use GIG\Infrastructure\Persistence\LdapClient;
+use GIG\Infrastructure\Repository\LocalUserRepository;
+use GIG\Infrastructure\Repository\UserTokenRepository;
 use GIG\Domain\Exceptions\GeneralException;
 use GIG\Domain\Entities\Event;
 
@@ -22,7 +22,7 @@ class AuthManager
         $this->ldap = Application::getInstance()->getLdapClient();
     }
 
-public function authenticate(string $login, string $password): User
+public function authenticate(string $login, string $password, bool $withToken = false)
 {
     // 1. Пытаемся найти пользователя в локальной базе
     $user = $this->users->findByLogin($login);
@@ -47,15 +47,15 @@ public function authenticate(string $login, string $password): User
             ]);
         }
 
-        // 2.3. Автоматическая регистрация локального пользователя (опционально — заполняй по логике)
-        // Здесь надо создавать нового User и добавлять в базу:
+        // 2.3. Автоматическая регистрация локального пользователя
         $user = $this->users->createFromLdap($ldapUser, $password);
-        // $this->users->create($user);
-        return $user;
 
-        // throw new GeneralException("Логика автосоздания пользователя ещё не реализована", 501, [
-        //     'detail' => "LDAP-пользователь '$login' найден и прошёл bind, но автоматическая регистрация не реализована"
-        // ]);
+        EventManager::logParams(Event::INFO, self::class, "Успешная аутентификация после создания локального пользователя '$login' из LDAP");
+        if ($withToken) {
+            $token = (new UserTokenRepository())->createForUser($user, 'ldap');
+            return ['user' => $user, 'token' => $token];
+        }
+        return ['user' => $user];
     }
 
     // 3. Проверяем активность пользователя
@@ -74,7 +74,11 @@ public function authenticate(string $login, string $password): User
                 // Можно обновить локальный хэш (опционально)
                 // $this->users->updatePassword($login, password_hash($password, PASSWORD_DEFAULT));
                 EventManager::logParams(Event::INFO, self::class, "Успешная аутентификация через LDAP для '$login'");
-                return $user;
+                if ($withToken) {
+                    $token = (new UserTokenRepository())->createForUser($user, 'ldap');
+                    return ['user' => $user, 'token' => $token];
+                }
+                return ['user' => $user];
             } else {
                 throw new GeneralException("Неверный логин или пароль", 401, [
                     'detail' => "LDAP bind для $login не удался"
@@ -89,9 +93,14 @@ public function authenticate(string $login, string $password): User
     }
 
     // 5. Проверяем локальный пароль (если LDAP не сработал или это local user)
-    if (password_verify($password, $user->password)) {
+    // if (password_verify($password, $user->password)) {
+    if (PasswordManager::verify($password, $user->password)) {
         EventManager::logParams(Event::INFO, self::class, "Локальная авторизация для '$login' (LDAP fallback)");
-        return $user;
+        if ($withToken) {
+            $token = (new UserTokenRepository())->createForUser($user, 'local');
+            return ['user' => $user, 'token' => $token];
+        }
+        return ['user' => $user];
     }
 
     // 6. Если все проверки не прошли

@@ -1,8 +1,8 @@
-// import { ModalManager } from './core/ModalManager.js';
-// import { Auth } from './core/Auth.js';
+import { ModalManager } from './core/ModalManager.js';
+import { Auth } from './core/Auth.js';
 import { AppConsole } from './core/AppConsole.js';
-// import { StatusMonitor } from './core/StatusMonitor.js';
-// import { APIClient } from './core/APIClient.js';
+import { StatusMonitor } from './core/StatusMonitor.js';
+import { APIClient } from './core/APIClient.js';
 
 // --- Тема ---
 function applyTheme(theme) {
@@ -16,23 +16,6 @@ function applyTheme(theme) {
         themeToggle.parentElement.nextElementSibling?.classList.toggle("highlited", theme === "dark");
     }
 }
-
-// function applyConsoleState(state) {
-//     localStorage.setItem("consoleState", state);
-
-//     // const consoleEl = document.getElementById('console');
-//     // const consoleWin = consoleEl?.parentElement;
-//     // switch (state) {
-//     //     case 'hidden':
-            
-//     //         break;
-//     //     case 'minimized':
-            
-//     //         break;
-//     //     default:
-//     //         break;
-//     // }
-// }
 
 document.addEventListener("DOMContentLoaded", function () {
     const savedConsoleState = localStorage.getItem("consoleState") || "maximized";
@@ -49,29 +32,30 @@ document.addEventListener("DOMContentLoaded", function () {
     const savedTheme = localStorage.getItem("theme") || "light";
     applyTheme(savedTheme);
 
-    // const monitor = new StatusMonitor();
-    // monitor.start();
-    // document.addEventListener('click', async (e) => {
-    //     const trigger = e.target.closest('[data-modal]');
-    //     if (!trigger) return;
-    //     e.preventDefault();
+    const monitor = new StatusMonitor();
+    monitor.start();
+    document.addEventListener('click', async (e) => {
+        const trigger = e.target.closest('[data-modal]');
+        if (!trigger) return;
+        e.preventDefault();
 
-    //     const modalId = trigger.dataset.modal;
-    //     const apiUrl  = trigger.dataset.modalUrl;
-    //     if (!apiUrl) {
-    //         console.error('data-modal-url не найден в элементе:', trigger);
-    //         return;
-    //     }
+        const modalId = trigger.dataset.modal;
+        const apiUrl  = trigger.dataset.modalUrl;
+        console.log(apiUrl);
+        if (!apiUrl) {
+            console.error('data-modal-url не найден в элементе:', trigger);
+            return;
+        }
 
-    //     try {
-    //         const html = await APIClient.request(apiUrl, 'GET');
-    //         ModalManager.open(html, {
-    //             onOpen: (wrapper) => {
-    //                 if (modalId === 'login-modal' && typeof Auth !== 'undefined') Auth.initLoginUI(wrapper);
-    //             }
-    //         });
-    //     } catch (err) {
-    //         console.error('Ошибка открытия модального окна:', err);
-    //     }
-    // });
+        try {
+            const html = await APIClient.request(apiUrl, 'GET');
+            ModalManager.open(html, {
+                onOpen: (wrapper) => {
+                    if (modalId === 'login-modal' && typeof Auth !== 'undefined') Auth.initLoginUI(wrapper);
+                }
+            });
+        } catch (err) {
+            console.error('Ошибка открытия модального окна:', err);
+        }
+    });
 });

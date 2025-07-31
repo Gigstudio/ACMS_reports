@@ -6,7 +6,15 @@ export class StatusMonitor {
 
     start() {
         if (this.eventSource) return;
-        this.eventSource = new EventSource(this.url);
+
+        const token = localStorage.getItem('authToken'); // предполагается, что логин сохранил его
+        if (!token) {
+            console.warn('StatusMonitor: не найден токен авторизации');
+            // this.updateStatusBar({}, 'Не авторизован');
+        }
+        const streamUrl = token ? `${this.url}?token=${encodeURIComponent(token)}` : this.url;
+
+        this.eventSource = new EventSource(streamUrl);
         this.eventSource.onmessage = (event) => {
             try {
                 const data = JSON.parse(event.data);

@@ -124,18 +124,36 @@ class LdapClient
 
     public function findUser(string $login)
     {
-        $result = $this->search("(samaccountname={$login})", ['dn']);
-        return !empty($result[0]['dn']) ? $result[0]['dn'] : null;
+        $result = $this->search("(samaccountname={$login})");
+        return !empty($result[0]) ? $result[0] : null;
     }
 
-    public function getUserData(string $samaccountname): array
+    public function getUserData(string $samaccountname, bool $ext_only = false): array
     {
         if (empty($samaccountname)) {
             return [];
         }
 
         $filter = "(samaccountname=$samaccountname)";
-        $data = $this->search($filter);
+        $attributes = [
+            'samaccountname',
+            'mail',
+            'cn',
+            'displayname',
+            'company',
+            'title',
+            'distinguishedname',
+            'extensionattribute1',
+            'extensionattribute6',
+            'extensionattribute7',
+            'extensionattribute8',
+            'extensionattribute9',
+            'extensionattribute10',
+            'extensionattribute11',
+            'extensionattribute12'
+        ];
+
+        $data = $this->search($filter, ($ext_only ? $attributes : ['*', '+']));
         return $data[0] ?? [];
     }
 

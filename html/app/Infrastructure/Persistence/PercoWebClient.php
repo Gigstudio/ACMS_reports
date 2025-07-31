@@ -4,7 +4,6 @@ namespace GIG\Infrastructure\Persistence;
 defined('_RUNKEY') or die;
 
 use GIG\Core\Application;
-use GIG\Core\Config;
 use GIG\Domain\Exceptions\GeneralException;
 use GIG\Domain\Services\EventManager;
 use GIG\Domain\Entities\Event;
@@ -26,25 +25,23 @@ class PercoWebClient
         $this->username = $config['perco_admin'];
         $this->password = $config['perco_password'];
 
-        $this->token = $_SESSION['perco_token'] ?? null;
-
+        $this->token = $this->getFromLocalDb();
         if (!$this->token) {
-            $this->token = $this->getFromLocalDb();
-            if ($this->token) {
-                $this->connect();
-            }
+            $this->connect();
         }
     }
 
     public function connect(): bool
     {
-        $this->getToken();
+        if (!$this->token) {
+            $this->getToken();
+        }
         return $this->isConnected();
     }
 
     protected function getDefaultConfig(): array
     {
-        return Config::get('services.PERCo-Web') ?? [];
+        return Application::getInstance()->getConfig('services.PERCo-Web') ?? [];
     }
 
     public function isConnected(): bool
@@ -58,17 +55,13 @@ class PercoWebClient
         $this->saveToLocalDb('');
     }
 
-    public function getConnection(): mixed
-    {
-        return $this->baseUrl;
-    }
-
-    public function request(string $resource, array $params = [], array $flags = [], string $method = 'GET'): mixed
+    public function request(string $resource, array $params = [], array $flags = [], string $method = 'GET', ?string $body = null): mixed
     {
         $url = $this->baseUrl . '/' . ltrim($resource, '/');
         $query = '';
-        $body = null;
-        $headers = [];
+        $params = array_filter($params, function ($v) {
+            return $v !== '' && $v !== null;
+        });
 
         if (!empty($params)) {
             $query = '?' . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
@@ -82,7 +75,7 @@ class PercoWebClient
             $query = $query . (!empty($params) ? '&' : '?') . implode('&', $queryParts);
         }
 
-        return $this->sendRequest($method, $url . $query, $body, $headers);
+        return $this->sendRequest($method, $url . $query, $body, [], true);
     }
 
     private function getFromLocalDb(): ?string
@@ -98,6 +91,19 @@ class PercoWebClient
         $db->updateOrInsert('app_settings', ['value' => $token], ['param' => 'perco_token']);
     }
 
+    public function appendCat(string $cat, array $data): int|null
+    {
+        $db = Application::getInstance()->getMysqlClient();
+        try {
+            $db->updateOrInsert($cat, $data, ['name' => $data['name']]);
+            $row = $db->first($cat, ['name' => $data['name']]);
+            return $row['id'] ?? null;
+        } catch (\Throwable $e) {
+            EventManager::logParams(Event::ERROR, self::class, "appendCat: ошибка при вставке/обновлении справочника $cat");
+            return null;
+        }
+    }
+
     private function getToken(): void
     {
         $url = $this->baseUrl . '/system/auth';
@@ -110,7 +116,6 @@ class PercoWebClient
         $result = json_decode($response, true);
 
         if (!isset($result['token'])) {
-            // EventManager::logParams(Event::WARNING, self::class, "Авторизация в PERCo-Web не удалась: $response");
             throw new GeneralException("Авторизация в PERCo-Web не удалась", 500, [
                 'detail' => $response
             ]);
@@ -122,9 +127,8 @@ class PercoWebClient
         EventManager::logParams(Event::INFO, self::class, 'Токен PERCo-Web успешно получен');
     }
 
-    private function sendRequest(string $method, string $url, ?string $body = null, array $headers = [], bool $useAuth = true): string
+    private function sendRequest(string $method, string $url, ?string $body = null, array $headers = [], bool $useAuth = true, bool $retry = true): string
     {
-        // file_put_contents(PATH_LOGS.'perco_request.log', $url);
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -152,7 +156,7 @@ class PercoWebClient
 
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-        if ($httpCode === 401 && $useAuth) {
+        if ($httpCode === 401 && $useAuth && $retry) {
             $this->disconnect();
             $this->connect();
 
@@ -165,98 +169,10 @@ class PercoWebClient
                 ]);
             }
 
-            return $this->sendRequest($method, $url, $body, $headers, $useAuth);
+            return $this->sendRequest($method, $url, $body, $headers, $useAuth, false);
         }
 
         return $response;
-    }
-
-    public function getUserByIdentifier(string $identifier): array
-    {
-        $query = [
-            'card' => $identifier,
-            'target' => 'staff'
-        ];
-
-        $response = $this->request('users/searchCard', $query);
-        $data = json_decode($response, true);
-
-        if (!empty($data['id'])) {
-            return ['user_id' => $data['id']];
-        }
-
-        return [];
-    }
-
-    public function getUserInfoById(int $userId): array
-    {
-        $response = $this->request('users/staff/' . $userId);
-        $data = json_decode($response, true);
-
-        return $data ?? [];
-    }
-
-    public function fetchAllUsersFromTable(){
-        $allUsers = [];
-        $page = 1;
-        $rowsPerPage = 100;
-        
-        do{
-            $params = [
-                'status' => 'active',
-                'page'   => $page,
-                'rows'   => $rowsPerPage
-            ];
-            $response = $this->request('users/staff/table', $params);
-            $data = json_decode($response, true);
-
-            if(!is_array($data) || !isset($data['rows'])){
-                EventManager::logParams(Event::WARNING, self::class, "Некорректный ответ при получении пользователей PERCo: $response");
-                break;
-            }
-            $allUsers = array_merge($allUsers, $data['rows']);
-            $totalPages = (int)($data['total'] ?? 1);
-            $page++;
-        } while ($page <= $totalPages);
-        return $allUsers;
-    }
-
-    public function fetchAllUsersFromList(){
-        $params = [
-            'withCards' => 'true'
-        ];
-        $response = $this->request('users/staff/list', $params);
-
-        file_put_contents(PATH_LOGS.'perco_debug.log', $response);
-        $data = json_decode($response, true);
-
-        return $data ?? [];
-    }
-
-    public function fetchAllDivisions(array $params = []){
-        $response = $this->request('divisions/list', $params);
-
-        $data = json_decode($response, true);
-
-        if (!is_array($data) || !isset($data['result'])) {
-            EventManager::logParams(Event::ERROR, self::class, 'Некорректный ответ API при запросе списка подразделений: ');
-            return [];
-        }
-
-        return $data['result'];
-    }
-
-    public function fetchAllPositions(array $params = []){
-        $response = $this->request('positions/list', $params);
-
-        $data = json_decode($response, true);
-
-        if (!is_array($data) || !isset($data['result'])) {
-            EventManager::logParams(Event::ERROR, self::class, 'Некорректный ответ API при запросе списка подразделений: ');
-            return [];
-        }
-
-        return $data['result'];
     }
 
     public function checkStatus(): array

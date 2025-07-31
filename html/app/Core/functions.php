@@ -1,7 +1,13 @@
 <?php
 defined('_RUNKEY') or die;
 
-if(!function_exists('var_dump')){
+if(!function_exists('array_is_list')) {
+    function array_is_list(array $array) {
+        return array_keys($array) === range(0, count($array) - 1);
+    }
+}
+
+if (!function_exists('var_dump')) {
 	function debug_dump($var){
 		echo '<pre>' . htmlspecialchars(print_r($var, true)) . '</pre>';
 	}
@@ -19,6 +25,38 @@ if (!function_exists('str_contains')) {
 if (!function_exists('str_starts_with')) {
     function str_starts_with($haystack, $needle) {
         return $needle !== '' && strpos($haystack, $needle) === 0;
+    }
+}
+
+if (!function_exists('console_log')) {
+    function console_log(mixed $data, string $label = ''): void
+    {
+        if (is_resource($data)) {
+            $type = get_resource_type($data);
+            echo "<script>console.log('⚠️ [console_log]: resource ($type) — не сериализуем');</script>";
+            return;
+        }
+        if (is_object($data)) {
+            echo "<script>console.log('⚠️ [console_log]: object of class " . get_class($data) . " — возможно несериализуем');</script>";
+        }
+
+        $output = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PARTIAL_OUTPUT_ON_ERROR | JSON_PRETTY_PRINT);
+        if ($output === false) {
+            $output = '"[Не удалось сериализовать данные]"';
+        }
+
+        $label = htmlspecialchars($label, ENT_QUOTES);
+
+        if (ob_get_level()) {
+            ob_end_flush();
+        }
+
+        echo "<script>";
+        echo $label ? "console.log('$label:', $output);" : "console.log($output);";
+        echo "</script>";
+
+        flush();
+        ob_start();
     }
 }
 
@@ -75,38 +113,6 @@ function array_pop_by_key(array &$array, string $path, string $delimiter = '.'):
 
 function system_warn(string $msg): void {
     trigger_error($msg, E_USER_WARNING);
-}
-
-if (!function_exists('console_log')) {
-    function console_log(mixed $data, string $label = ''): void
-    {
-        if (is_resource($data)) {
-            $type = get_resource_type($data);
-            echo "<script>console.log('⚠️ [console_log]: resource ($type) — не сериализуем');</script>";
-            return;
-        }
-        if (is_object($data)) {
-            echo "<script>console.log('⚠️ [console_log]: object of class " . get_class($data) . " — возможно несериализуем');</script>";
-        }
-
-        $output = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PARTIAL_OUTPUT_ON_ERROR | JSON_PRETTY_PRINT);
-        if ($output === false) {
-            $output = '"[Не удалось сериализовать данные]"';
-        }
-
-        $label = htmlspecialchars($label, ENT_QUOTES);
-
-        if (ob_get_level()) {
-            ob_end_flush();
-        }
-
-        echo "<script>";
-        echo $label ? "console.log('$label:', $output);" : "console.log($output);";
-        echo "</script>";
-
-        flush();
-        ob_start();
-    }
 }
 
 function showEarlyErrorPage($title, $message, $detail = null, $httpCode = 500)

@@ -11,6 +11,7 @@ export class Auth {
             // console.error('Login form не найден в модалке');
             return;
         }
+        const regForm = wrapper.querySelector('form#register');
 
         loginForm.onsubmit = null;
         loginForm.addEventListener('submit', async (e) => {
@@ -69,24 +70,28 @@ export class Auth {
         try {
             const result = await APIClient.request('/api/auth/login', 'POST', { login, password });
             if (result.status === 'success') {
-                sendMessage(0, result.message || 'Успешная авторизация');
+                const source = result.extra?.source || 'unknown';
+                if (result.data?.token) {
+                    localStorage.setItem('authToken', result.data.token);
+                }
+                // sendMessage(0, result.message || `Успешная авторизация (${source})`);
                 showSnack('Вход выполнен!');
                 ModalManager.close();
                 window.location.reload();
-            } else {
-                // sendMessage(3, result.message || 'Ошибка авторизации');
-                showSnack(result.message || 'Ошибка авторизации');
+                return;
+            }
 
-                // Проверяем reason и extra.reason
-                const reason = result.reason || (result.extra && result.extra.reason) || '';
-                if (['missing_login', 'not_found'].includes(reason)) {
-                    userHolder.classList.add('input-error', 'blink');
-                    userHolder.firstElementChild.title = result.message;
-                }
-                if (['missing_password', 'invalid_password', 'ldap_invalid_password'].includes(reason)) {
-                    passHolder.classList.add('input-error', 'blink');
-                    passHolder.firstElementChild.title = result.message;
-                }
+            showSnack(result.message || 'Ошибка авторизации');
+
+            // Проверяем reason и extra.reason
+            const reason = result.extra?.reason || '';
+            if (['missing_login', 'not_found'].includes(reason)) {
+                userHolder.classList.add('input-error', 'blink');
+                userHolder.firstElementChild.title = result.message;
+            }
+            if (['missing_password', 'invalid_password', 'ldap_invalid_password'].includes(reason)) {
+                passHolder.classList.add('input-error', 'blink');
+                passHolder.firstElementChild.title = result.message;
             }
         } catch (err) {
             sendMessage(3, err.message || 'Сбой авторизации');

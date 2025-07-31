@@ -28,7 +28,7 @@ abstract class Database implements DatabaseClientInterface
     protected function validateIdentifier(string $identifier): void
     {
         if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $identifier)) {
-            throw new GeneralException("Недопустимое имя таблицы или поля", 400, [
+            throw new GeneralException("Недопустимое имя таблицы или поля ($identifier)", 400, [
                 'detail' => "Идентификатор '$identifier' содержит недопустимые символы."
             ]);
         }
@@ -53,19 +53,8 @@ abstract class Database implements DatabaseClientInterface
         $params = [];
 
         if (!empty($where)) {
-            $conditions = [];
-            foreach ($where as $key => $val) {
-                $this->validateIdentifier($key);
-                if (is_array($val)) {
-                    $placeholders = implode(',', array_fill(0, count($val), '?'));
-                    $conditions[] = "`$key` IN ($placeholders)";
-                    foreach ($val as $v) $params[] = $v;
-                } else {
-                    $conditions[] = "`$key` = ?";
-                    $params[] = $val;
-                }
-            }
-            $sql .= " WHERE " . implode(" AND ", $conditions);
+            [$whereClause, $params] = $this->buildWhereClause($where);
+            $sql .= " WHERE $whereClause";
         }
 
         if ($limit !== null) {
@@ -73,6 +62,48 @@ abstract class Database implements DatabaseClientInterface
         }
 
         return [$sql, $params];
+    }
+
+    protected function buildWhereClause(array $where)
+    {
+        $conditions = [];
+        $params = [];
+
+        foreach ($where as $key => $val) {
+            if (is_int($key)) {
+                // Прямое SQL-условие
+                $conditions[] = $val;
+                continue;
+            }
+
+            $this->validateIdentifier($key);
+
+            // Оператор: ['field' => ['operator' => '!=', 'value' => 'DONE']]
+            if (is_array($val) && isset($val['operator'], $val['value'])) {
+                $conditions[] = "`$key` {$val['operator']} ?";
+                $params[] = $val['value'];
+            }
+
+            // IN (...)
+            elseif (is_array($val)) {
+                $placeholders = implode(',', array_fill(0, count($val), '?'));
+                $conditions[] = "`$key` IN ($placeholders)";
+                foreach ($val as $v) $params[] = $v;
+            }
+
+            // IS NULL
+            elseif ($val === null) {
+                $conditions[] = "`$key` IS NULL";
+            }
+
+            // =
+            else {
+                $conditions[] = "`$key` = ?";
+                $params[] = $val;
+            }
+        }
+
+        return [implode(' AND ', $conditions), $params];
     }
 
     // --- Базовые методы выполнения SQL ---
@@ -122,6 +153,9 @@ abstract class Database implements DatabaseClientInterface
 
     public function insert(string $table, array $data): bool
     {
+        $data = array_filter(
+            $data, fn($v) => $v !== '' && $v !== null
+        );
         $this->validateIdentifier($table);
         foreach (array_keys($data) as $field) {
             $this->validateIdentifier($field);
