@@ -31,6 +31,8 @@ defined('PATH_API_CONTROLLERS') or  define('PATH_API_CONTROLLERS', PATH_API . 'C
 defined('PATH_SITEROOT') or         define('PATH_SITEROOT', PATH_ROOT . 'siteroot' . DS);
 defined('PATH_ASSETS') or           define('PATH_ASSETS', PATH_SITEROOT . 'assets' . DS);
 
+defined('PATH_SCRIPTS') or           define('PATH_SCRIPTS', PATH_ROOT . 'scripts' . DS);
+
 // Веб-режим — только если есть $_SERVER и сценарий не CLI
 if (PHP_SAPI !== 'cli' && !empty($_SERVER['SERVER_NAME'])) {
     defined('PROTOCOL') or define('PROTOCOL', (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://');

@@ -66,6 +66,8 @@ abstract class Database implements DatabaseClientInterface
 
     protected function buildWhereClause(array $where)
     {
+        // file_put_contents(PATH_LOGS . 'sql_check2.log', print_r($where,true), FILE_APPEND);
+
         $conditions = [];
         $params = [];
 
@@ -79,28 +81,31 @@ abstract class Database implements DatabaseClientInterface
             $this->validateIdentifier($key);
 
             // Оператор: ['field' => ['operator' => '!=', 'value' => 'DONE']]
-            if (is_array($val) && isset($val['operator'], $val['value'])) {
-                $conditions[] = "`$key` {$val['operator']} ?";
-                $params[] = $val['value'];
+            if (is_array($val) && array_keys($val) === ['operator', 'value']) {
+                $operator = trim($val['operator']);
+                $value = $val['value'];
+                $conditions[] = "`$key` $operator ?";
+                $params[] = $value;
+                continue;
             }
 
             // IN (...)
-            elseif (is_array($val)) {
+            if (is_array($val)) {
                 $placeholders = implode(',', array_fill(0, count($val), '?'));
                 $conditions[] = "`$key` IN ($placeholders)";
                 foreach ($val as $v) $params[] = $v;
+                continue;
             }
 
             // IS NULL
-            elseif ($val === null) {
+            if ($val === null) {
                 $conditions[] = "`$key` IS NULL";
+                continue;
             }
 
             // =
-            else {
-                $conditions[] = "`$key` = ?";
-                $params[] = $val;
-            }
+            $conditions[] = "`$key` = ?";
+            $params[] = $val;
         }
 
         return [implode(' AND ', $conditions), $params];
@@ -110,6 +115,7 @@ abstract class Database implements DatabaseClientInterface
 
     public function exec(string $sql, array $params = [], string $message = ''): PDOStatement
     {
+        // file_put_contents(PATH_LOGS . 'sql_check.log', $sql . PHP_EOL . print_r($params,true), FILE_APPEND);
         try {
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute($params);

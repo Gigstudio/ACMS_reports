@@ -41,7 +41,13 @@ class DbSchemaManager
         $this->ensureBackgroundTasksTable();
 
         $current = $this->getCurrentVersion();
+
         if ($current !== $this->version) {
+            file_put_contents(
+                PATH_LOGS . 'db_version_change.log', 
+                date('Y-m-d H:i:s') . PHP_EOL . "App current: $current;" . PHP_EOL . "Config: $this->version" . PHP_EOL, 
+                FILE_APPEND
+            );
             $this->applyMigration();
             $this->updateVersion();
         }
@@ -136,12 +142,12 @@ class DbSchemaManager
         ];
         foreach ($roleList as $role) {
 
-            // $exists = $this->db->value("SELECT id FROM role WHERE name = ?", [$role['name']]);
-            // if (!$exists) {
-            if($this->db->updateOrInsert('role', $role, ['name' => $role['name']])){
-                EventManager::logParams(Event::INFO, self::class, "Добавлена роль {$role['name']}");
+            $exists = $this->db->value("SELECT id FROM role WHERE name = ?", [$role['name']]);
+            if (!$exists) {
+                if($this->db->updateOrInsert('role', $role, ['name' => $role['name']])){
+                    EventManager::logParams(Event::INFO, self::class, "Добавлена роль {$role['name']}");
+                }
             }
-            // }
         }
     }
 
@@ -187,8 +193,11 @@ class DbSchemaManager
             ]
         ];
         foreach ($taskList as $task) {
-            if ($this->db->updateOrInsert('background_task', $task, ['type' => $task['type']])){
-                EventManager::logParams(Event::INFO, self::class, "Добавлено задание {$task['type']}");
+            $exists = $this->db->value("SELECT id FROM background_task WHERE type = ?", [$task['type']]);
+            if (!$exists) {
+                if ($this->db->updateOrInsert('background_task', $task, ['type' => $task['type']])){
+                    EventManager::logParams(Event::INFO, self::class, "Добавлено задание {$task['type']}");
+                }
             }
         }
     }

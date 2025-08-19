@@ -21,7 +21,7 @@ class User extends Entity
     public int $is_blocked = 0;
     public ?string $birth_date = null;
     public ?string $mobyle = null;
-    public string $source = 'perco';
+    public string $source = 'local';
     public string $created_at;
     public ?string $last_login_at = null;
 
@@ -30,7 +30,17 @@ class User extends Entity
         return $this->is_active && !$this->is_blocked;
     }
 
-    public function getInsertableColumns()
+    public function getFullName(): string
+    {
+        return $this->name;
+    }
+
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    public function getInsertableColumns(): array
     {
         return [
             'login', 

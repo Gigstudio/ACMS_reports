@@ -3,6 +3,7 @@ import { Auth } from './core/Auth.js';
 import { AppConsole } from './core/AppConsole.js';
 import { StatusMonitor } from './core/StatusMonitor.js';
 import { APIClient } from './core/APIClient.js';
+import { AdminPanel } from './core/AdminPanel.js';
 
 // --- Тема ---
 function applyTheme(theme) {
@@ -34,6 +35,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const monitor = new StatusMonitor();
     monitor.start();
+
+    const adminpanel = new AdminPanel();
+    adminpanel.init();
+
     document.addEventListener('click', async (e) => {
         const trigger = e.target.closest('[data-modal]');
         if (!trigger) return;
@@ -41,7 +46,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const modalId = trigger.dataset.modal;
         const apiUrl  = trigger.dataset.modalUrl;
-        console.log(apiUrl);
         if (!apiUrl) {
             console.error('data-modal-url не найден в элементе:', trigger);
             return;
@@ -51,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const html = await APIClient.request(apiUrl, 'GET');
             ModalManager.open(html, {
                 onOpen: (wrapper) => {
-                    if (modalId === 'login-modal' && typeof Auth !== 'undefined') Auth.initLoginUI(wrapper);
+                    if (modalId === 'login-modal' && typeof Auth !== 'undefined') Auth.initAuthForm(wrapper);
                 }
             });
         } catch (err) {

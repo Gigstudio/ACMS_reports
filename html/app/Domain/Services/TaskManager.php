@@ -1,9 +1,11 @@
 <?php
 namespace GIG\Domain\Services;
 
+
 defined('_RUNKEY') or die;
 
 use GIG\Infrastructure\Contracts\DatabaseClientInterface;
+use GIG\Infrastructure\Persistence\SupervisorClient;
 use GIG\Domain\Entities\Task;
 use GIG\Domain\Exceptions\GeneralException;
 use GIG\Domain\Services\EventManager;
@@ -13,10 +15,78 @@ use GIG\Core\Application;
 class TaskManager
 {
     protected DatabaseClientInterface $db;
+    protected SupervisorClient $sv;
+    protected string $container = 'worker';
 
-    public function __construct(DatabaseClientInterface $db = null)
+    public function __construct(DatabaseClientInterface $db = null, SupervisorClient $sv = null)
     {
         $this->db = $db ?? Application::getInstance()->getMysqlClient();
+        $this->sv = $sv ?? Application::getInstance()->getSupervisorClient();
+    }
+
+    public function getWorkers(): array{
+        $list = $this->sv->getAllProcesses();
+        $result = [];
+        foreach ($list as $p) {
+            $result[] = [
+                'name'      => $p['name'] ?? '',
+                'group'     => $p['group'] ?? '',
+                'status'    => $p['statename'] ?? '',
+                'pid'       => $p['pid'] ?? '',
+                'desc'      => $p['description'] ?? ''
+            ];
+        }
+        return $result;
+    }
+
+    public function startWorker(string $script): bool
+    {
+        try {
+            $ok = $this->sv->start($script);
+            if ($ok) EventManager::logParams(Event::INFO, self::class, "Задача $script успешно запущена");
+            return $ok;
+        } catch (GeneralException $e) {
+            throw $e;
+        }
+    }
+
+    public function stopWorker(string $script): bool
+    {
+        try {
+            $ok = $this->sv->stop($script);
+            if ($ok) EventManager::logParams(Event::INFO, self::class, "Задача $script успешно остановлена");
+            return $ok;
+        } catch (GeneralException $e) {
+            throw $e;
+        }
+    }
+
+    public function restartWorker(string $script): bool
+    {
+        try {
+            $ok = $this->sv->restart($script);
+            if ($ok) EventManager::logParams(Event::INFO, self::class, "Задача $script успешно перезапущена");
+            return $ok;
+        } catch (GeneralException $e) {
+            throw $e;
+        }
+    }
+
+    public function isWorkerRunning(string $script): bool
+    {
+        $all = $this->getWorkers();
+        foreach ($all as $p) {
+            if ($p['name'] === $script) {
+                return $p['status'] === 'RUNNING';
+            }
+        }
+        return false;
+    }
+
+    private function getWorkerStatus(string $script): string
+    {
+        if (!$script || !file_exists($script)) return 'not found';
+        return $this->isWorkerRunning($script) ? 'running' : 'stopped';
     }
 
     /**

@@ -16,10 +16,10 @@ class Renderer {
         }
 
         foreach ($block->getStyles() as $style) {
-            AssetManager::addStyle($style);
+            AssetManager::addStyle("/assets/css/$style.css");
         }
         foreach ($block->getScripts() as $script) {
-            AssetManager::addScript($script);
+            AssetManager::addScript("/assets/js/$script.js");
         }
 
         $data = $block->getData();

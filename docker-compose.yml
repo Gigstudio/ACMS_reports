@@ -32,6 +32,7 @@ services:
     volumes:
       - ./html:/var/www/html:rw
       - ./config/php/php.ini:/usr/local/etc/php/php.ini
+      - ./config/supervisor/supervisord.conf:/etc/supervisor/supervisord.conf
       - ./config/supervisor:/etc/supervisor/conf.d
       - ./logs/worker:/var/log/worker
     environment:
@@ -42,7 +43,9 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     depends_on:
       - db
-    command: ["/usr/bin/supervisord", "-n"]
+    command: ["/usr/bin/supervisord","-n","-c","/etc/supervisor/supervisord.conf"]
+    expose:
+      - "9001"
     extra_hosts:
       - "host.docker.internal:host-gateway"
   db:

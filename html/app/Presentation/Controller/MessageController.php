@@ -8,8 +8,8 @@ use GIG\Core\Block;
 
 class MessageController extends Controller
 {
-    public function error(int $code, array|string $data): void{
-        $this->setStatus($code);
+    public function error(int|string $code, array|string $data): void{
+        if (is_int($code)) $this->setStatus($code);
 
         if (!is_array($data)) {
             $data = [

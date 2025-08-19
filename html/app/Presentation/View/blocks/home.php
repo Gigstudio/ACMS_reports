@@ -8,5 +8,7 @@
     var_dump($ldapUserInfo2);
     // var_dump($percoDivisions);
     // var_dump($found);
+    // var_dump($firebird_tables);
+    // var_dump($events);
     ?>
 </p>

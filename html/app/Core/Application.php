@@ -9,6 +9,7 @@ use GIG\Infrastructure\Persistence\MySQLClient;
 use GIG\Infrastructure\Persistence\FirebirdClient;
 use GIG\Infrastructure\Persistence\LdapClient;
 use GIG\Infrastructure\Persistence\PercoWebClient;
+use GIG\Infrastructure\Persistence\SupervisorClient;
 use GIG\Core\Request;
 use GIG\Core\Response;
 use GIG\Core\Router;
@@ -23,6 +24,7 @@ class Application
     protected ?DatabaseClientInterface $firebird = null;
     protected ?LdapClient $ldapClient = null;
     protected ?PercoWebClient $percoWebClient = null;
+    protected ?SupervisorClient $supervisorClient = null;
     protected ?User $currentUser = null;
 
     public Request $request;
@@ -99,14 +101,24 @@ class Application
         return $this->percoWebClient;
     }
 
+    public function getSupervisorClient(): ?SupervisorClient
+    {
+        if (!$this->supervisorClient) {
+            $this->supervisorClient = new SupervisorClient($this->config->get('services.Supervisor'));
+        }
+        return $this->supervisorClient;
+    }
+
     public function getServiceByName(string $name)
     {
         $services = $this->getConfig('services') ?? [];
+        // file_put_contents(PATH_LOGS . 'services_config.log', print_r($services, true) . PHP_EOL, FILE_APPEND);
         if(!array_key_exists($name, $services)){
             return null;
         }
         $suffix = $services[$name]['client'];
         $method = "get$suffix";
+        // file_put_contents(PATH_LOGS . 'services_config.log', $method . PHP_EOL . (method_exists($this, $method) ? 'Есть метод' : 'Нет метода!'), FILE_APPEND);
         if (!method_exists($this, $method)){
             return null;
         }

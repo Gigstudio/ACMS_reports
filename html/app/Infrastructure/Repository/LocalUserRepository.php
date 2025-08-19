@@ -5,25 +5,26 @@ defined('_RUNKEY') or die;
 
 use GIG\Core\Application;
 use GIG\Core\PasswordManager;
-use GIG\Domain\Entities\User;
-use GIG\Domain\Entities\Event;
-use GIG\Domain\Services\PercoManager;
-use GIG\Domain\Exceptions\GeneralException;
-use GIG\Domain\Services\EventManager;
-use GIG\Domain\Services\RoleManager;
 use GIG\Infrastructure\Persistence\MySQLClient;
+use GIG\Infrastructure\Persistence\LdapClient;
+use GIG\Domain\Services\PercoManager;
+use GIG\Domain\Services\RoleManager;
+use GIG\Domain\Entities\User;
+use GIG\Domain\Exceptions\GeneralException;
 
 class LocalUserRepository
 {
     protected MySQLClient $db;
-    protected PercoManager $percoManager;
+    protected LdapClient $ldap;
+    protected PercoManager $perco;
     protected RoleManager $roleManager;
     private array $columns = [];
 
     public function __construct()
     {
         $this->db = Application::getInstance()->getMysqlClient();
-        $this->percoManager = new PercoManager();
+        $this->ldap = Application::getInstance()->getLdapClient();
+        $this->perco = new PercoManager();
         $this->roleManager = new RoleManager();
         $this->columns = $this->getColumnNames('user');
     }
@@ -65,12 +66,10 @@ class LocalUserRepository
         }
         return $result;
     }
-    
+
     public function create(User $user): int
     {
-        $data = $user->getInsertableColumns();
-        unset($data['id']);
-        $this->db->insert('user', $data);
+        $this->db->insert('user', $user->toArray($user->getInsertableColumns()));
         return $this->db->lastInsertId();
     }
 
@@ -97,62 +96,91 @@ class LocalUserRepository
         $this->db->update('user', ['is_blocked' => 1], ['id' => $user->id]);
     }
 
-    public function createFromLdap(array $ldap, string $password): ?User{
-        $fullName = $ldap['displayname'] ?? '';
-        $divisionName = $this->extractDivisionFromDn($ldap['distinguishedname'] ?? '');
+    public function createFromPerco(int $badgeNumber): ?User
+    {
+        $data = $this->perco->getUserByBadge($badgeNumber);
+        return $this->createUser($data);
+    }
+
+    public function createFromLdap(array $ldapData, string $password): ?User
+    {
+        $fullName = $ldapData['displayname'] ?? $ldapData['cn'] ?? null; // Для поиска в PERCo-Web
+        $divisionName = $this->ldap->extractDivisionFromDn($ldapData['distinguishedname'] ?? ''); // Для уточнения поиска в PERCo-Web
         $positionName = $ldap['title'] ?? null;
 
-        $percoData = $this->percoManager->findUserByName($fullName, $divisionName);
+        $percoData = $this->perco->findUserByName($fullName, $divisionName);
 
-        $login = strtolower($ldap['samaccountname'] ?? '');
-        $pass_hash = PasswordManager::hash($password);
-        $name = $percoData['name'];
-        $email = $ldap['mail'] ?? $percoData['email'] ?? null;
-        $companyId = $percoData['company_id'] ?: 0;
-        $divisionId = $percoData['division_id'] ?? $this->resolveDictionaryEntry('division', $divisionName) ?? null;
-        $positionId = $percoData['position_id'] ?? $this->resolveDictionaryEntry('position', $positionName) ?: null;
-        $perco_id = $percoData['perco_id'] ?? null;
-        $cardNumber = $percoData['card_number'] ?: null;
-        $tabelNumber = $percoData['tabel_number'] ?: null;
-        $roleId = $this->roleManager->assignRole($positionId);
-        $birthDate = $percoData['birth_date'] ?: null;
-        $mobyle = $percoData['mobyle'] ?: null;
+        $divisionId = $percoData['division_id'] ?? $this->resolveDictionaryEntryId('division', $divisionName) ?? null;
+        $positionId = $percoData['position_id'] ?? $this->resolveDictionaryEntryId('position', $positionName) ?: null;
 
+        $percoData['login'] = strtolower($ldapData['samaccountname']);
+        $percoData['password'] = $password;
+        $percoData['source'] = 'ldap';
+
+        if (empty($percoData['email']) && !empty($ldapData['mail'])) {
+            $percoData['email'] = $ldapData['mail'];
+        }
+
+        if (empty($percoData['division_id']) && $divisionId) {
+            $percoData['division_id'] = $divisionId;
+        }
+
+        if (empty($percoData['position_id']) && $positionId) {
+            $percoData['position_id'] = $positionId;
+        }
+
+        return $this->createUser($percoData);
+    }
+
+    public function createUser(array $data): ?User
+    {
+        // file_put_contents(PATH_LOGS . 'control_user_create.log', print_r($data, true) . PHP_EOL, FILE_APPEND);
+        $login = strtolower(trim((string)($data['login'] ?? '')));
+        $pass_hash = PasswordManager::hash($data['password']);
+        $roleId = $this->roleManager->assignRole($data['positionId']);
         $user = new User([
             'login' => $login, 
             'password' => $pass_hash,
-            'name' => $name,
-            'email' => $email,
-            'company_id' => $companyId,
-            'division_id' => $divisionId,
-            'position_id' => $positionId,
-            'perco_id' => $perco_id,
-            'card_number' => $cardNumber,
-            'tabel_number' => $tabelNumber,
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'company_id' => $data['company_id'],
+            'division_id' => $data['division_id'],
+            'position_id' => $data['position_id'],
+            'perco_id' => $data['perco_id'],
+            'card_number' => $data['card_number'],
+            'tabel_number' => $data['tabel_number'],
             'role_id' => $roleId,
             'is_active' => 1,
             'is_blocked' => 0,
-            'birth_date' => $birthDate,
-            'mobyle' => $mobyle,
-            'source' => 'ldap'
+            'birth_date' => $data['birth_date'],
+            'mobyle' => $data['mobyle'],
+            'source' => $data['source']
         ]);
-        $this->db->updateOrInsert('user', $user->toArray($user->getInsertableColumns()), ['login' => $login]);
+        $this->create($user);
         return $this->findByLogin($login);
     }
 
-    private function extractDivisionFromDn(string $dn): ?string
-    {
-        if (preg_match_all('/OU=([^,]+)/u', $dn, $matches) && isset($matches[1][0])) {
-            return trim($matches[1][0]);
-        }
-        return null;
-    }
-
-    public function resolveDictionaryEntry(string $dict, string $value): ?int
+    public function resolveDictionaryEntryId(string $dict, string $value): ?int
     {
         if (!$value) return null;
         $row = $this->db->first($dict, ['name' => $value]);
         if ($row) return (int)$row['id'];
+        return null;
+    }
+
+    public function getDivisionName(int $id): ?string
+    {
+        if (!$id) return null;
+        $row = $this->db->first('division', ['id' => $id]);
+        if ($row) return (string)$row['name'];
+        return null;
+    }
+
+    public function getPositionName(int $id): ?string
+    {
+        if (!$id) return null;
+        $row = $this->db->first('position', ['id' => $id]);
+        if ($row) return (string)$row['name'];
         return null;
     }
 }

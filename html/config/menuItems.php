@@ -4,6 +4,7 @@ return [
         ['title' => 'Главная', 'link' => '/', 'icon' => ''],
         ['title' => 'Тестирование API', 'link' => '/api_test', 'icon' => ''],
         ['title' => 'Отчеты', 'link' => '/reports', 'icon' => ''],
+        ['title' => 'Администрирование', 'link' => '/adminpanel', 'icon' => ''],
     ],
     'side' => [],
     'bottom' => [

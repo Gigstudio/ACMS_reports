@@ -21,9 +21,9 @@ class ErrorHandler
     public static function handleError(int $errno, string $errstr, string $errfile, int $errline): void
     {
         $eventType = match ($errno) {
-            E_USER_NOTICE, E_NOTICE        => Event::INFO,
-            E_WARNING, E_USER_WARNING      => Event::WARNING,
-            default                        => Event::ERROR,
+            E_USER_NOTICE, E_NOTICE        => (int)Event::INFO,
+            E_WARNING, E_USER_WARNING      => (int)Event::WARNING,
+            default                        => (int)Event::ERROR,
         };
 
         $message = self::composeMessage($eventType, $errno, $errstr, $errfile, $errline);
@@ -65,6 +65,7 @@ class ErrorHandler
         }
 
         $eventType = Event::ERROR;
+        file_put_contents(PATH_LOGS . 'error_detailed.log', print_r($e, true), FILE_APPEND);
         $detail = self::composeMessage($eventType, $e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
 
         $extra = method_exists($e, 'getExtra') ? $e->getExtra() : [];
@@ -116,7 +117,7 @@ class ErrorHandler
         }
     }
 
-    private static function composeMessage(int $eventType, int $errno, string $errstr, string $errfile, int $errline): string
+    private static function composeMessage(int $eventType, string $errno, string $errstr, string $errfile, int $errline): string
     {
         return sprintf(
             '%s (%s), файл %s, строка %s: %s',

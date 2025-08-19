@@ -23,6 +23,7 @@ RUN apt-get update && \
         libmagickwand-dev \
         libldap2-dev \
         iputils-ping \
+        procps \
         firebird-dev && \
     rm -rf /var/lib/apt/lists/*
 

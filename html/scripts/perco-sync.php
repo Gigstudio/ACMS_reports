@@ -1,12 +1,14 @@
 <?php
+/**
+ * Синхронизация справочников PERCo-Web
+ */
 require_once __DIR__ . '/../bootstrap.php';
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-
 ini_set('log_errors', 1);
-ini_set('error_log', '/var/www/logs/worker/worker_error.log');
+ini_set('error_log', '/var/www/logs/worker/perco_sync_error.log');
 
 use GIG\Domain\Exceptions\GeneralException;
 use GIG\Core\Application;
@@ -15,54 +17,29 @@ use GIG\Domain\Services\TaskManager;
 use GIG\Domain\Services\PercoManager;
 
 $app = Application::getInstance();
+
 $taskManager = new TaskManager($app->getMysqlClient());
 $statusManager = new ServiceStatusManager($app->getMysqlClient());
 
 $config = $app->getConfig();
-$services = $config['services'] ?? [];
 $settings = $config['settings'] ?? [];
 $delay = $settings['worker_delay'] ?? 30; // секунд
 
+const ALLOWED_TYPES = ['sync_divisions', 'sync_positions'];
+
 while (true) {
-    foreach ($services as $serviceName => $serviceCfg) {
-        try {
-            $client = $app->getServiceByName($serviceName);
-            if (!$client) {
-                throw new GeneralException("Сервис '$serviceName' не реализован или не внедрен.");
-            }
-            if (!method_exists($client, 'checkStatus')) {
-                throw new GeneralException("Клиент '$serviceName' не реализует checkStatus().");
-            }
-            $result = $client->checkStatus();
-            $status = $result['status'] ?? 'unknown';
-            $message = $result['message'] ?? '';
-            $detail = $result['detail'] ?? null;
-        } catch (\Throwable $e) {
-            $status = 'fail';
-            $message = $e->getMessage();
-            $detail = $e->getTraceAsString();
-        }
+    $tasks = array_values(array_filter(
+        $taskManager->getRunnableTasks(50),
+        fn($t) => in_array($t->type, ALLOWED_TYPES, true)
+    ));
 
-        try {
-            $statusManager->setStatus($serviceName, $status, $message, $detail);
-        } catch (\Throwable $e) {
-            if ($e instanceof GeneralException) {
-                var_dump($e->getExtra());
-            } else {
-                echo $e->getMessage();
-            }
-        }
-
-        if ($status !== 'ok') echo "$serviceName: $status ($message)\n";
-    }
-
-    $tasks = $taskManager->getRunnableTasks(50);
-    if (!empty($tasks)) {
-        $lines = array_map(fn($task) => '- ' . ($task->name ?? $task->type), $tasks);
-        $timestamp = date('Y-m-d H:i:s');
-        $message = "[$timestamp] RUNNABLE TASKS:\n" . implode(";\n", $lines) . ".\n";
-        file_put_contents(PATH_LOGS . 'worker_debug.log', $message, FILE_APPEND);
-    }
+    // if (!empty($tasks)) {
+        // $lines = array_map(fn($task) => '- ' . ($task->name ?? $task->type), $tasks);
+        // file_put_contents(PATH_LOGS . 'perco_sync.log',
+        //     '[' . date('Y-m-d H:i:s') . "] RUNNABLE:\n" . implode(";\n", $lines) . ".\n",
+        //     FILE_APPEND
+        // );    
+    // }
 
     foreach ($tasks as $task) {
         $taskId = $task->id;
@@ -76,7 +53,7 @@ while (true) {
 
             switch ($task->type) {
                 case 'sync_divisions':
-                    $result = syncDivisions($app);
+                    $result = syncDivisions($app, $statusManager);
                     break;
                 case 'sync_positions':
                     $result = syncPositions($app);
@@ -107,17 +84,16 @@ while (true) {
     sleep($delay);
 }
 
-function syncDivisions($app) {
+function syncDivisions(Application $app, ServiceStatusManager $statusManager) {
     $client = new PercoManager();
     $db = $app->getMysqlClient();
-    $statusManager = new ServiceStatusManager($db);
 
     $statusManager->setStatus('perco_web', 'busy', 'Синхронизация подразделений начата');
 
     try {
         $divisions = $client->fetchAllDivisions();
 
-        file_put_contents(PATH_LOGS . 'worker_debug.log', "DIVISIONS: " . count($divisions) . ' записей получено.' . PHP_EOL, FILE_APPEND);
+        // file_put_contents(PATH_LOGS . 'worker_debug.log', "DIVISIONS: " . count($divisions) . ' записей получено.' . PHP_EOL, FILE_APPEND);
 
         $rows = [];
         $fields = ['id', 'name', 'parent_id', 'external_code'];
@@ -144,32 +120,11 @@ function syncPositions($app) {
     $db = $app->getMysqlClient();
     $positions = $client->fetchAllPositions();
 
-    file_put_contents(PATH_LOGS . 'worker_debug.log', "POSITIONS: " . count($positions) . ' записей получено.' . PHP_EOL, FILE_APPEND);
+    // file_put_contents(PATH_LOGS . 'worker_debug.log', "POSITIONS: " . count($positions) . ' записей получено.' . PHP_EOL, FILE_APPEND);
 
     $rows = [];
     $fields = ['id', 'name', 'external_code'];
     foreach ($positions as $item) {
-        $rows[] = [
-            'id' => $item['id'],
-            'name' => $item['name'],
-            'external_code' => $item['comment'] ?? null,
-        ];
-    }
-
-    $db->upsertMany('position', $fields, $rows);
-    return ['count' => count($rows)];
-}
-
-function syncCompanies($app) {
-    $client = new PercoManager();
-    $db = $app->getMysqlClient();
-    $companies = $client->fetchAllCompanies();
-
-    file_put_contents(PATH_LOGS . 'worker_debug.log', "COMPANIES: " . count($companies) . ' записей получено.' . PHP_EOL, FILE_APPEND);
-
-    $rows = [];
-    $fields = ['id', 'name', 'external_code'];
-    foreach ($companies as $item) {
         $rows[] = [
             'id' => $item['id'],
             'name' => $item['name'],

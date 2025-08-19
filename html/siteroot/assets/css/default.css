@@ -477,6 +477,145 @@
 .status-warn { background: #f4d53a; box-shadow: 0 0 6px #f4d53a99; }
 .statusbar-name { opacity: 0.85; }
 
+/* ===== Admin layout ===== */
+.admin-layout{
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 16px;
+  /* padding: 0 var(--w64); */
+  align-items: start;
+}
+.admin-sidebar{
+  position: sticky;
+  top: 12px;
+  align-self: start;
+  background: var(--menu-bg);
+  color: var(--menu-forecolor);
+  border-radius: 4px;
+  box-shadow: 0 4px 12px var(--shadow-color);
+  padding: 12px;
+}
+.admin-nav{
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.admin-nav a{
+  display: block;
+  padding: 10px 12px;
+  border-radius: 4px;
+  color: var(--menu-forecolor);
+  text-decoration: none;
+  transition: background var(--transition-mid), color var(--transition-mid);
+}
+.admin-nav a:hover{
+  background: #ffffff22;
+  color: var(--menu-foreaccent);
+}
+.admin-nav a.active{
+  background: var(--winc-bg);
+  color: var(--menu-highlight);
+  box-shadow: 0 2px 6px var(--shadow-color);
+}
+
+/* ===== Main panels ===== */
+.admin-main{
+  min-height: 60vh;
+}
+.panel{
+  background: var(--bg-color);
+  border: 1px solid #00000011;
+  border-radius: 4px;
+  box-shadow: 0 6px 16px var(--shadow-color);
+  overflow: hidden;
+}
+.panel-head{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: #00000006;
+  border-bottom: 1px solid #00000011;
+}
+.panel-body{
+  padding: 16px;
+}
+.text-muted{ opacity:.75; }
+
+/* ===== Table for workers ===== */
+table.workers{
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+table.workers thead th{
+  text-align: left;
+  padding: 10px 8px;
+  font-size: 16px;
+  background: #00000008;
+  border-bottom: 1px solid #00000011;
+}
+table.workers tbody td{
+  padding: 10px 8px;
+  border-bottom: 1px solid #00000011;
+  vertical-align: middle;
+}
+table.workers tbody tr:hover{
+  background: #00000005;
+}
+table.workers button{
+  margin-right: 8px;
+  padding: 6px 10px;
+  border-radius: 2px;
+  border: 1px solid #00000022;
+  background: var(--primary-bg);
+  color: var(--menu-foreaccent);
+  cursor: pointer;
+  transition: opacity var(--transition-mid), transform var(--transition-fast);
+}
+table.workers button:hover:not([disabled]){
+  opacity: .9;
+  transform: translateY(-1px);
+}
+table.workers button[disabled]{
+  background: var(--disable-bg);
+  border-color: #aeb3b7;
+  cursor: default;
+}
+
+/* small button variant */
+.btn.small{ padding: 8px 14px; height: auto; line-height: 1; }
+
+/* иконки-кнопки в таблице */
+table.workers td.actions {
+  white-space: nowrap;
+}
+.icon-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:36px; height:36px;
+  border-radius: 8px;
+  border: 1px solid #00000022;
+  background: var(--primary-bg);
+  color: var(--menu-foreaccent);
+  margin-right: 8px;
+  cursor: pointer;
+  transition: opacity var(--transition-mid), transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+.icon-btn i { pointer-events: none; font-size: 14px; }
+.icon-btn:hover:not([disabled]){ opacity:.9; transform: translateY(-1px); box-shadow: 0 2px 6px var(--shadow-color); }
+.icon-btn[disabled]{ background: var(--disable-bg); border-color: #aeb3b7; cursor: default; opacity:.85; }
+
+/* ===== Responsive ===== */
+@media (max-width: 1024px){
+  .admin-layout{
+    grid-template-columns: 1fr;
+    padding: 0 24px;
+  }
+  .admin-sidebar{ position: static; }
+  .admin-nav{ flex-direction: row; flex-wrap: wrap; gap: 8px; }
+}
 
 .hidden {
     display: none;

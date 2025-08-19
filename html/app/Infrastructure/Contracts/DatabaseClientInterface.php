@@ -21,6 +21,7 @@ interface DatabaseClientInterface
     public function updateOrInsert(string $table, array $data, array $where): bool;
     public function delete(string $table, array $where): bool;
     public function lastInsertId(): int;
+    public function upsertMany(string $table, array $fields, array $rows): int;
 
     // Инфраструктура таблиц
     public function tableExists(string $table): bool;

@@ -7,7 +7,7 @@ class ApiAnswer
 {
     public const SUCCESS = 'success';
     public const ERROR = 'error';
-    public const FAIL = 'FAIL';
+    public const FAIL = 'fail';
 
     public string $status = self::SUCCESS; // success|fail|error
     public int $code = 200; // HTTP-статус (дублирует, но всегда в теле)

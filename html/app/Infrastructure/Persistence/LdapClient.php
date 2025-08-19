@@ -96,19 +96,16 @@ class LdapClient
     {
         if (!$this->isConnected()) {
             $this->connect();
-            // throw new GeneralException("LDAP не подключён", 401, [
-            //     'detail' => "Проблемы с подключением к LDAP.",
-            // ]);
         }
         $this->bindService();
 
-        $search = ldap_search($this->connection, $this->config['ldap_dn'], $filter, $attributes);
+        $searchResult = ldap_search($this->connection, $this->config['ldap_dn'], $filter, $attributes);
 
-        if (!$search) {
+        if (!$searchResult) {
             return [];
         }
 
-        $entries = ldap_get_entries($this->connection, $search);
+        $entries = ldap_get_entries($this->connection, $searchResult);
         $result = [];
 
         if (isset($entries['count']) && $entries['count'] > 0) {
@@ -120,6 +117,10 @@ class LdapClient
             }
         }
         return $result;
+    }
+
+    public function userExists(string $login): bool{
+        return !empty($this->search("(samaccountname={$login})")[0]);
     }
 
     public function findUser(string $login)
@@ -161,6 +162,41 @@ class LdapClient
     {
         // Не трогаем основной bind, отдельный bind для проверки
         return $this->bindUser($login, $password, $domain);
+    }
+
+    public function extractDivisionFromDn(string $dn): string{
+        $codeOuRegex = '/^\d{4,}(?:\s+|\s*[-–—]\s*)/u';
+
+        $parts = preg_split('/(?<!\\\\),\s*/u', $dn) ?: [];
+        $ous = [];
+
+        foreach ($parts as $p) {
+            if (strpos($p, 'OU=') === 0) {
+                $val = substr($p,3);
+
+                $val = strtr($val, [
+                    '\\,' => ',', '\\+' => '+', '\\"' => '"', '\\\\' => '\\',
+                    '\\#' => '#', '\\;' => ';', '\\=' => '=', '\\<' => '<', '\\>' => '>',
+                    '\\ ' => ' ',
+                ]);
+
+                $ous[] = trim($val);
+            }
+        }
+        if (!$ous) return '';
+
+        foreach ($ous as $ou) {
+            if (preg_match('/^\d{4,}(?:\s+|\s*[-–—]\s*)/u', $ou) === 1) {
+                return $ou;
+            }
+        }
+
+        $nonLatin = array_values(array_filter($ous, static function (string $ou) {
+            return preg_match('/\p{Cyrillic}/u', $ou) === 1;
+        }));
+
+        if ($nonLatin) return $nonLatin[0];
+        return $ous[0];
     }
 
     protected function normalizeLdapEntry(array $entry): array

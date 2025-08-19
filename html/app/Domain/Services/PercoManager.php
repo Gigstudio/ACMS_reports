@@ -20,19 +20,6 @@ class PercoManager
         $this->client = Application::getInstance()->getPercoWebClient();
     }
 
-    public function fetchAllCompanies(array $params = []): array
-    {
-        $divisions = $this->fetchAllDivisions();
-
-        if (!is_array($divisions)) {
-            return [];
-        }
-
-        return array_filter($divisions, function($item){
-            return $this->getRootDivision((int)$item['id'])['id'] === (int)$item['id']; 
-        });
-    }
-
     public function fetchAllDivisions(array $params = []): array
     {
         if (!empty($this->divisionsCache)) {
@@ -257,6 +244,19 @@ class PercoManager
         return $data ?? [];
     }
 
+    public function getUserByBadge(string $badge): ?array
+    {
+        $userId = $this->findUserByIdentifier($badge);
+        if (!$userId) {
+            return null;
+        }
+        $percoData = $this->getUserInfoById($userId);
+        if (empty($percoData) || empty($percoData['id'])) {
+            return null;
+        }
+        return $this->normalizeUserData($percoData);
+    }
+
     public function findUserByName(string $name, ?string $divisionName = null): array
     {
         $candidates = $this->fetchUsersFromTable($name, $divisionName);
@@ -265,7 +265,7 @@ class PercoManager
             return [];
         }
         if (count($candidates) > 1) {
-            EventManager::logParams(Event::MESSAGE, self::class, "Найдено несколько совпадений по ФИО '$name' в PERCo (" . count($candidates) . ").");
+            EventManager::logParams(Event::INFO, self::class, "Найдено несколько совпадений по ФИО '$name' в PERCo (" . count($candidates) . ").");
         }
         return $this->getActualUser($candidates);
     }
@@ -287,14 +287,15 @@ class PercoManager
     public function normalizeUserData(array $percoData): array
     {
         $details = $this->getUserInfoById($percoData['id']);
-        $position = $this->getPositionByName($percoData['position_name']);
+        $positionName = $percoData['position_name'] ?? (is_array($percoData['position']) ? reset($percoData['position']) : null);
+        $position = $positionName ? $this->getPositionByName($positionName) : null;
 
         $normalized = [
-            'name' => $percoData['fio'],
-            'email' =>$percoData['email_for_send'],
+            'name' => $percoData['fio'] ?? implode(' ', [mb_strtoupper($percoData['last_name']), mb_strtoupper($percoData['first_name']), mb_strtoupper($percoData['middle_name'])]),
+            'email' =>$percoData['email_for_send'] ?? null,
             'company_id' => null,
-            'division_id' => $percoData['division_id'],
-            'position_id' => $position['id'],//(!empty($percoData['position']) && is_array($percoData['position'])) ? (int)array_key_first($percoData['position']) : null,
+            'division_id' => $percoData['division_id'] ?? (is_array($percoData['division']) ? (int)array_key_first($percoData['division']) : null),
+            'position_id' => $position['id'],
             'perco_id' => $percoData['id'],
             'card_number' => (!empty($details['identifier']) && is_array($details['identifier'])) ? $details['identifier'][0]['identifier'] : null,
             'tabel_number' => $percoData['tabel_number'] ?: null,
@@ -325,7 +326,7 @@ class PercoManager
         if (is_array($position)) {
             $normalized['position_id'] = $position['id'] ?? null;
         }
-        $normalized['company_id'] = $normalized['division_id'] ? $this->getRootDivision($normalized['division_id'])['id'] : null;
+        $normalized['company_id'] = $normalized['division_id'] ? $this->getRootDivision((int)$normalized['division_id'])['id'] : null;
         
         return $normalized;
     }

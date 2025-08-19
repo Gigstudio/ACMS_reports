@@ -32,7 +32,7 @@ defined('_RUNKEY') or die;
 						<label class="label active right" for="checkreg">Нет учетной записи? <i class="fas fa-redo"></i></label>
 					</div>
 					<div class="inputset hint">
-						<div class="hint-info">
+						<div class="hint-info" id="login_hint">
 							<i class="fas fa-info-circle"></i>
 							Используйте учётную запись корпоративной сети ПНХЗ, если она у вас есть.
 						</div>
@@ -62,40 +62,44 @@ defined('_RUNKEY') or die;
 								<label class="label active" for="checkreg" title="Вернуться к вводу учетных данных"><i class="fas fa-undo"></i> Уже зарегистрирован?</label>
 							</div>
 							<div class="inputset hint" id="stage1_hint">
-								<div class="hint-text">
-									<br>
-									<i class="fas fa-info-circle"></i> Номер пропуска находится на его обратной стороне
-								</div>
-								<div class="card-wrapper">
-									<div class="card">
-										<div class="card-front">
-											<div class="company">«Организация»</div>
-											<div class="badge-credentials">
-												<div class="photo-example"><i class="fas fa-user"></i></div>
-												<div class="cred-example">
-													Фамилия<br>
-													Имя<br>
-													Отчество
+								<div class="reghint">
+									<div class="hint-text">
+										<br>
+										<i class="fas fa-info-circle"></i> Номер пропуска находится на его обратной стороне
+									</div>
+									<div class="card-wrapper">
+										<div class="card">
+											<div class="card-front">
+												<div class="company">«Организация»</div>
+												<div class="badge-credentials">
+													<div class="photo-example"><i class="fas fa-user"></i></div>
+													<div class="cred-example">
+														Фамилия<br>
+														Имя<br>
+														Отчество
+													</div>
 												</div>
 											</div>
-										</div>
-										<div class="card-back">
-											<span class="constant-blink">XXXXXXXXXX</span><span>XXX.XXXXX</span> 
+											<div class="card-back">
+												<span class="constant-blink">XXXXXXXXXX</span><span>XXX.XXXXX</span> 
+											</div>
 										</div>
 									</div>
 								</div>
-								<fieldset class="inputset hidden" style="margin-top: 8px;">
-									<div class="input-holder">
-										<label for="logincheck"><i class="fas fa-id-card"></i></label>
-										<input id="logincheck" type="text" placeholder="Сгенерированный логин" name="logincheck"/>
-									</div>
-								</fieldset>
-								<div class="hint-text error hidden" id="hint-warn"></div>
+								<div class="flex-column hidden" style="width: 100%;">
+									<fieldset class="inputset" style="margin-top: 8px;">
+										<div class="input-holder">
+											<label for="logincheck"><i class="fas fa-id-card"></i></label>
+											<input id="logincheck" type="text" placeholder="Сгенерированный логин" name="logincheck"/>
+										</div>
+									</fieldset>
+									<div class="hint-info error" id="hint-warn"></div>
+								</div>
 							</div>
 						</div>
-						<div class="flex-row tail">
-							<button type="button" id="reg-back" class="btn on-the-glass disabled hidden" title="Перейти к форме входа">← Назад</button>
-							<button type="button" id="reg-next" class="btn on-the-glass disabled" disabled title="Проверить и продолжить">Найти</button>
+						<div class="flex-row tail" id="reg_actions">
+							<button type="button" id="reg-back" class="btn on-the-glass disabled" title="Проверить и продолжить">Проверить</button>
+							<button type="button" id="reg-next" class="btn on-the-glass disabled hidden" disabled title="Перейти к регистрации">Далее</button>
 						</div>
 					</div>
 
@@ -104,7 +108,7 @@ defined('_RUNKEY') or die;
 						<fieldset class="inputset" style="height: 238px">
 							<div class="input-holder">
 								<label for="reguser"><i class="fas fa-user"></i></label>
-								<input id="reguser" type="text" placeholder="Придумайте логин" name="reguser" required/>
+								<input id="reguser" type="text" placeholder="Придумайте логин" name="reguser" disabled/>
 							</div>
 							<div class="input-holder">
 								<label for="regemail"><i class="fas fa-envelope"></i></label>
@@ -123,11 +127,11 @@ defined('_RUNKEY') or die;
 							test
 						</div>
 						<div class="lineholder fullwidth">
-							<span class="label active" id="reg-prev">← Назад</span>
+							<!-- <span class="label active" id="reg-prev">← Назад</span> -->
 							<label class="label active right" for="checkreg" title="Вернуться к вводу учетных данных">Уже зарегистрирован? <i class="fas fa-undo"></i></label>
 						</div>
 						<div class="flex-column tail">
-							<button type="submit" class="btn on-the-glass disabled">Зарегистрироваться</button>
+							<button type="submit" id="reg-last" class="btn on-the-glass disabled" disabled>Зарегистрироваться</button>
 						</div>
 					</div>
 				</div>

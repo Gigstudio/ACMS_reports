@@ -71,4 +71,41 @@ class TaskController extends ApiController
         $this->manager->updateTask($id, ['status' => 'ABORTED']);
         $this->success([], "Задача отменена");
     }
+
+    public function getWorkers()
+    {
+        $workers = $this->manager->getWorkers();
+        $this->success(['workers' => $workers]);
+    }
+
+    public function workerAction()
+    {
+        $body = $this->request->getBody();
+        $action = $body['action'] ?? null;
+        $program = trim((string)($body['program'] ?? null));
+
+        if (!$program) {
+            return $this->error("Не указано имя программы", 400);
+        }
+        if (!in_array($action, ['start', 'stop', 'restart'], true)) {
+            return $this->error('Неверное действие', 400);
+        }
+
+        $tm = $this->manager;
+        $result = false;
+
+        switch ($action) {
+            case 'start':
+                $result = $tm->startWorker($program);
+                break;
+            case 'stop':
+                $result = $tm->stopWorker($program);
+                break;
+            case 'restart':
+                $result = $tm->restartWorker($program);
+                break;
+        }
+
+        return $this->success([], "Команда '{$program}' " . ($result ? '' : 'не ') . "выполнена");
+    }
 }
